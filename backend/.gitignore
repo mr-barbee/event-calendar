@@ -1,0 +1,9 @@
+# Ignore dependencies that are managed with Composer.
+# Generally you should only ignore the root vendor directory. It's important
+# that core/assets/vendor and any other vendor directories within contrib or
+# custom module, theme, etc., are not ignored unless you purposely do so.
+# REMOVING for now so we dont have to worry about running composer on environments
+/vendor/
+
+# Things in the core directory that Drupal 8 commits in the repository.
+!web/core/**/*.gz

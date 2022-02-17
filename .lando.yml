@@ -1,0 +1,63 @@
+name: event-calendar
+proxy:
+  appserver:
+    - cms.event-calendar.lndo.site
+  node:
+    - event-calendar.lndo.site:3000
+services:
+  appserver:
+    type: php
+    via: apache
+    ssl: true
+    webroot: backend/web
+    xdebug: false
+    overrides:
+      environment:
+        DB_HOST: mariadb
+        DB_USER: cms
+        DB_PASSWORD: cms
+        DB_NAME: cms
+        DB_PORT: 3306
+    build:
+      - "composer --ansi --working-dir=/app/backend install"
+  mariadb:
+    type: mariadb
+    portforward: true
+    creds:
+      user: cms
+      password: cms
+      database: cms
+  node:
+    type: node
+    ssl: true
+    command: cd frontend && npm start
+    build:
+      - "cd frontend && npm install"
+    port: 3000
+tooling:
+  composer:
+    service: appserver
+    cmd: "composer --ansi --working-dir=/app/backend"
+  drush:
+    service: appserver
+    cmd: "/app/backend/vendor/drush/drush/drush --root=/app/backend/web"
+    needs:
+      - mariadb
+    options:
+      drush:
+        passthrough: true
+  node:
+    service: node
+  npm:
+    service: node
+    cmd: "npm --cwd=/app/frontend"
+  npx:
+    service: node
+    cmd: "npx --cwd=/app/frontend"
+  # yarn:
+  #   service: node
+  #   cmd: "yarn --cwd=/app/frontend"
+# events:
+#   post-start:
+    # - appserver: "cp $LANDO_MOUNT/config/drupal/lando.settings.php $LANDO_MOUNT/backend/web/sites/default/settings.php"
+    # - cms: "cp $LANDO_MOUNT/backend/web/sites/example.settings.local.php $LANDO_MOUNT/backend/web/sites/default/settings.local.php"
