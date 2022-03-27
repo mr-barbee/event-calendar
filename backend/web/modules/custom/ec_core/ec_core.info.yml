@@ -1,0 +1,9 @@
+name: Event Calendar Core
+type: module
+description: 'Core functionality used for the Event Calendar Application.'
+package: Custom
+core: 8.x
+dependencies:
+  - graphql:graphql
+  - node:node
+core_version_requirement: ^8 || ^9

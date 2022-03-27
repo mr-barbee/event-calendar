@@ -1,0 +1,5 @@
+# services:
+#   twilio_api.authentication.auth_token:
+#     class: Drupal\twilio_api\Authentication\AuthToken
+#     tags:
+#       - { name: authentication_provider, provider_id: 'token_auth', priority: 10 }

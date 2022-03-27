@@ -1,0 +1,18 @@
+{
+    "name": "drupal/twilio_api",
+    "description": "Adds the Twilio API to be leveraged by the system",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Jibril Barbee (jibril_barbee)",
+            "homepage": "https://www.drupal.org/u/jibril_barbee",
+            "role": "Maintainer"
+        }
+    ],
+    "homepage": "https://drupal.org/project/twilio_api",
+    "support": {
+        "issues": "https://drupal.org/project/issues/twilio_api",
+        "source": "https://git.drupalcode.org/project/twilio_api"
+    }
+}

@@ -16,16 +16,23 @@
     ],
     "require": {
         "composer/installers": "^1.9",
+        "drupal/admin_toolbar": "^3.1",
         "drupal/core-composer-scaffold": "^9.3",
         "drupal/core-project-message": "^9.3",
         "drupal/core-recommended": "^9.3",
-        "drupal/jsonapi_extras": "^3.20",
-        "drush/drush": "10.*"
+        "drupal/graphql": "^4.3",
+        "drupal/social_api": "^3.0",
+        "drupal/social_auth": "^3.0",
+        "drupal/social_auth_facebook": "^3.0",
+        "drupal/social_auth_facebook_api": "^3.0@RC",
+        "drush/drush": "10.*",
+        "league/oauth2-client": "^2.6",
+        "twilio/sdk": "^6.35"
     },
     "conflict": {
         "drupal/drupal": "*"
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "beta",
     "prefer-stable": true,
     "config": {
         "sort-packages": true

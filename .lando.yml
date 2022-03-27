@@ -30,7 +30,8 @@ services:
   node:
     type: node
     ssl: true
-    command: cd frontend && npm start
+    # @TODO Running this live shows useful print outs in the terminal.
+    # command: cd frontend && npm start
     build:
       - "cd frontend && npm install"
     port: 3000
@@ -50,13 +51,13 @@ tooling:
     service: node
   npm:
     service: node
-    cmd: "npm --cwd=/app/frontend"
+    cmd: "npm --prefix ./frontend/"
   npx:
     service: node
-    cmd: "npx --cwd=/app/frontend"
+    cmd: "npx --prefix ./frontend/"
   # yarn:
   #   service: node
-  #   cmd: "yarn --cwd=/app/frontend"
+  #   cmd: "yarn --cwd ./frontend/"
 # events:
 #   post-start:
     # - appserver: "cp $LANDO_MOUNT/config/drupal/lando.settings.php $LANDO_MOUNT/backend/web/sites/default/settings.php"
