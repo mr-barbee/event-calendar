@@ -21,6 +21,7 @@
         "drupal/core-project-message": "^9.3",
         "drupal/core-recommended": "^9.3",
         "drupal/graphql": "^4.3",
+        "drupal/paragraphs": "^1.13",
         "drupal/social_api": "^3.0",
         "drupal/social_auth": "^3.0",
         "drupal/social_auth_facebook": "^3.0",

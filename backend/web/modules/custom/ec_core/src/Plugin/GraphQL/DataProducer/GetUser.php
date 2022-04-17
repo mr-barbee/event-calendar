@@ -4,29 +4,24 @@ namespace Drupal\ec_core\Plugin\GraphQL\DataProducer;
 
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\graphql\GraphQL\Execution\FieldContext;
 use Drupal\graphql\Plugin\GraphQL\DataProducer\DataProducerPluginBase;
-use Drupal\ec_core\GraphQL\Response\ArticleResponse;
-use Drupal\node\Entity\Node;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+
 /**
- * Creates a new article entity.
+ * Gets the ID of current user.
  *
  * @DataProducer(
- *   id = "create_article",
- *   name = @Translation("Create Article"),
- *   description = @Translation("Creates a new article."),
+ *   id = "get_user",
+ *   name = @Translation("Current user"),
+ *   description = @Translation("Current logged in user."),
  *   produces = @ContextDefinition("any",
- *     label = @Translation("Article")
- *   ),
- *   consumes = {
- *     "data" = @ContextDefinition("any",
- *       label = @Translation("Article data")
- *     )
- *   }
+ *     label = @Translation("Current user")
+ *   )
  * )
  */
-class CreateArticle extends DataProducerPluginBase implements ContainerFactoryPluginInterface {
+class GetUser extends DataProducerPluginBase implements ContainerFactoryPluginInterface {
 
   /**
    * The current user.
@@ -48,7 +43,7 @@ class CreateArticle extends DataProducerPluginBase implements ContainerFactoryPl
   }
 
   /**
-   * CreateArticle constructor.
+   * UserRegister constructor.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
@@ -65,35 +60,12 @@ class CreateArticle extends DataProducerPluginBase implements ContainerFactoryPl
   }
 
   /**
-   * Creates an article.
+   * Returns current user id.
    *
-   * @param array $data
-   *   The submitted values for the article.
-   *
-   * @return \Drupal\ec_core\GraphQL\Response\ArticleResponse
-   *   The newly created article.
-   *
-   * @throws \Exception
+   * @return int
+   *   The current user id.
    */
-  public function resolve(array $data) {
-    \Drupal::logger('module_name')->notice('<pre><code>' . print_r($data, TRUE) . '</code></pre>' );
-    $response = new ArticleResponse();
-    if ($this->currentUser->hasPermission("create article content")) {
-      $values = [
-        'type' => 'article',
-        'title' => $data['title'],
-        'body' => $data['description'],
-      ];
-      $node = Node::create($values);
-      $node->save();
-      $response->setArticle($node);
-    }
-    else {
-      $response->addViolation(
-        $this->t('You do not have permissions to create articles.')
-      );
-    }
-    return $response;
+  public function resolve() {
+    return $this->currentUser->id();
   }
-
 }

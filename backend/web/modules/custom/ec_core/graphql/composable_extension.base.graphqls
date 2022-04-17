@@ -2,6 +2,14 @@ type Mutation
 
 scalar Violation
 
+type User {
+  id: Int!
+  name: String!
+  full_name: String
+}
+
+
+# @TODO Remove just keeping for now for testing.
 type Article {
   id: Int!
   title: String!

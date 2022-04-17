@@ -1,5 +1,6 @@
 extend type Query {
   article(id: Int!): Article
+  currentUser: User
 }
 
 extend type Mutation {

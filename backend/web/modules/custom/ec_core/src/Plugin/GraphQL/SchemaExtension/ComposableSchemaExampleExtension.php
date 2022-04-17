@@ -70,6 +70,25 @@ class ComposableSchemaExampleExtension extends SdlSchemaExtensionPluginBase {
       )
     );
 
+    $registry->addFieldResolver('Query', 'currentUser', $builder->compose(
+      $builder->produce('get_user'),
+      $builder->produce('entity_load')
+        ->map('type', $builder->fromValue('user'))
+        ->map('id', $builder->fromParent()),
+      $builder->callback(function ($entity) {
+        // Here we can do anything we want to the data. We get as a parameter anyting that was returned
+        // in the previous step.
+        return [
+          'id' => $entity->id(),
+          'name' => $entity->getDisplayName(),
+          'full_name' => $entity->field_user_full_name->value,
+        ];
+      })
+    ));
+
+
+
+
     // Response type resolver.
     $registry->addTypeResolver('Response', [
       __CLASS__,
