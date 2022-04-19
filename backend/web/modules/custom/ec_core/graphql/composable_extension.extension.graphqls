@@ -1,8 +1,8 @@
 extend type Query {
-  article(id: Int!): Article
   currentUser: User
-}
-
-extend type Mutation {
-  createArticle(data: ArticleInput): ArticleResponse
+  event(id: Int!): Event
+  events(
+    offset: Int = 0
+    limit: Int = 10
+  ): EventConnection!
 }

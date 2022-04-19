@@ -1,31 +1,32 @@
-type Mutation
+# type Mutation
 
 scalar Violation
+scalar Date
+scalar Array
 
 type User {
   id: Int!
   name: String!
-  full_name: String
+  fullName: String
+  phone: String
+  email: String
+  contact: Boolean
+  categories: Array
+  experiences: Array
+  note: String
 }
 
-
-# @TODO Remove just keeping for now for testing.
-type Article {
+type Event {
   id: Int!
   title: String!
-  author: String
+  body: String
+  startDate: Date
+  endDate: Date
+  categories: Array
+  volunteers: Array
 }
 
-type ArticleResponse implements Response {
-  errors: [Violation]
-  article: Article
-}
-
-interface Response {
-  errors: [Violation]
-}
-
-input ArticleInput {
-  title: String!
-  description: String
+type EventConnection {
+  total: Int!
+  items: [Event!]
 }
