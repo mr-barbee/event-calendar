@@ -4,5 +4,14 @@ extend type Query {
   events(
     offset: Int = 0
     limit: Int = 10
+    date: String
+    range: String = "1 month"
+    user: Int
   ): EventConnection!
+  taxonomies(
+    offset: Int = 0
+    limit: Int = 10
+    vocabulary: String
+    id: Int = 0
+  ): TaxonomyConnection!
 }

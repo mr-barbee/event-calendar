@@ -27,45 +27,34 @@ class ComposableSchemaExampleExtension extends SdlSchemaExtensionPluginBase {
    */
   public function registerResolvers(ResolverRegistryInterface $registry): void {
     $builder = new ResolverBuilder();
+    // Get the query and fields needed.
+    $this->addQueryFields($registry, $builder);
+    $this->addUserFields($registry, $builder);
+    $this->addEventFields($registry, $builder);
+    $this->addTaxonomyFields($registry, $builder);
+    // Add the query connections.
+    foreach (['TaxonomyConnection', 'EventConnection'] as $type) {
+      // Re-usable connection type fields.
+      $this->addConnectionFields($type, $registry, $builder);
+    }
+  }
 
+  /**
+   * @param \Drupal\graphql\GraphQL\ResolverRegistryInterface $registry
+   * @param \Drupal\graphql\GraphQL\ResolverBuilder $builder
+   */
+  protected function addQueryFields(ResolverRegistryInterface $registry, ResolverBuilder $builder): void {
     /**
      * Get the current user data for the logged in user
      */
-    $registry->addFieldResolver('Query', 'currentUser', $builder->compose(
+    $registry->addFieldResolver('Query', 'currentUser',
       $builder->produce('get_user'),
       $builder->produce('entity_load')
         ->map('type', $builder->fromValue('user'))
-        ->map('id', $builder->fromParent()),
-      $builder->callback(function ($entity) {
-        foreach($entity->get('field_user_categories')->getValue() as $taxonamy) {
-          $categories[$taxonamy['target_id']] = Term::load($taxonamy['target_id'])->get('name')->value;
-        }
-        foreach($entity->get('field_user_experience_skills')->getValue() as $taxonamy) {
-          $experiences[$taxonamy['target_id']] = Term::load($taxonamy['target_id'])->get('name')->value;
-        }
-        return [
-          'id' => $entity->id(),
-          'name' => $entity->getDisplayName(),
-          'fullName' => $entity->field_user_full_name->value,
-          'phone' => $entity->field_user_phone->value,
-          'email' => $entity->field_user_primary_contact->value,
-          'contact' => $entity->field_user_contact->value,
-          'categories' => $categories ?? [],
-          'experiences' => $experiences ?? [],
-          'note' => $entity->field_user_note->value
-        ];
-      })
-    ));
-
-
-
-
-
-
-
-
+        ->map('id', $builder->fromParent())
+    );
     /**
-     * Get the event data for each events types in the system.
+     * Get the event data for each event types in the system.
      */
     $registry->addFieldResolver('Query', 'event',
       $builder->produce('entity_load')
@@ -73,7 +62,157 @@ class ComposableSchemaExampleExtension extends SdlSchemaExtensionPluginBase {
         ->map('bundles', $builder->fromValue(['event']))
         ->map('id', $builder->fromArgument('id'))
     );
+    /**
+     * An event query to get all the events for a specific range and date
+     * time stamp
+     */
+    $registry->addFieldResolver('Query', 'events',
+      $builder->produce('query_events')
+        ->map('offset', $builder->fromArgument('offset'))
+        ->map('limit', $builder->fromArgument('limit'))
+        ->map('date', $builder->fromArgument('date'))
+        ->map('range', $builder->fromArgument('range'))
+        ->map('user', $builder->fromArgument('user'))
+    );
+    /**
+     * Query the DB for a list of taxonomies.
+     */
+    $registry->addFieldResolver('Query', 'taxonomies',
+      $builder->produce('query_taxonomies')
+        ->map('offset', $builder->fromArgument('offset'))
+        ->map('limit', $builder->fromArgument('limit'))
+        ->map('vocabulary', $builder->fromArgument('vocabulary'))
+        ->map('id', $builder->fromArgument('id'))
+    );
+  }
 
+  /**
+   * @param \Drupal\graphql\GraphQL\ResolverRegistryInterface $registry
+   * @param \Drupal\graphql\GraphQL\ResolverBuilder $builder
+   */
+  protected function addUserFields(ResolverRegistryInterface $registry, ResolverBuilder $builder): void {
+    $registry->addFieldResolver('User', 'id',
+      $builder->produce('get_user'),
+      $builder->produce('entity_id')
+        ->map('entity', $builder->fromParent())
+    );
+
+    $registry->addFieldResolver('User', 'name',
+      $builder->compose(
+        $builder->produce('get_user'),
+        $builder->produce('entity_load')
+          ->map('type', $builder->fromValue('user'))
+          ->map('id', $builder->fromParent()),
+        $builder->produce('entity_label')
+          ->map('entity', $builder->fromParent())
+      )
+    );
+
+    $registry->addFieldResolver('User', 'fullName',
+      $builder->compose(
+        $builder->produce('get_user'),
+        $builder->produce('entity_load')
+          ->map('type', $builder->fromValue('user'))
+          ->map('id', $builder->fromParent()),
+        $builder->produce('property_path')
+          ->map('type', $builder->fromValue('entity:user'))
+          ->map('value', $builder->fromParent())
+          ->map('path', $builder->fromValue('field_user_full_name.value'))
+      )
+    );
+
+    $registry->addFieldResolver('User', 'phone',
+      $builder->compose(
+        $builder->produce('get_user'),
+        $builder->produce('entity_load')
+          ->map('type', $builder->fromValue('user'))
+          ->map('id', $builder->fromParent()),
+        $builder->produce('property_path')
+          ->map('type', $builder->fromValue('entity:user'))
+          ->map('value', $builder->fromParent())
+          ->map('path', $builder->fromValue('field_user_phone.value'))
+      )
+    );
+
+    $registry->addFieldResolver('User', 'primary',
+      $builder->compose(
+        $builder->produce('get_user'),
+        $builder->produce('entity_load')
+          ->map('type', $builder->fromValue('user'))
+          ->map('id', $builder->fromParent()),
+        $builder->produce('property_path')
+          ->map('type', $builder->fromValue('entity:user'))
+          ->map('value', $builder->fromParent())
+          ->map('path', $builder->fromValue('field_user_primary_contact.value'))
+      )
+    );
+
+    $registry->addFieldResolver('User', 'contact',
+      $builder->compose(
+        $builder->produce('get_user'),
+        $builder->produce('entity_load')
+          ->map('type', $builder->fromValue('user'))
+          ->map('id', $builder->fromParent()),
+        $builder->produce('property_path')
+          ->map('type', $builder->fromValue('entity:user'))
+          ->map('value', $builder->fromParent())
+          ->map('path', $builder->fromValue('field_user_contact.value'))
+      )
+    );
+
+    $registry->addFieldResolver('User', 'categories', $builder->compose(
+      $builder->produce('get_user'),
+      $builder->produce('entity_load')
+        ->map('type', $builder->fromValue('user'))
+        ->map('id', $builder->fromParent()),
+      $builder->produce('property_path')
+        ->map('type', $builder->fromValue('entity:user'))
+        ->map('value', $builder->fromParent())
+        ->map('path', $builder->fromValue('field_user_categories')),
+      $builder->callback(function ($entity) {
+        foreach ( $entity as $taxonomy ) {
+          $categories[$taxonomy['target_id']] = Term::load($taxonomy['target_id'])->get('name')->value;
+        }
+        return $categories ?? [];
+      })
+    ));
+
+    $registry->addFieldResolver('User', 'experiences', $builder->compose(
+      $builder->produce('get_user'),
+      $builder->produce('entity_load')
+        ->map('type', $builder->fromValue('user'))
+        ->map('id', $builder->fromParent()),
+      $builder->produce('property_path')
+        ->map('type', $builder->fromValue('entity:user'))
+        ->map('value', $builder->fromParent())
+        ->map('path', $builder->fromValue('field_user_experience_skills')),
+      $builder->callback(function ($entity) {
+        foreach ( $entity as $taxonomy ) {
+          $experiences[$taxonomy['target_id']] = Term::load($taxonomy['target_id'])->get('name')->value;
+        }
+        return $experiences ?? [];
+      })
+    ));
+
+    $registry->addFieldResolver('User', 'note',
+      $builder->compose(
+        $builder->produce('get_user'),
+        $builder->produce('entity_load')
+          ->map('type', $builder->fromValue('user'))
+          ->map('id', $builder->fromParent()),
+        $builder->produce('property_path')
+          ->map('type', $builder->fromValue('entity:user'))
+          ->map('value', $builder->fromParent())
+          ->map('path', $builder->fromValue('field_user_note.value'))
+      )
+    );
+  }
+
+  /**
+   * @param \Drupal\graphql\GraphQL\ResolverRegistryInterface $registry
+   * @param \Drupal\graphql\GraphQL\ResolverBuilder $builder
+   */
+  protected function addEventFields(ResolverRegistryInterface $registry, ResolverBuilder $builder): void {
     $registry->addFieldResolver('Event', 'id',
       $builder->produce('entity_id')
         ->map('entity', $builder->fromParent())
@@ -127,10 +266,12 @@ class ComposableSchemaExampleExtension extends SdlSchemaExtensionPluginBase {
       $builder->callback(function ($entity) {
         foreach ( $entity as $element ) {
           $paragraph = Paragraph::load( $element['target_id'] );
-          $categories[] = [
-            'category' => Term::load($paragraph->field_event_category->target_id)->get('name')->value,
-            'count' => $paragraph->field_event_category_count->value
-          ];
+          if (!empty($paragraph->field_event_category->target_id)) {
+            $categories[] = [
+              'category' => Term::load($paragraph->field_event_category->target_id)->get('name')->value,
+              'count' => $paragraph->field_event_category_count->value
+            ];
+          }
         }
         return $categories ?? [];
       })
@@ -145,69 +286,63 @@ class ComposableSchemaExampleExtension extends SdlSchemaExtensionPluginBase {
         foreach ( $entity as $element ) {
           // Load the paragraph and user.
           $paragraph = Paragraph::load( $element['target_id'] );
-          $user = User::load($paragraph->field_event_volunteer->target_id);
-          // And the user to the array.
-          if (!empty($user)) {
-            $volunteers[] = [
-              'volunteer' => $user->getDisplayName(),
-              'hours' => $paragraph->field_event_volunteer_hrs_avail->value,
-              'note' => $paragraph->field_event_volunteer_notes->value
-            ];
+          if (!empty($paragraph->field_event_volunteer->target_id)) {
+            $user = User::load($paragraph->field_event_volunteer->target_id);
+            $category = !empty(Term::load($paragraph->field_event_category->target_id)) ? Term::load($paragraph->field_event_category->target_id)->get('name')->value : '';
+            // And the user to the array.
+            if (!empty($user)) {
+              $volunteers[] = [
+                'id' => $paragraph->field_event_volunteer->target_id,
+                'volunteer' => $user->getDisplayName(),
+                'category' => $category,
+                'hours' => $paragraph->field_event_volunteer_hrs_avail->value,
+                'note' => $paragraph->field_event_volunteer_notes->value
+              ];
+            }
           }
         }
         return $volunteers ?? [];
         })
     ));
+  }
 
-
-
+  /**
+   * @param \Drupal\graphql\GraphQL\ResolverRegistryInterface $registry
+   * @param \Drupal\graphql\GraphQL\ResolverBuilder $builder
+   */
+  protected function addTaxonomyFields(ResolverRegistryInterface $registry, ResolverBuilder $builder): void {
     /**
-     * An event query to get all the events for a specific range and date
-     * time stamp
+     * Get the Taxonomy fields.
      */
-    $registry->addFieldResolver('Query', 'events',
-      $builder->produce('query_events')
-        ->map('offset', $builder->fromArgument('offset'))
-        ->map('limit', $builder->fromArgument('limit'))
+    $registry->addFieldResolver('Taxonomy', 'id',
+      $builder->produce('entity_id')
+        ->map('entity', $builder->fromParent())
     );
 
-    $registry->addFieldResolver('EventConnection', 'total',
+    $registry->addFieldResolver('Taxonomy', 'name',
+      $builder->compose(
+        $builder->produce('entity_label')
+          ->map('entity', $builder->fromParent())
+      )
+    );
+  }
+
+  /**
+   * @param string $type
+   * @param \Drupal\graphql\GraphQL\ResolverRegistryInterface $registry
+   * @param \Drupal\graphql\GraphQL\ResolverBuilder $builder
+   */
+  protected function addConnectionFields($type, ResolverRegistryInterface $registry, ResolverBuilder $builder): void {
+    $registry->addFieldResolver($type, 'total',
       $builder->callback(function (QueryConnection $connection) {
         return $connection->total();
       })
     );
 
-    $registry->addFieldResolver('EventConnection', 'items',
+    $registry->addFieldResolver($type, 'items',
       $builder->callback(function (QueryConnection $connection) {
         return $connection->items();
       })
     );
-
-    // Response type resolver.
-    // $registry->addTypeResolver('Response', [
-    //   __CLASS__,
-    //   'resolveResponse',
-    // ]);
   }
-
-  /**
-   * Resolves the response type.
-   *
-   * @param \Drupal\graphql\GraphQL\Response\ResponseInterface $response
-   *   Response object.
-   *
-   * @return string
-   *   Response type.
-   *
-   * @throws \Exception
-   *   Invalid response type.
-   */
-  // public static function resolveResponse(ResponseInterface $response): string {
-  //   // Resolve content response.
-  //   if ($response instanceof ArticleResponse) {
-  //     return 'ArticleResponse';
-  //   }
-  //   throw new \Exception('Invalid response type.');
-  // }
-
 }

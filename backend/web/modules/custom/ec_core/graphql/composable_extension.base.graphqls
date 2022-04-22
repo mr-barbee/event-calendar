@@ -1,5 +1,4 @@
 # type Mutation
-
 scalar Violation
 scalar Date
 scalar Array
@@ -9,7 +8,7 @@ type User {
   name: String!
   fullName: String
   phone: String
-  email: String
+  primary: String
   contact: Boolean
   categories: Array
   experiences: Array
@@ -29,4 +28,14 @@ type Event {
 type EventConnection {
   total: Int!
   items: [Event!]
+}
+
+type Taxonomy {
+  id: Int!
+  name: String
+}
+
+type TaxonomyConnection {
+  total: Int!
+  items: [Taxonomy!]
 }
