@@ -1,10 +1,10 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Navigate } from 'react-router-dom'
 import FacebookLogin from 'react-facebook-login'
 import { Formik, Form, Field } from 'formik'
-import { useMutation,} from 'react-query'
+import { useQuery, useMutation } from 'react-query'
+import UserService from '../api/UserService'
 import { useToken } from '../auth/useToken'
-import axios from 'axios'
 import * as Yup from 'yup';
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
@@ -14,56 +14,46 @@ const ValidationSchema = Yup.object().shape({
 })
 
 export default function Login() {
-  const navigate = useNavigate()
-  const [, setToken] = useToken()
+  const [token, setToken] = useToken()
   const [error, setError] = useState('')
-
+  // We want to call the user api only once the skip state is set.
+  const [skip, setSkip] = useState(false)
+  const { isLoading, data } = useQuery(['get-user'], () => UserService.getCurrentUser(), { enabled: skip })
+  // Login mutation for the login form with an email and password.
+  const { data: mutationData, mutate: mutatePostLogin } = useMutation((values) => UserService.loginUser(values))
+  // Login mutation for the facebook data.
+  const { data: facebookData, mutate: mutateFacebookLogin } = useMutation((accessToken) => UserService.facebookLoginUser(accessToken))
+  // Reponse callback for the facebook login.
   const responseFacebook = response => {
     if (response.accessToken) {
-      // Set the data from
-      // the Facebook API.
-      onFacebookResponseLogin(response.accessToken)
-    }
-    else {
+      // Set the data from the Facebook API.
+      mutateFacebookLogin(response.accessToken, { onError: (res) => setError(res.data.message) })
+    } else {
       setError('Sorry, unable to authenticate with Facebook.')
     }
   }
 
-  const mutatePostLogin = useMutation(
-    values => axios.post(`https://cms.event-calendar.lndo.site/user/login?_format=json`, {
-    name: values.email, pass: values.password }, { withCredentials: true }),
-    {
-      onSuccess: response => {
-        // Get the token data
-        // from the response.
-        setToken(response.data)
-        // After setting
-        // we navigate to
-        // the user dashbard.
-        navigate('/')
-      },
-      onError: error => {
-        setError(error.response.data.message)
+  useEffect(() => {
+    if (mutationData || facebookData) {
+      // we want to run the
+      // current user api.
+      setSkip(true)
+    }
+  }, [mutationData, facebookData])
+
+  useEffect(() => {
+    if (data && !isLoading) {
+      if (mutationData || facebookData) {
+        // Get the token data from the response.
+        let tokenData = mutationData ? mutationData : facebookData
+        tokenData.current_user = data.currentUser
+        setToken(tokenData)
       }
     }
-  )
+  }, [data, isLoading, facebookData, mutationData, setToken])
 
-  const onFacebookResponseLogin = async (accessToken) => {
-    await axios.post(`https://cms.event-calendar.lndo.site/user/login/facebook?_format=json`, {
-      access_token: accessToken})
-      .then(response => {
-        // Get the token data
-        // from the response.
-        setToken(response.data)
-        // After setting
-        // we navigate to
-        // the user dashbard.
-        navigate('/')
-      })
-      .catch((err) => {
-        setError(err)
-      })
-  }
+  // Direct to the login page if token is set.
+  if (token) return <Navigate to="/" />
 
   return (
     <div className="login">
@@ -75,7 +65,7 @@ export default function Login() {
             password: ''
           }}
           validationSchema={ValidationSchema}
-          onSubmit={values => { mutatePostLogin.mutate(values) }}
+          onSubmit={values => { mutatePostLogin(values, { onError: (res) => setError(res.data.message) }) }}
         >
           {({ errors, touched }) => (
             <Form>

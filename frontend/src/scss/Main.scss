@@ -41,5 +41,18 @@ body {
       width: 80%;
       margin: 0 auto;
     }
+    .logout-button {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+      display: inline;
+      margin: 0;
+      padding: 0;
+      svg {
+        font-size: 25px;
+        color: white;
+      }
+    }
   }
 }

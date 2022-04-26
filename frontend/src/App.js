@@ -4,7 +4,17 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import './App.scss'
 
 // Create a client
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      // refetchOnmount: false,
+      // refetchOnReconnect: false,
+      retry: false,
+      staleTime: 5*60*1000,
+    },
+  },
+})
 
 export default function App() {
   return (
