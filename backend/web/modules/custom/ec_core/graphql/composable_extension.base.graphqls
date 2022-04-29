@@ -6,6 +6,7 @@ scalar Array
 type User {
   id: Int!
   name: String!
+  email: String
   fullName: String
   phone: String
   primary: String

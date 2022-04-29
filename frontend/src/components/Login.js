@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Navigate } from 'react-router-dom'
 import FacebookLogin from 'react-facebook-login'
-import { Formik, Form, Field } from 'formik'
-import { useQuery, useMutation } from 'react-query'
+import { Formik } from 'formik'
+import { useMutation } from 'react-query'
 import UserService from '../api/UserService'
 import { useToken } from '../auth/useToken'
+import { Button, Form, Row, Col } from 'react-bootstrap'
 import * as Yup from 'yup';
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
@@ -16,9 +17,6 @@ const ValidationSchema = Yup.object().shape({
 export default function Login() {
   const [token, setToken] = useToken()
   const [error, setError] = useState('')
-  // We want to call the user api only once the skip state is set.
-  const [skip, setSkip] = useState(false)
-  const { isLoading, data } = useQuery(['get-user'], () => UserService.getCurrentUser(), { enabled: skip })
   // Login mutation for the login form with an email and password.
   const { data: mutationData, mutate: mutatePostLogin } = useMutation((values) => UserService.loginUser(values))
   // Login mutation for the facebook data.
@@ -37,20 +35,10 @@ export default function Login() {
     if (mutationData || facebookData) {
       // we want to run the
       // current user api.
-      setSkip(true)
+      let tokenData = mutationData ? mutationData : facebookData
+      setToken(tokenData)
     }
-  }, [mutationData, facebookData])
-
-  useEffect(() => {
-    if (data && !isLoading) {
-      if (mutationData || facebookData) {
-        // Get the token data from the response.
-        let tokenData = mutationData ? mutationData : facebookData
-        tokenData.current_user = data.currentUser
-        setToken(tokenData)
-      }
-    }
-  }, [data, isLoading, facebookData, mutationData, setToken])
+  }, [mutationData, facebookData, setToken])
 
   // Direct to the login page if token is set.
   if (token) return <Navigate to="/" />
@@ -58,43 +46,76 @@ export default function Login() {
   return (
     <div className="login">
       <>
-        <h3>Please Sign in below with your <strong>email</strong>:</h3>
+        <h3>Please Sign in below with your <strong>Email</strong>:</h3>
         <Formik
           initialValues={{
             email: '',
             password: ''
           }}
           validationSchema={ValidationSchema}
-          onSubmit={values => { mutatePostLogin(values, { onError: (res) => setError(res.data.message) }) }}
+          onSubmit={(values, {setSubmitting, resetForm}) => { mutatePostLogin(values, { onError: (res) => setError(res.data.message) }) }}
         >
-          {({ errors, touched }) => (
-            <Form>
-              <div>
-                <Field name="email" type="email" placeholder="Email"  />
-                {errors.email && touched.email ? <div>{errors.email}</div> : null}
-              </div>
-              <div>
-                <Field name="password" type="password" placeholder="Password"  />
-                {errors.password && touched.password ? <div>{errors.password}</div> : null}
-              </div>
-              <div>
-                <button type="submit">Login</button>
-              </div>
-              <div>
-                <p><strong>-- OR --</strong></p>
-              </div>
-              <div>
-                <FacebookLogin
-                  appId='1123351384872679'
-                  autoLoad={false}
-                  fields='name,email,picture'
-                  scope='public_profile,user_friends'
-                  callback={responseFacebook}
-                  icon='fa-facebook' />
-              </div>
+          {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
+            <Form onSubmit={handleSubmit}>
+              <Row className="mb-3">
+                <Form.Group
+                  as={Col}
+                  md="12"
+                  controlId="formEmail"
+                  className="position-relative"
+                >
+                  <Form.Control
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    value={values.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    isValid={touched.email && !errors.email}
+                  />
+                  <Form.Text className="text-muted">
+                    Please input the email you used when signing up with.
+                  </Form.Text>
+                </Form.Group>
+              </Row>
+              <Row className="mb-3">
+                <Form.Group
+                  as={Col}
+                  md="12"
+                  controlId="formPassword"
+                  className="position-relative"
+                >
+                  <Form.Control
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    value={values.password}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    isValid={touched.password && !errors.password}
+                  />
+                </Form.Group>
+              </Row>
+              <Row className="mb-3">
+                <Col><Button variant="primary" type="submit">Login</Button></Col>
+              </Row>
             </Form>
           )}
         </Formik>
+        <Row className="mb-3">
+          <Col><p><strong>-- OR --</strong></p></Col>
+        </Row>
+        <Row className="mb-3">
+          <Col>
+            <FacebookLogin
+              appId='1123351384872679'
+              autoLoad={false}
+              fields='name,email,picture'
+              scope='public_profile,user_friends'
+              callback={responseFacebook}
+              icon='fa-facebook' />
+          </Col>
+        </Row>
       </>
       {error &&
         <p>{ error }</p>

@@ -5,6 +5,7 @@ import Login from './components/Login'
 import Dashboard from './components/Dashboard'
 import ContactForm from './components/ContactForm'
 import ValidateUser from './components/ValidateUser'
+import { Container } from 'react-bootstrap'
 import { PrivateRoute } from './auth/PrivateRoute'
 
 export const PageRoutes = () => {
@@ -12,14 +13,16 @@ export const PageRoutes = () => {
     <Router>
       <Header />
       <div className="main">
-        <Routes>
-          <Route exact path='/' element={<PrivateRoute />}>
-            <Route exact path='/' element={<Dashboard />}/>
-            <Route exact path='/contact-form' element={<ContactForm />}/>
-          </Route>
-          <Route path='/login' element={<Login />}/>
-          <Route path='/please-verify' element={<ValidateUser />}/>
-        </Routes>
+        <Container fluid>
+          <Routes>
+            <Route exact path='/' element={<PrivateRoute />}>
+              <Route exact path='/' element={<Dashboard />}/>
+              <Route exact path='/contact-form' element={<ContactForm />}/>
+            </Route>
+            <Route path='/login' element={<Login />}/>
+            <Route path='/please-verify' element={<ValidateUser />}/>
+          </Routes>
+        </Container>
       </div>
       <Footer />
     </Router>

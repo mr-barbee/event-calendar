@@ -12,9 +12,8 @@ function Logout() {
   const user = useUser()
   const [token, setToken] = useToken()
   const [skip, setSkip] = useState(false)
-  const [, setIsLogout] = useState(false)
   // Login mutation for the login form with an email and password.
-  const { isLoading, isError, error, mutate: userLogout } = useMutation((values) => UserService.logoutUser(values), { onSuccess: () => logout() })
+  const { isError, error, mutate: userLogout } = useMutation((values) => UserService.logoutUser(values), { onSuccess: () => logout() })
   // We want to fetch a session token for the logout process bc a fresh token is needed.
   const { isLoading: sessionIsLoading, data: sessionToken } = useQuery(['sessionToken'], () => UserService.fetchSessionToken(), { enabled: skip, onSuccess: () => setSkip(false) })
 
@@ -29,7 +28,6 @@ function Logout() {
     clearCacheData()
     // Set the user token to null.
     setToken(null)
-    setIsLogout(true)
     // We want to navigate
     // back to the login page.
     navigate('/login')
@@ -54,19 +52,11 @@ function Logout() {
     }
   }, [user, sessionIsLoading])
 
-  useEffect(() => {
-    console.log('in')
-    setIsLogout(false)
-  }, [])
-
   return (
     <div>
       {user && token && sessionToken &&
         <button className="logout-button" type="submit" onClick={() => {userLogout({'logoutToken': token.logout_token, 'sessionToken': sessionToken})}}><FaSignOutAlt /></button>
       }
-      {isLoading
-          ? "Logging out...": ""
-        }
       {isError
         ? error.message : ""
       }

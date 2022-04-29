@@ -3,8 +3,6 @@ body {
   padding-bottom: 100px;
   .app {
     text-align: center;
-
-
     .header, .footer {
       background-color: #282c34;
       min-height: 80px;
@@ -17,42 +15,51 @@ body {
       width: 100%;
       position: fixed;
       padding: 10px 0;
-      .header--back-button {
-        a {
-          color: white;
-          text-decoration: none;
-        }
-      }
-      .header--title {
-        flex: 1;
-      }
     }
     .header{
       top: 0;
       display: flex;
+      z-index: 1;
+      .header--wrapper {
+        display: flex;
+        justify-content: space-between;
+        width: 90%;
+        .header--back {
+          width: 30px;
+        }
+        .header--title {
+
+        }
+        .header--login {
+          width: 30px;
+        }
+        .logout-button,
+        .back-button {
+          background-color: transparent;
+          border: none;
+          cursor: pointer;
+          text-decoration: underline;
+          display: inline;
+          margin: 0;
+          padding: 0;
+          svg {
+            font-size: 25px;
+            color: white;
+          }
+        }
       }
+    }
+    .main {
+      width: 80%;
+      margin: 0 auto;
+      margin-top: 40px;
+    }
     .footer{
       bottom: 0;
       display: flex;
       flex-direction: column;
       justify-content: center;
-    }
-    .main {
-      width: 80%;
-      margin: 0 auto;
-    }
-    .logout-button {
-      background-color: transparent;
-      border: none;
-      cursor: pointer;
-      text-decoration: underline;
-      display: inline;
-      margin: 0;
-      padding: 0;
-      svg {
-        font-size: 25px;
-        color: white;
-      }
+      z-index: 1;
     }
   }
 }
