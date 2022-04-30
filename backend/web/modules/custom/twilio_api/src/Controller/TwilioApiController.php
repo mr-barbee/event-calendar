@@ -21,6 +21,13 @@ use Twilio\Rest\Client;
 class TwilioApiController extends ControllerBase {
 
   /**
+   * Config settings.
+   */
+  protected function getConfigs() {
+    return \Drupal::config('twilio_api_settings_form.settings');
+  }
+
+  /**
    * [sendVerificationToken description]
    * @param  Request $request [description]
    * @return [type]           [description]
@@ -28,11 +35,12 @@ class TwilioApiController extends ControllerBase {
   public function sendVerificationToken(Request $request) {
     $status = 200;
     $response = [];
+    $config = $this->getConfigs();
 
     // Here we want to check the IP whitelist to make sure the
     // IP address is valid for access to this method.
     $api_error = TwilioApiHandler::validate_api_request($request);
-    if (isset($api_error['status']) && $api_error['status'] == 'error'){
+    if (isset($api_error['status']) && $api_error['status'] == 'FAILURE'){
       throw new AccessDeniedHttpException;
     }
 
@@ -43,20 +51,17 @@ class TwilioApiController extends ControllerBase {
       try {
         // Find your Account SID and Auth Token at twilio.com/console
         // and set the environment variables. See http://twil.io/secure
-        $account_sid = 'AC98612360ca3c6a64da32e80e751d81b0';
-        $token = '8b2392a5c990e33328676cecde2ea44d';
-        $service_id = 'VA110d6f8871c021e5ce915bd1eaa2c496';
-        $type = 'sms';
-
+        $account_sid = $config->get('twilio_api_settings_form.account_sid');
+        $token = $config->get('twilio_api_settings_form.auth_token');
+        $service_id = $config->get('twilio_api_settings_form.service_id');
 
         $twilio = new Client($account_sid, $token);
-        // Format: "+18564269588"
         $verification = $twilio->verify->v2->services($service_id)
                                      ->verifications
-                                     ->create( $data['contact'], $type);
+                                     ->create( $data['contact'], $data['type'], ["locale" => "en"]);
 
         // If the status is not pending that means
-        // somehting went wrong with the call.
+        // something went wrong with the call.
         $status = $verification->status == 'pending' ? 200 : 400;
         $response = [
           'valid' => $verification->valid,
@@ -88,6 +93,7 @@ class TwilioApiController extends ControllerBase {
   public function checkVerificationToken(Request $request) {
     $status = 200;
     $response = [];
+    $config = $this->getConfigs();
 
     // Here we want to check the IP whitelist to make sure the
     // IP address is valid for access to this method.
@@ -99,33 +105,20 @@ class TwilioApiController extends ControllerBase {
     $data = json_decode($request->getContent(), TRUE);
     // Update the request with the data.
     $request->request->replace( is_array( $data ) ? $data : [] );
-    if (isset($data['contact']) && isset($data['code'])) {
+    if (isset($data['sid']) && isset($data['code'])) {
       try {
-        // @TODO add this to the settings file.
         // Find your Account SID and Auth Token at twilio.com/console
         // and set the environment variables. See http://twil.io/secure
-        $account_sid = 'AC98612360ca3c6a64da32e80e751d81b0';
-        $token = '8b2392a5c990e33328676cecde2ea44d';
-        $service_id = 'VA110d6f8871c021e5ce915bd1eaa2c496';
+        $account_sid = $config->get('twilio_api_settings_form.account_sid');
+        $token = $config->get('twilio_api_settings_form.auth_token');
+        $service_id = $config->get('twilio_api_settings_form.service_id');
 
         $twilio = new Client($account_sid, $token);
-        // Format: "+18564269588"
         $verification_check = $twilio->verify->v2->services($service_id)
                                           ->verificationChecks
                                           ->create($data['code'],
-                                                   ["to" => $data['contact']]
+                                                   ["verificationSid" => $data['sid']]
                                           );
-
-        // If the status is not approved that means
-        // somehting went wrong with the call.
-        // $session = \Drupal::request()->getSession();
-        // $session->set('twilio_sid', $verification_check->sid);
-
-
-        // $tempstore = \Drupal::service('user.private_tempstore')->get('mymodule_name');
-        // $tempstore->set('my_variable_name', $some_data);
-
-
 
         $status = $verification_check->status == 'approved' ? 200 : 400;
         $response = [

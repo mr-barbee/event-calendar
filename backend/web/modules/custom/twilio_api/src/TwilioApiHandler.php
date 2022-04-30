@@ -8,13 +8,23 @@ namespace Drupal\twilio_api;
 
 class TwilioApiHandler {
 
-  const ALLOWED_IPS = [
-    '172.19.0.2'
-  ];
+  /**
+   * [allowedIPAdresses description]
+   * @return [type] [description]
+   */
+  protected function allowedIPAdresses() {
+    $config = \Drupal::config('twilio_api_settings_form.settings');
+    return !empty($config->get('twilio_api_settings_form.allowed_ips')) ? explode(PHP_EOL, $config->get('twilio_api_settings_form.allowed_ips')): [];
+  }
 
+  /**
+   * [validate_api_request description]
+   * @param  [type] $request               [description]
+   * @return [type]          [description]
+   */
 	static function validate_api_request($request) {
     $ip = $request->getClientIp();
-    if (in_array($ip, TwilioApiHandler::ALLOWED_IPS)) {
+    if (in_array($ip, TwilioApiHandler::allowedIPAdresses())) {
       $api_error['status'] = 'SUCCESS';
     }
     else {

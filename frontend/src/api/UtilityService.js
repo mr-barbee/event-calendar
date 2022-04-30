@@ -11,4 +11,24 @@ export default class UtilityService {
       }
     })
   }
+  static sendVerificationToken(values) {
+    return request({
+      url: 'api/services/send-token',
+      method: 'POST',
+      data: {
+        contact: values.contact,
+        type: values.type
+      }
+    })
+  }
+  static verifyToken(values) {
+    return request({
+      url: 'api/services/check-token',
+      method: 'POST',
+      data: {
+        sid: values.sid,
+        code: values.code
+      }
+    })
+  }
 }

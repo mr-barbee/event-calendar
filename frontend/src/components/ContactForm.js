@@ -1,9 +1,10 @@
-import { useNavigate } from 'react-router-dom'
-import { useQuery } from 'react-query'
+import { useState, useEffect } from 'react'
+import { useNavigate, Navigate } from 'react-router-dom'
+import { useQuery, useMutation } from 'react-query'
 import { Formik } from 'formik'
 import UserService from '../api/UserService'
 import UtilityService from '../api/UtilityService'
-import { Button, Form, Row, Col } from 'react-bootstrap'
+import { Button, Form, InputGroup, Row, Col } from 'react-bootstrap'
 import * as Yup from 'yup'
 
 // RegEx for phone number validation
@@ -26,15 +27,47 @@ const ContactFormSchema = Yup.object().shape({
 
 function ContactForm() {
   const navigate = useNavigate()
+  const [error, setError] = useState('')
+  const [verification, setVerification] = useState('')
   const { isLoading, data } = useQuery(['get-user'], () => UserService.getCurrentUser())
   const { isLoading: categoriesLoading, data: categories } = useQuery(['get-volunteer-categories'], () => UtilityService.getTaxonomy('volunteer_categories'))
   const { isLoading: skillsLoading, data: experiences } = useQuery(['get-experience-skills'], () => UtilityService.getTaxonomy('experience_skills'))
 
+  const { data: verificationData, mutate: sendVerification } = useMutation((values) => UtilityService.sendVerificationToken(values))
 
   const formSubmit = values => {
     console.log(values)
-    navigate('/')
+    // We want to verify the data the contact information.
+    // Reasons why we need to verify the contact info.
+    // 1. Perfered primary contact was changed.
+    // 2. The users account was never verified.
+    // 3. The user updated there primary contact info.
+    const type = values.primaryContact === 'e' ? 'email' : 'sms';
+    const contact = values.primaryContact === 'e' ? values.email : `+1${values.phone}`
+    sendVerification({'contact': contact, 'type': type}, { onError: (res) => setError(res.data.error_message) })
+
+    // We only want navigate to
+    // profile page if we dont
+    // need to validate contact.
+    if (false) {
+      navigate('/')
+    }
   }
+
+  useEffect(() => {
+    if (verificationData) {
+      // we want to verify the status is pending.
+      if (verificationData.status === 'pending') {
+        setVerification(verificationData.token)
+      } else {
+        const error = verificationData.error_message ?? 'There was an error with the verification'
+        setError(error)
+      }
+    }
+  }, [verificationData, setVerification])
+
+  // Direct to the verification page if token is set.
+  if (verification) return <Navigate to={`/please-verify?sid=${verification}`} />
 
   return (
     <div className="contact-form">
@@ -129,16 +162,24 @@ function ContactForm() {
                   md="6"
                   controlId="formPhone"
                 >
-                  <Form.Control
-                    type="text"
-                    name="phone"
-                    placeholder="* Phone"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.phone}
-                    className={touched.phone && errors.phone ? "error" : null}
-                    isValid={touched.phone && !errors.phone}
-                  />
+                  <InputGroup className="mb-3">
+                    <InputGroup.Text id="phone">+1</InputGroup.Text>
+                    <Form.Control
+                      type="text"
+                      name="phone"
+                      placeholder="* Phone"
+                      aria-label="Phone"
+                      aria-describedby="phone"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.phone}
+                      className={touched.phone && errors.phone ? "error" : null}
+                      isValid={touched.phone && !errors.phone}
+                    />
+                  </InputGroup>
+                  <Form.Text className="text-muted">
+                    Please include the area code.
+                  </Form.Text>
                   {touched.phone && errors.phone ? (
                     <div className="error-message">{errors.phone}</div>
                   ): null}
@@ -174,6 +215,9 @@ function ContactForm() {
                       onBlur={handleBlur}
                       isValid={touched.primaryContact && !errors.primaryContact}
                     />
+                    <Form.Text className="text-muted">
+                      If you change your primary contact then you would need to verify that contact.
+                    </Form.Text>
                   </div>
                   {touched.primaryContact && errors.primaryContact ? (
                     <div className="error-message">{errors.primaryContact}</div>
@@ -295,6 +339,9 @@ function ContactForm() {
             </Form>
           )}
         </Formik>
+      }
+      {error &&
+        <p>{ error }</p>
       }
     </div>
   )

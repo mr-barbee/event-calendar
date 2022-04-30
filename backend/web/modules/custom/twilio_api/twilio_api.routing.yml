@@ -7,7 +7,6 @@ twilio_api.send_token:
   requirements:
     _permission: 'access content'
 
-
 twilio_api.check_token:
   path: '/api/services/check-token'
   defaults:
@@ -16,3 +15,12 @@ twilio_api.check_token:
   methods:  [POST]
   requirements:
     _permission: 'access content'
+
+twilio_api.settings:
+  path: '/admin/config/system/settings/twilio'
+  base_route_name: twilio_api.admin.config
+  defaults:
+    _form: '\Drupal\twilio_api\Form\TwilioApiSettings'
+    _title: 'Twilio API Settings'
+  requirements:
+    _permission: 'admin twilio api'
