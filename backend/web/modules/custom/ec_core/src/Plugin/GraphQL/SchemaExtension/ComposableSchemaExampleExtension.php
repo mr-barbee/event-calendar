@@ -247,7 +247,7 @@ class ComposableSchemaExampleExtension extends SdlSchemaExtensionPluginBase {
         ->map('path', $builder->fromValue('body.value'))
     );
 
-    $registry->addFieldResolver('Event', 'startDate', $builder->compose(
+    $registry->addFieldResolver('Event', 'start', $builder->compose(
       $builder->produce('property_path')
         ->map('type', $builder->fromValue('entity:node:event'))
         ->map('value', $builder->fromParent())
@@ -255,11 +255,11 @@ class ComposableSchemaExampleExtension extends SdlSchemaExtensionPluginBase {
       $builder->callback(function ($entity) {
         // need to adjust the string for the timezone so -00:00 is needed
         $dateTime = new DrupalDateTime($entity[0]['value'] . '-00:00');
-        return \Drupal::service('date.formatter')->format($dateTime->getTimestamp(), 'long');
+        return \Drupal::service('date.formatter')->format($dateTime->getTimestamp(), 'html_datetime');
       })
     ));
 
-    $registry->addFieldResolver('Event', 'endDate', $builder->compose(
+    $registry->addFieldResolver('Event', 'end', $builder->compose(
       $builder->produce('property_path')
         ->map('type', $builder->fromValue('entity:node:event'))
         ->map('value', $builder->fromParent())
@@ -267,7 +267,7 @@ class ComposableSchemaExampleExtension extends SdlSchemaExtensionPluginBase {
       $builder->callback(function ($entity) {
                 // need to adjust the string for the timezone so -00:00 is needed
         $dateTime = new DrupalDateTime($entity[0]['value'] . '-00:00');
-        return \Drupal::service('date.formatter')->format($dateTime->getTimestamp(), 'long');
+        return \Drupal::service('date.formatter')->format($dateTime->getTimestamp(), 'html_datetime');
       })
     ));
 
@@ -281,6 +281,7 @@ class ComposableSchemaExampleExtension extends SdlSchemaExtensionPluginBase {
           $paragraph = Paragraph::load( $element['target_id'] );
           if (!empty($paragraph->field_event_category->target_id)) {
             $categories[] = [
+              'id' => $paragraph->field_event_category->target_id,
               'category' => Term::load($paragraph->field_event_category->target_id)->get('name')->value,
               'count' => $paragraph->field_event_category_count->value
             ];

@@ -22,3 +22,27 @@ export const GETTAXONOMY = taxonomy => `query GetTaxonomies {
     }
   }
 }`
+
+export const GETEVENT = id => `query GetEvent {
+  event(id: ${id}) {
+    id
+    title
+    body
+    start
+    end
+    categories
+    volunteers
+  }
+}`
+
+export const GETEVENTS = parameters => `query GetEvents{
+  events(limit:${parameters.limit}, offset:${parameters.offset}, date:"${parameters.date}", range:"${parameters.range}", user:${parameters.user}) {
+    total
+    items {
+      id
+      title
+      start
+      end
+    }
+  }
+}`

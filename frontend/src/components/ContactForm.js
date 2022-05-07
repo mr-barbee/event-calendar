@@ -36,7 +36,6 @@ function ContactForm() {
   const { data: verificationData, mutate: sendVerification } = useMutation((values) => UtilityService.sendVerificationToken(values))
 
   const formSubmit = values => {
-    console.log(values)
     // We want to verify the data the contact information.
     // Reasons why we need to verify the contact info.
     // 1. Perfered primary contact was changed.
@@ -83,7 +82,7 @@ function ContactForm() {
             categories: Object.keys(data.currentUser.categories),
             notify: data.currentUser.contact,
             experiences: Object.keys(data.currentUser.experiences),
-            note: data.currentUser.note
+            note: data.currentUser.note ?? ''
           }}
           validationSchema={ContactFormSchema}
           onSubmit={(values, {setSubmitting, resetForm}) => { formSubmit(values) }}

@@ -5,6 +5,8 @@ import Login from './components/Login'
 import Dashboard from './components/Dashboard'
 import ContactForm from './components/ContactForm'
 import ValidateUser from './components/ValidateUser'
+import DeleteUser from './components/DeleteUser'
+import EventCalendar from './components/Calendar/EventCalendar'
 import { Container } from 'react-bootstrap'
 import { PrivateRoute } from './auth/PrivateRoute'
 
@@ -18,6 +20,8 @@ export const PageRoutes = () => {
             <Route exact path='/' element={<PrivateRoute />}>
               <Route exact path='/' element={<Dashboard />}/>
               <Route exact path='/contact-form' element={<ContactForm />}/>
+              <Route exact path='/delete-user' element={<DeleteUser />}/>
+              <Route exact path='/event-calendar' element={<EventCalendar />}/>
             </Route>
             <Route path='/login' element={<Login />}/>
             <Route path='/please-verify' element={<ValidateUser />}/>
