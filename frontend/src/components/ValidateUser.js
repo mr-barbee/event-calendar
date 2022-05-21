@@ -23,9 +23,8 @@ function ValidateUser() {
   const { data: verificationData, mutate: sendVerification } = useMutation((values) => UtilityService.verifyToken(values))
 
   const formSubmit = values => {
-    console.log(values)
     if (values.code) {
-      sendVerification({'sid': sid, 'code': values.code}, { onError: (res) => setError(res.data.error_message) })
+      sendVerification({'sid': sid, 'code': values.code}, { onError: (res) => setError('There was an error with the verification') })
     } else {
       setError("Token is not set.")
     }
@@ -72,10 +71,10 @@ function ValidateUser() {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   isValid={touched.code && !errors.code}
-                  className={touched.code && errors.code ? "error" : null}
+                  className={(touched.code && errors.code) || error ? "error" : null}
                 />
-                {touched.code && errors.code ? (
-                  <div className="error-message">{errors.code}</div>
+              {touched.code && errors.code  ? (
+                  <div className="error-message">{errors.code ?? error}</div>
                 ): null}
               </Form.Group>
             </Row>

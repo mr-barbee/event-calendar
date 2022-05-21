@@ -4,6 +4,7 @@ import { useToken } from '../auth/useToken'
 import { useUser } from '../auth/useUser'
 import UserService from '../api/UserService'
 import { FaSignOutAlt } from "react-icons/fa"
+import { logout } from './Common/LogoutHelper'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 function Logout() {
@@ -19,28 +20,28 @@ function Logout() {
 
   // We want to clear user queries, cache
   // and token and redirect to the login page.
-  const logout = () =>  {
-    // Clear the token and queries
-    localStorage.removeItem('token')
-    queryClient.removeQueries('get-user')
-    // We want to clear
-    // all of the cache data.
-    clearCacheData()
-    // Set the user token to null.
-    setToken(null)
-    // We want to navigate
-    // back to the login page.
-    navigate('/login')
-  }
-
-  // Function to clear complete cache data
-  const clearCacheData = () => {
-    caches.keys().then((names) => {
-      names.forEach((name) => {
-        caches.delete(name)
-      })
-    })
-  }
+  // const logout = () =>  {
+  //   // Clear the token and queries
+  //   localStorage.removeItem('token')
+  //   queryClient.removeQueries('get-user')
+  //   // We want to clear
+  //   // all of the cache data.
+  //   clearCacheData()
+  //   // Set the user token to null.
+  //   setToken(null)
+  //   // We want to navigate
+  //   // back to the login page.
+  //   navigate('/login')
+  // }
+  //
+  // // Function to clear complete cache data
+  // const clearCacheData = () => {
+  //   caches.keys().then((names) => {
+  //     names.forEach((name) => {
+  //       caches.delete(name)
+  //     })
+  //   })
+  // }
 
   useEffect(() => {
     // if the user is set and data empty run the

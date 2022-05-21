@@ -1,9 +1,9 @@
 import axios from 'axios'
+import LogoutHelper from '../components/Common/LogoutHelper'
 
 const AxiosClient = (() => {
-  // @TODO Put these variables in an .ENV file.
   return axios.create({
-    baseURL: 'https://cms.event-calendar.lndo.site/',
+    baseURL: process.env.REACT_APP_BASE_URL,
     timeout: 1000,
     headers: {
       'Content-Type': 'application/json'
@@ -25,6 +25,8 @@ const request = async function (options, store) {
   }
   // Catch the error response.
   const onError = function (error) {
+    console.log(error.response.status)
+    if (error.response.status === 403) LogoutHelper.logout()
     return Promise.reject(error.response)
   }
   // Adding the axios client.

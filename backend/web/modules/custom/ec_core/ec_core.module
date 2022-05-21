@@ -1,0 +1,20 @@
+<?php
+
+use \Drupal\user\Entity\User;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+function ec_core_preprocess_page() {
+  if (!\Drupal::currentUser()->isAnonymous()) {
+    $user = User::load(\Drupal::currentUser()->id());
+    $roles = $user->getRoles();
+    // We only allow certian roles to login.
+    if (!in_array('administrator', $roles)) {
+      user_logout();
+      \Drupal::messenger()->addMessage(t('You dont have access to this '), 'error');
+      $homeResponse = new RedirectResponse(Url::fromRoute('user.login')->toString());
+      $homeResponse->send();
+    }
+  }
+}

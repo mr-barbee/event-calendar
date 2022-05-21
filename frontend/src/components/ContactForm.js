@@ -4,7 +4,7 @@ import { useQuery, useMutation } from 'react-query'
 import { Formik } from 'formik'
 import UserService from '../api/UserService'
 import UtilityService from '../api/UtilityService'
-import { Button, Form, InputGroup, Row, Col } from 'react-bootstrap'
+import { Spinner, Button, Form, InputGroup, Row, Col } from 'react-bootstrap'
 import * as Yup from 'yup'
 
 // RegEx for phone number validation
@@ -41,16 +41,17 @@ function ContactForm() {
     // 1. Perfered primary contact was changed.
     // 2. The users account was never verified.
     // 3. The user updated there primary contact info.
-    const type = values.primaryContact === 'e' ? 'email' : 'sms';
-    const contact = values.primaryContact === 'e' ? values.email : `+1${values.phone}`
-    sendVerification({'contact': contact, 'type': type}, { onError: (res) => setError(res.data.error_message) })
-
-    // We only want navigate to
-    // profile page if we dont
-    // need to validate contact.
-    if (false) {
+    if (data.currentUser.primary !== values.primaryContact) {
+      const type = values.primaryContact === 'e' ? 'email' : 'sms';
+      const contact = values.primaryContact === 'e' ? values.email : `+1${values.phone}`
+      sendVerification({'contact': contact, 'type': type}, { onError: (res) => setError(res.data.error_message) })
+    } else {
+      // We only want navigate to
+      // profile page if we dont
+      // need to validate contact.
       navigate('/')
     }
+
   }
 
   useEffect(() => {
@@ -338,6 +339,11 @@ function ContactForm() {
             </Form>
           )}
         </Formik>
+      }
+      {isLoading &&
+        <Spinner animation="border" role="status" size="lg" >
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
       }
       {error &&
         <p>{ error }</p>
