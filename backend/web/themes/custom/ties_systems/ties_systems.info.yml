@@ -1,0 +1,40 @@
+core: 8.x
+type: theme
+base theme: bootstrap_business
+core_version_requirement: ^8 || ^9
+name: 'TIES Systems'
+description: 'A Drupal Bootstrap Business based sub-theme.'
+package: 'Bootstrap'
+version: '9.x-1.0'
+dependencies:
+  - drupal:admin_toolbar
+  - drupal:system
+  - drupal:user
+  - bootstrap_business:bootstrap_business
+
+regions:
+    pre_header_first: 'Pre Header First'
+    pre_header_second: 'Pre Header Second'
+    pre_header_third: 'Pre Header Third'
+    header_top_left: 'Header Top Left'
+    header_top_right: 'Header Top Right'
+    header: Header
+    navigation: 'Navigation'
+    banner: 'Banner'
+    highlighted: Highlighted
+    promoted: 'Promoted'
+    content: Content
+    sidebar_first: 'Sidebar First'
+    sidebar_second: 'Sidebar Second'
+    bottom_content: 'Bottom Content'
+    footer_first: 'Footer First'
+    footer_second: 'Footer Second'
+    footer_third: 'Footer Third'
+    footer_fourth: 'Footer Fourth'
+    footer: Footer
+    help: Help
+    page_top: 'Page top'
+    page_bottom: 'Page bottom'
+
+libraries:
+  - ties_systems/framework

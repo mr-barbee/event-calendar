@@ -1,0 +1,17 @@
+/* Styles */
+.form-item-check-in-date-min {
+  clear: both !important;
+}
+.form-item-check-out-date-min {
+  clear: both !important;
+}
+.js-form-item .bootstrap-select.dropdown {
+  width: 100% !important;
+}
+#book-items {
+  margin: 50px 0px;
+}
+
+tr th p {
+  margin: 0 0 0px;
+}
