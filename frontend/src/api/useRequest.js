@@ -1,5 +1,5 @@
 import axios from 'axios'
-import LogoutHelper from '../components/Common/LogoutHelper'
+import useLogout from '../components/Common/useLogout'
 
 const AxiosClient = (() => {
   return axios.create({
@@ -13,7 +13,8 @@ const AxiosClient = (() => {
 })()
 
 // The base request used to get query data.
-const request = async function (options, store) {
+const useRequest = () => {
+  const [logout] = useLogout()
   // Success hanlder for the request
   const onSuccess = function (response) {
     const {
@@ -25,12 +26,14 @@ const request = async function (options, store) {
   }
   // Catch the error response.
   const onError = function (error) {
-    console.log(error.response.status)
-    if (error.response.status === 403) LogoutHelper.logout()
+    if (typeof error.response !== 'undefined' && error.response.status === 403) logout()
     return Promise.reject(error.response)
   }
-  // Adding the axios client.
-  return AxiosClient(options).then(onSuccess).catch(onError)
+  const request = async function (options, store) {
+    // Adding the axios client.
+    return AxiosClient(options).then(onSuccess).catch(onError)
+  }
+  return [request]
 }
 
-export default request
+export default useRequest

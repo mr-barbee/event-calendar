@@ -1,47 +1,21 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useToken } from '../auth/useToken'
 import { useUser } from '../auth/useUser'
-import UserService from '../api/UserService'
+import useUserService from '../api/useUserService'
 import { FaSignOutAlt } from "react-icons/fa"
-import { logout } from './Common/LogoutHelper'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
+import useLogout from './Common/useLogout'
+import { useMutation, useQuery } from 'react-query'
 
 function Logout() {
-  const queryClient = useQueryClient()
-  const navigate = useNavigate()
   const user = useUser()
-  const [token, setToken] = useToken()
+  const [token] = useToken()
+  const [logout] = useLogout()
   const [skip, setSkip] = useState(false)
+  const [,,, logoutUser, fetchSessionToken] = useUserService()
   // Login mutation for the login form with an email and password.
-  const { isError, error, mutate: userLogout } = useMutation((values) => UserService.logoutUser(values), { onSuccess: () => logout() })
+  const { isError, error, mutate: userLogout } = useMutation((values) => logoutUser(values), { onSuccess: () => logout() })
   // We want to fetch a session token for the logout process bc a fresh token is needed.
-  const { isLoading: sessionIsLoading, data: sessionToken } = useQuery(['sessionToken'], () => UserService.fetchSessionToken(), { enabled: skip, onSuccess: () => setSkip(false) })
-
-  // We want to clear user queries, cache
-  // and token and redirect to the login page.
-  // const logout = () =>  {
-  //   // Clear the token and queries
-  //   localStorage.removeItem('token')
-  //   queryClient.removeQueries('get-user')
-  //   // We want to clear
-  //   // all of the cache data.
-  //   clearCacheData()
-  //   // Set the user token to null.
-  //   setToken(null)
-  //   // We want to navigate
-  //   // back to the login page.
-  //   navigate('/login')
-  // }
-  //
-  // // Function to clear complete cache data
-  // const clearCacheData = () => {
-  //   caches.keys().then((names) => {
-  //     names.forEach((name) => {
-  //       caches.delete(name)
-  //     })
-  //   })
-  // }
+  const { isLoading: sessionIsLoading, data: sessionToken } = useQuery(['sessionToken'], () => fetchSessionToken(), { enabled: skip, onSuccess: () => setSkip(false) })
 
   useEffect(() => {
     // if the user is set and data empty run the
@@ -53,13 +27,12 @@ function Logout() {
     }
   }, [user, sessionIsLoading])
 
+  if (isError) console.log(error.message)
+
   return (
     <div>
       {user && token && sessionToken &&
         <button className="logout-button" type="submit" onClick={() => {userLogout({'logoutToken': token.logout_token, 'sessionToken': sessionToken})}}><FaSignOutAlt /></button>
-      }
-      {isError
-        ? error.message : ""
       }
     </div>
   )

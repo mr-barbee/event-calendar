@@ -1,8 +1,9 @@
-import request from "./request"
+import useRequest from "./useRequest"
 import * as GRAPHQL from './graphql'
 
-export default class UserService {
-  static getCurrentUser() {
+const useUserService = () => {
+  const [request] = useRequest()
+  function getCurrentUser() {
     return request({
       url: 'graphql_api',
       method: 'POST',
@@ -11,7 +12,7 @@ export default class UserService {
       }
     })
   }
-  static loginUser(values) {
+  function loginUser(values) {
     return request({
       url: 'user/login?_format=json',
       method: 'POST',
@@ -21,7 +22,7 @@ export default class UserService {
       }
     })
   }
-  static facebookLoginUser(accessToken) {
+  function facebookLoginUser(accessToken) {
     return request({
       url: 'user/login/facebook?_format=json',
       method: 'POST',
@@ -30,7 +31,7 @@ export default class UserService {
       }
     })
   }
-  static logoutUser(values) {
+  function logoutUser(values) {
     return request({
       url: `user/logout?_format=json&token=${values.logoutToken}`,
       method: 'POST',
@@ -39,10 +40,14 @@ export default class UserService {
       }
     })
   }
-  static fetchSessionToken() {
+  function fetchSessionToken() {
     return request({
       url: 'session/token',
       method: 'GET'
     })
   }
+
+  return [getCurrentUser, loginUser, facebookLoginUser, logoutUser, fetchSessionToken]
 }
+
+export default useUserService

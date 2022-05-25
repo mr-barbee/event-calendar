@@ -7,16 +7,17 @@ import interactionPlugin from '@fullcalendar/interaction'
 import bootstrap5Plugin from '@fullcalendar/bootstrap5'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import EventDetail from './EventDetail'
-import EventService from '../../api/EventService'
+import useEventService from '../../api/useEventService'
 import { useQuery } from 'react-query'
-import { Spinner, Button } from 'react-bootstrap'
+import { Spinner } from 'react-bootstrap'
 
 function EventCalendar() {
   const calendarRef = useRef(null)
   const [eventDetail, setEventDetail] = useState(false)
-  const { isLoading: eventsLoading, data: eventData } = useQuery(['get-events'], () => EventService.getEvents({'limit': 10, 'offset': 0, 'date':'01-05-2022', 'range': '12 month', 'user': null}))
+  const [, getEvents] = useEventService()
+  const { isLoading: eventsLoading, data: eventData } = useQuery(['get-events'], () => getEvents({'limit': 10, 'offset': 0, 'date':'01-05-2022', 'range': '12 month', 'user': null}))
 
-
+  // use this in the FullCalendar eventContent={renderEventContent}
   const renderEventContent = eventInfo => {
     return (
       <>
@@ -56,7 +57,6 @@ function EventCalendar() {
             initialView="dayGridMonth"
             events={eventData.events.items}
             dateClick={handleDateClick}
-            // eventContent={renderEventContent}
             themeSystem="bootstrap5"
             eventClick={handleEventClick}
           />

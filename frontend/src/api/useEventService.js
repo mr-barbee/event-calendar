@@ -1,8 +1,9 @@
-import request from "./request"
+import useRequest from "./useRequest"
 import * as GRAPHQL from './graphql'
 
-export default class EventService {
-  static getEvent(id) {
+const useEventService = () => {
+  const [request] = useRequest()
+  function getEvent(id) {
     return request({
       url: 'graphql_api',
       method: 'POST',
@@ -11,7 +12,7 @@ export default class EventService {
       }
     })
   }
-  static getEvents(parameters) {
+  function getEvents(parameters) {
     return request({
       url: 'graphql_api',
       method: 'POST',
@@ -20,4 +21,7 @@ export default class EventService {
       }
     })
   }
+  return [getEvent, getEvents]
 }
+
+export default useEventService

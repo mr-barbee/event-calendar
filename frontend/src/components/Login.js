@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom'
 import FacebookLogin from 'react-facebook-login'
 import { Formik } from 'formik'
 import { useMutation } from 'react-query'
-import UserService from '../api/UserService'
+import useUserService from '../api/useUserService'
 import { useToken } from '../auth/useToken'
 import { Button, Form, Row, Col } from 'react-bootstrap'
 import * as Yup from 'yup';
@@ -17,10 +17,11 @@ const ValidationSchema = Yup.object().shape({
 export default function Login() {
   const [token, setToken] = useToken()
   const [error, setError] = useState('')
+  const [, loginUser, facebookLoginUser] = useUserService()
   // Login mutation for the login form with an email and password.
-  const { data: mutationData, mutate: mutatePostLogin } = useMutation((values) => UserService.loginUser(values))
+  const { data: mutationData, mutate: mutatePostLogin } = useMutation((values) => loginUser(values))
   // Login mutation for the facebook data.
-  const { data: facebookData, mutate: mutateFacebookLogin } = useMutation((accessToken) => UserService.facebookLoginUser(accessToken))
+  const { data: facebookData, mutate: mutateFacebookLogin } = useMutation((accessToken) => facebookLoginUser(accessToken))
   // Reponse callback for the facebook login.
   const responseFacebook = response => {
     if (response.accessToken) {

@@ -2,18 +2,22 @@ import { useQueryClient } from 'react-query'
 import { useNavigate } from 'react-router-dom'
 import { useToken } from '../../auth/useToken'
 
-export default function LogoutHelper () {
+// We want to clear user queries, cache
+// and token and redirect to the login page.
+const useLogout = () => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
   const [, setToken] = useToken()
-
-  return {
-    logout
+  // Helper function to clear user
+  // data saved in browser.
+  const clearCacheData = () => {
+    caches.keys().then((names) => {
+      names.forEach((name) => {
+        caches.delete(name)
+      })
+    })
   }
-
-  // We want to clear user queries, cache
-  // and token and redirect to the login page.
-  function logout() {
+  const logout = () => {
     // Clear the token and queries
     localStorage.removeItem('token')
     queryClient.removeQueries('get-user')
@@ -22,19 +26,12 @@ export default function LogoutHelper () {
     clearCacheData()
     // Set the user token to null.
     setToken(null)
-    console.log('in')
     // We want to navigate
     // back to the login page.
     navigate('/login')
   }
 
-  // Function to clear complete cache data
-  function clearCacheData() {
-    caches.keys().then((names) => {
-      names.forEach((name) => {
-        caches.delete(name)
-      })
-    })
-  }
-
+  return [logout]
 }
+
+export default useLogout

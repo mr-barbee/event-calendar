@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Navigate, useSearchParams } from "react-router-dom"
 import { useMutation } from 'react-query'
-import UtilityService from '../api/UtilityService'
+import useUtilityService from '../api/useUtilityService'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { Button, Form, Row, Col } from 'react-bootstrap'
@@ -19,8 +19,8 @@ function ValidateUser() {
   const [error, setError] = useState('')
   const [verified, setVerified] = useState(false)
   const sid = searchParams.get("sid")
-
-  const { data: verificationData, mutate: sendVerification } = useMutation((values) => UtilityService.verifyToken(values))
+  const [,, verifyToken] = useUtilityService()
+  const { data: verificationData, mutate: sendVerification } = useMutation((values) => verifyToken(values))
 
   const formSubmit = values => {
     if (values.code) {

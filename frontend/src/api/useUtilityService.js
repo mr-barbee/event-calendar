@@ -1,8 +1,9 @@
-import request from "./request"
+import useRequest from "./useRequest"
 import * as GRAPHQL from './graphql'
 
-export default class UtilityService {
-  static getTaxonomy(taxonomy) {
+const useUtilityService = () => {
+  const [request] = useRequest()
+  function getTaxonomy(taxonomy) {
     return request({
       url: 'graphql_api',
       method: 'POST',
@@ -11,7 +12,7 @@ export default class UtilityService {
       }
     })
   }
-  static sendVerificationToken(values) {
+  function sendVerificationToken(values) {
     return request({
       url: 'api/services/send-token',
       method: 'POST',
@@ -21,7 +22,7 @@ export default class UtilityService {
       }
     })
   }
-  static verifyToken(values) {
+  function verifyToken(values) {
     return request({
       url: 'api/services/check-token',
       method: 'POST',
@@ -31,4 +32,7 @@ export default class UtilityService {
       }
     })
   }
+  return [getTaxonomy, sendVerificationToken, verifyToken]
 }
+
+export default useUtilityService

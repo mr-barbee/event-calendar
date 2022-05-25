@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import { useNavigate, Navigate } from 'react-router-dom'
 import { useQuery, useMutation } from 'react-query'
 import { Formik } from 'formik'
-import UserService from '../api/UserService'
-import UtilityService from '../api/UtilityService'
+import useUserService from '../api/useUserService'
+import useUtilityService from '../api/useUtilityService'
 import { Spinner, Button, Form, InputGroup, Row, Col } from 'react-bootstrap'
 import * as Yup from 'yup'
 
@@ -29,11 +29,13 @@ function ContactForm() {
   const navigate = useNavigate()
   const [error, setError] = useState('')
   const [verification, setVerification] = useState('')
-  const { isLoading, data } = useQuery(['get-user'], () => UserService.getCurrentUser())
-  const { isLoading: categoriesLoading, data: categories } = useQuery(['get-volunteer-categories'], () => UtilityService.getTaxonomy('volunteer_categories'))
-  const { isLoading: skillsLoading, data: experiences } = useQuery(['get-experience-skills'], () => UtilityService.getTaxonomy('experience_skills'))
+  const [getCurrentUser] = useUserService()
+  const [getTaxonomy, sendVerificationToken] = useUtilityService()
+  const { isLoading, data } = useQuery(['get-user'], () => getCurrentUser())
+  const { isLoading: categoriesLoading, data: categories } = useQuery(['get-volunteer-categories'], () => getTaxonomy('volunteer_categories'))
+  const { isLoading: skillsLoading, data: experiences } = useQuery(['get-experience-skills'], () => getTaxonomy('experience_skills'))
 
-  const { data: verificationData, mutate: sendVerification } = useMutation((values) => UtilityService.sendVerificationToken(values))
+  const { data: verificationData, mutate: sendVerification } = useMutation((values) => sendVerificationToken(values))
 
   const formSubmit = values => {
     // We want to verify the data the contact information.

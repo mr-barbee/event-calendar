@@ -3,7 +3,7 @@ import { useQuery } from 'react-query'
 import { useUser } from '../../auth/useUser'
 import { Formik } from 'formik'
 import { Spinner, Button, Modal, Col, Row, Form } from 'react-bootstrap'
-import EventService from '../../api/EventService'
+import useEventService from '../../api/useEventService'
 import * as Yup from 'yup'
 
 const EventFormSchema = Yup.object().shape({
@@ -19,7 +19,8 @@ const EventFormSchema = Yup.object().shape({
 function EventDetail(props) {
   const user = useUser()
   const [show, setShow] = useState(true)
-  const { isLoading, data } = useQuery([`get-event-${props.id}`], () => EventService.getEvent(props.id))
+  const [getEvent] = useEventService()
+  const { isLoading, data } = useQuery([`get-event-${props.id}`], () => getEvent(props.id))
 
   const handleClose = () => {
     // Close the modal.
