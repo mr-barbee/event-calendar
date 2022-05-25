@@ -1,14 +1,14 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Header from './components/Header'
-import Footer from './components/Footer'
-import Login from './components/Login'
-import Dashboard from './components/Dashboard'
-import ContactForm from './components/ContactForm'
-import ValidateUser from './components/ValidateUser'
-import DeleteUser from './components/DeleteUser'
-import EventCalendar from './components/Calendar/EventCalendar'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
+import Login from '../components/Login'
+import Dashboard from '../components/Dashboard'
+import ContactForm from '../components/ContactForm'
+import ValidateUser from '../components/ValidateUser'
+import DeleteUser from '../components/DeleteUser'
+import EventCalendar from '../components/Calendar'
 import { Container } from 'react-bootstrap'
-import { PrivateRoute } from './auth/PrivateRoute'
+import { PrivateRoute } from '../auth/PrivateRoute'
 
 export const PageRoutes = () => {
   return (

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import useLogout from '../components/Common/useLogout'
+import useLogout from '../hooks/useLogout'
 
 const AxiosClient = (() => {
   return axios.create({

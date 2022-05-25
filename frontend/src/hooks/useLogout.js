@@ -1,6 +1,6 @@
 import { useQueryClient } from 'react-query'
 import { useNavigate } from 'react-router-dom'
-import { useToken } from '../../auth/useToken'
+import { useToken } from '../auth/useToken'
 
 // We want to clear user queries, cache
 // and token and redirect to the login page.

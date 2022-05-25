@@ -3,10 +3,10 @@ import { Navigate } from 'react-router-dom'
 import FacebookLogin from 'react-facebook-login'
 import { Formik } from 'formik'
 import { useMutation } from 'react-query'
-import useUserService from '../api/useUserService'
-import { useToken } from '../auth/useToken'
+import useUserService from '../../api/useUserService'
+import { useToken } from '../../auth/useToken'
 import { Button, Form, Row, Col } from 'react-bootstrap'
-import * as Yup from 'yup';
+import * as Yup from 'yup'
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 const ValidationSchema = Yup.object().shape({

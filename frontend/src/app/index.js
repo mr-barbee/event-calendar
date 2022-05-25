@@ -1,7 +1,7 @@
 import { PageRoutes } from './PageRoutes'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
-import './App.scss'
+import './style.scss'
 
 // Create a client
 const queryClient = new QueryClient({

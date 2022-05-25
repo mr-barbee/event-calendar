@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Navigate, useSearchParams } from "react-router-dom"
 import { useMutation } from 'react-query'
-import useUtilityService from '../api/useUtilityService'
+import useUtilityService from '../../api/useUtilityService'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { Button, Form, Row, Col } from 'react-bootstrap'

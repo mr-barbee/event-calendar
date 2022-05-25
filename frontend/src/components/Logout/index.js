@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
-import { useToken } from '../auth/useToken'
-import { useUser } from '../auth/useUser'
-import useUserService from '../api/useUserService'
+import { useToken } from '../../auth/useToken'
+import { useUser } from '../../auth/useUser'
+import useUserService from '../../api/useUserService'
 import { FaSignOutAlt } from "react-icons/fa"
-import useLogout from './Common/useLogout'
+import useLogout from '../../hooks/useLogout'
 import { useMutation, useQuery } from 'react-query'
 
 function Logout() {
