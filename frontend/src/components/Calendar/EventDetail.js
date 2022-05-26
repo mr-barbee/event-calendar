@@ -1,20 +1,10 @@
 import { useState } from 'react'
 import { useQuery } from 'react-query'
-import { useUser } from '../../auth/useUser'
+import { useUser } from '../../hooks/useUser'
 import { Formik } from 'formik'
 import { Spinner, Button, Modal, Col, Row, Form } from 'react-bootstrap'
 import useEventService from '../../api/useEventService'
-import * as Yup from 'yup'
-
-const EventFormSchema = Yup.object().shape({
- categories: Yup.array()
-    .min(1, 'Required'),
-  hours: Yup.number()
-    .typeError('hours must specify a number')
-    .min(0, 'Min value 0.')
-    .max(30, 'Max value 30.')
-    .required('Required'),
-})
+import ValidationSchema from './validation'
 
 function EventDetail(props) {
   const user = useUser()
@@ -55,7 +45,7 @@ function EventDetail(props) {
             hours: '',
             note: ''
           }}
-          validationSchema={EventFormSchema}
+          validationSchema={ValidationSchema}
           onSubmit={(values, {setSubmitting, resetForm}) => { formSubmit(values) }}
         >
           {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (

@@ -10,6 +10,7 @@ import EventDetail from './EventDetail'
 import useEventService from '../../api/useEventService'
 import { useQuery } from 'react-query'
 import { Spinner } from 'react-bootstrap'
+import './style.scss'
 
 function EventCalendar() {
   const calendarRef = useRef(null)

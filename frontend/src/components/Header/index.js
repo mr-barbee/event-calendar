@@ -1,6 +1,7 @@
 import Logout from '../Logout'
 import { useNavigate, useMatch } from "react-router-dom"
 import { FaReply } from "react-icons/fa"
+import './style.scss'
 
 export default function Header() {
   const navigate = useNavigate()

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useToken } from '../../auth/useToken'
-import { useUser } from '../../auth/useUser'
+import { useToken } from '../../hooks/useToken'
+import { useUser } from '../../hooks/useUser'
 import useUserService from '../../api/useUserService'
 import { FaSignOutAlt } from "react-icons/fa"
 import useLogout from '../../hooks/useLogout'

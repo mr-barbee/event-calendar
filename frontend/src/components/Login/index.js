@@ -4,15 +4,10 @@ import FacebookLogin from 'react-facebook-login'
 import { Formik } from 'formik'
 import { useMutation } from 'react-query'
 import useUserService from '../../api/useUserService'
-import { useToken } from '../../auth/useToken'
+import { useToken } from '../../hooks/useToken'
 import { Button, Form, Row, Col } from 'react-bootstrap'
-import * as Yup from 'yup'
-
-const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
-const ValidationSchema = Yup.object().shape({
-  email: Yup.string().email('Invalid email').required('Required'),
-  phone: Yup.string().matches(phoneRegExp, 'Phone number is not valid')
-})
+import ValidationSchema from './validation'
+import './style.scss'
 
 export default function Login() {
   const [token, setToken] = useToken()
@@ -73,7 +68,11 @@ export default function Login() {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     isValid={touched.email && !errors.email}
+                    className={touched.email && errors.email ? "error" : null}
                   />
+                  {touched.email && errors.email ? (
+                    <div className="error-message">{errors.email}</div>
+                  ): null}
                   <Form.Text className="text-muted">
                     Please input the email you used when signing up with.
                   </Form.Text>
@@ -94,7 +93,11 @@ export default function Login() {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     isValid={touched.password && !errors.password}
+                    className={touched.password && errors.password ? "error" : null}
                   />
+                  {touched.password && errors.password ? (
+                    <div className="error-message">{errors.password}</div>
+                  ): null}
                 </Form.Group>
               </Row>
               <Row className="mb-3">

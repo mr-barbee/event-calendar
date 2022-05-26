@@ -1,0 +1,43 @@
+.header {
+  background-color: #282c34;
+  min-height: 80px;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  width: 100%;
+  position: fixed;
+  padding: 10px 0;
+  top: 0;
+  z-index: 10;
+  .header--wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    .header--back {
+      width: 30px;
+    }
+    .header--title {
+
+    }
+    .header--login {
+      width: 30px;
+    }
+    .logout-button,
+    .back-button {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+      display: inline;
+      margin: 0;
+      padding: 0;
+      svg {
+        font-size: 25px;
+        color: white;
+      }
+    }
+  }
+}

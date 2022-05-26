@@ -3,16 +3,8 @@ import { Navigate, useSearchParams } from "react-router-dom"
 import { useMutation } from 'react-query'
 import useUtilityService from '../../api/useUtilityService'
 import { Formik } from 'formik'
-import * as Yup from 'yup'
 import { Button, Form, Row, Col } from 'react-bootstrap'
-
-const ContactFormSchema = Yup.object().shape({
- code: Yup.string()
-    .matches(/^[0-9]+$/, "Must be only digits")
-    .min(6, 'Too Short!')
-    .max(9, 'Too Long!')
-    .required('Required')
-})
+import ValidationSchema from './validation'
 
 function ValidateUser() {
   let [searchParams] = useSearchParams()
@@ -52,7 +44,7 @@ function ValidateUser() {
         initialValues={{
           code: '',
         }}
-        validationSchema={ContactFormSchema}
+        validationSchema={ValidationSchema}
         onSubmit={(values, {setSubmitting, resetForm}) => { formSubmit(values) }}
       >
         {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (

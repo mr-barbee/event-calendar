@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { Button, Row, Col } from 'react-bootstrap'
-import { useUser } from '../../auth/useUser'
+import { useUser } from '../../hooks/useUser'
+import './style.scss'
 
 function Dashboard() {
   const navigate = useNavigate()

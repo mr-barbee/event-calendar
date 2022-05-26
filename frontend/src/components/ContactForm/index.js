@@ -5,25 +5,7 @@ import { Formik } from 'formik'
 import useUserService from '../../api/useUserService'
 import useUtilityService from '../../api/useUtilityService'
 import { Spinner, Button, Form, InputGroup, Row, Col } from 'react-bootstrap'
-import * as Yup from 'yup'
-
-// RegEx for phone number validation
-const phoneRegExp = /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/
-
-const ContactFormSchema = Yup.object().shape({
- fullName: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-  phone: Yup.string()
-    .matches(phoneRegExp, "*Phone number is not valid")
-    .required("*Phone number required"),
-  email: Yup.string()
-    .email('Invalid email')
-    .required('Required'),
-  primaryContact: Yup.string()
-    .required('Required'),
-})
+import ValidationSchema from './validation'
 
 function ContactForm() {
   const navigate = useNavigate()
@@ -87,7 +69,7 @@ function ContactForm() {
             experiences: Object.keys(data.currentUser.experiences),
             note: data.currentUser.note ?? ''
           }}
-          validationSchema={ContactFormSchema}
+          validationSchema={ValidationSchema}
           onSubmit={(values, {setSubmitting, resetForm}) => { formSubmit(values) }}
         >
           {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (

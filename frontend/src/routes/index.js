@@ -8,7 +8,7 @@ import ValidateUser from '../components/ValidateUser'
 import DeleteUser from '../components/DeleteUser'
 import EventCalendar from '../components/Calendar'
 import { Container } from 'react-bootstrap'
-import { PrivateRoute } from '../auth/PrivateRoute'
+import { PrivateRoute } from './PrivateRoute'
 
 export const PageRoutes = () => {
   return (
