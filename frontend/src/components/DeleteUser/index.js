@@ -1,4 +1,5 @@
-import { Button, Form, Row } from 'react-bootstrap'
+import { Form, Row } from 'react-bootstrap'
+import { Submit } from '../_common/FormElements'
 
 function DeleteUser() {
 
@@ -10,7 +11,7 @@ function DeleteUser() {
     <div className="delete-user">
       <Form onSubmit={handleSubmit}>
         <Row>
-          <Button variant="primary" type="submit">Delete User</Button>
+          <Submit value='Delete User' />
         </Row>
       </Form>
     </div>

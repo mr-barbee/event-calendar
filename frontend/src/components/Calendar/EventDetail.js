@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { useUser } from '../../hooks/useUser'
 import { Formik } from 'formik'
-import { Spinner, Button, Modal, Col, Row, Form } from 'react-bootstrap'
+import { Spinner, Modal, Col, Row, Form } from 'react-bootstrap'
+import { Submit, Input, Check  } from '../_common/FormElements'
 import useEventService from '../../api/useEventService'
 import ValidationSchema from './validation'
 
@@ -67,84 +68,64 @@ function EventDetail(props) {
                   </Col>
                 </Row>
                 <Row>
-                  <Form.Group
+                  <Check
+                    as={Col}
+                    column="12"
+                    type="checkbox"
                     controlId="formCategories"
-                    as={Col}
-                    md="12"
-                    className="mb-3"
-                  >
-                    <Form.Label>
-                      <p>The number next to the category depicts how many volunteer spots are still needed</p>
-                    </Form.Label>
-                    {data.event.categories.map((items) => (
-                      <Col sm='3' className="mb-3" key={ items.id }>
-                        <Form.Check
-                          inline
-                          label={ items.category + " (" + items.count + ")" }
-                          name="categories"
-                          type='checkbox'
-                          id={ items.category }
-                          value={ items.id }
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                      </Col>
+                    groupClassName="mb-3"
+                    formLabel={<p>The number next to the category depicts how many volunteer spots are still needed</p>}
+                    name="categories"
+                    checkColumn="3"
+                    inline={true}
+                    value={values.categories}
+                    values={data.event.categories.map((items) => (
+                      {id:items.name, label:items.category + " (" + items.count + ")", value:items.id}
                     ))}
-                    {touched.categories && errors.categories ? (
-                      <div className="error-message">{errors.categories}</div>
-                    ): null}
-                  </Form.Group>
-                </Row>
-                <Row className="mb-3">
-                  <Form.Label><p>How many hours can your volunteer for:</p></Form.Label>
-                  <Form.Group
-                    as={Col}
-                    md="6"
-                    controlId="formHours"
-                  >
-                    <Form.Control
-                      type="text"
-                      name="hours"
-                      placeholder="* Hours Available"
-                      value={values.hours}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      isValid={touched.hours && !errors.hours}
-                      className={touched.hours && errors.hours ? "error" : null}
-                    />
-                    <Form.Text className="text-muted">
-                      <p><strong><sup>Hours will be divided evenly among categories</sup></strong></p>
-                    </Form.Text>
-                    {touched.hours && errors.hours ? (
-                      <div className="error-message">{errors.hours}</div>
-                    ): null}
-                  </Form.Group>
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    errors={touched.categories && errors.categories ? errors.categories : null}
+                  />
                 </Row>
                 <Row>
-                  <Form.Group
+                  <Input
                     as={Col}
-                    md="12"
-                    className="mb-3"
+                    column="6"
+                    controlId="formHours"
+                    groupClassName="mb-3"
+                    type="text"
+                    name="hours"
+                    placeholder="* Hours Available"
+                    formLabel={<p>How many hours can your volunteer for:</p>}
+                    value={values.hours}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    isValid={touched.hours && !errors.hours}
+                    className={touched.hours && errors.hours ? "error" : null}
+                    errors={touched.hours && errors.hours ? errors.hours : null}
+                    helperText={<p><strong><sup>Hours will be divided evenly among categories</sup></strong></p>}
+                  />
+                </Row>
+                <Row>
+                  <Input
+                    as={Col}
+                    column="12"
                     controlId="formNote"
-                  >
-                    <Form.Label>Add Note:</Form.Label>
-                    <Form.Control
-                      as="textarea"
-                      rows={3}
-                      name="note"
-                      placeholder="Note (Optional)"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.note}
-                    />
-                  </Form.Group>
+                    groupClassName="mb-3"
+                    inputAs="textarea"
+                    name="note"
+                    rows={3}
+                    formLabel="Add Note:"
+                    placeholder="Note (Optional)"
+                    value={values.note}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
                 </Row>
               </Modal.Body>
               <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                  Close
-                </Button>
-                <Button variant="primary" type="submit">Volunteer Now</Button>
+                <Submit variant="secondary" onClick={handleClose} value="Close" />
+                <Submit value="Volunteer Now" />
               </Modal.Footer>
             </Form>
           )}

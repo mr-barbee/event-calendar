@@ -5,7 +5,8 @@ import { Formik } from 'formik'
 import { useMutation } from 'react-query'
 import useUserService from '../../api/useUserService'
 import { useToken } from '../../hooks/useToken'
-import { Button, Form, Row, Col } from 'react-bootstrap'
+import { Form, Row, Col } from 'react-bootstrap'
+import { Submit, Input } from '../_common/FormElements'
 import ValidationSchema from './validation'
 import './style.scss'
 
@@ -54,54 +55,44 @@ export default function Login() {
           {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
             <Form onSubmit={handleSubmit}>
               <Row className="mb-3">
-                <Form.Group
+                <Input
                   as={Col}
-                  md="12"
+                  column="12"
                   controlId="formEmail"
-                  className="position-relative"
-                >
-                  <Form.Control
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    value={values.email}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    isValid={touched.email && !errors.email}
-                    className={touched.email && errors.email ? "error" : null}
-                  />
-                  {touched.email && errors.email ? (
-                    <div className="error-message">{errors.email}</div>
-                  ): null}
-                  <Form.Text className="text-muted">
-                    Please input the email you used when signing up with.
-                  </Form.Text>
-                </Form.Group>
+                  groupClassName="position-relative"
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={values.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  isValid={touched.email && !errors.email}
+                  className={touched.email && errors.email ? "error" : null}
+                  errors={touched.email && errors.email ? errors.email : null}
+                  helperText="Please input the email you used when signing up with."
+                />
               </Row>
               <Row className="mb-3">
-                <Form.Group
+                <Input
                   as={Col}
-                  md="12"
+                  column="12"
                   controlId="formPassword"
-                  className="position-relative"
-                >
-                  <Form.Control
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    value={values.password}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    isValid={touched.password && !errors.password}
-                    className={touched.password && errors.password ? "error" : null}
-                  />
-                  {touched.password && errors.password ? (
-                    <div className="error-message">{errors.password}</div>
-                  ): null}
-                </Form.Group>
+                  groupClassName="position-relative"
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={values.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  isValid={touched.password && !errors.password}
+                  className={touched.password && errors.password ? "error" : null}
+                  errors={touched.password && errors.password ? errors.password : null}
+                />
               </Row>
               <Row className="mb-3">
-                <Col><Button variant="primary" type="submit">Login</Button></Col>
+                <Col>
+                  <Submit value='Login' />
+                </Col>
               </Row>
             </Form>
           )}

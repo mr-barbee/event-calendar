@@ -3,7 +3,8 @@ import { Navigate, useSearchParams } from "react-router-dom"
 import { useMutation } from 'react-query'
 import useUtilityService from '../../api/useUtilityService'
 import { Formik } from 'formik'
-import { Button, Form, Row, Col } from 'react-bootstrap'
+import { Form, Row, Col } from 'react-bootstrap'
+import { Submit, Input } from '../_common/FormElements'
 import ValidationSchema from './validation'
 
 function ValidateUser() {
@@ -50,28 +51,23 @@ function ValidateUser() {
         {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
           <Form onSubmit={handleSubmit}>
             <Row className="mb-3">
-              <Form.Group
+              <Input
                 as={Col}
-                md="6"
+                column="12"
                 controlId="formCode"
-              >
-                <Form.Control
-                  type="text"
-                  name="code"
-                  placeholder="* Access Code"
-                  value={values.code}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  isValid={touched.code && !errors.code}
-                  className={(touched.code && errors.code) || error ? "error" : null}
-                />
-              {touched.code && errors.code  ? (
-                  <div className="error-message">{errors.code ?? error}</div>
-                ): null}
-              </Form.Group>
+                type="text"
+                name="code"
+                placeholder="* Access Code"
+                value={values.code}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                isValid={touched.code && !errors.code}
+                className={touched.code && errors.code ? "error" : null}
+                errors={touched.code && errors.code ? errors.code : null}
+              />
             </Row>
             <Row className="mb-3">
-              <Col><Button variant="primary" type="submit">Verify</Button></Col>
+              <Col><Submit value='Verify' /></Col>
             </Row>
           </Form>
         )}

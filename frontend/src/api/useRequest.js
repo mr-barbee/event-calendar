@@ -26,6 +26,8 @@ const useRequest = () => {
   }
   // Catch the error response.
   const onError = function (error) {
+    // we want to clear cache and log browser out if we get a 403 access denied error.
+    // @TODO only do this for certain request or have a way this can be bypassed.
     if (typeof error.response !== 'undefined' && error.response.status === 403) logout()
     return Promise.reject(error.response)
   }

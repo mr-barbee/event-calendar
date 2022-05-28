@@ -5,6 +5,7 @@ import useUserService from '../../api/useUserService'
 import { FaSignOutAlt } from "react-icons/fa"
 import useLogout from '../../hooks/useLogout'
 import { useMutation, useQuery } from 'react-query'
+import { Submit } from '../_common/FormElements'
 
 function Logout() {
   const user = useUser()
@@ -32,7 +33,13 @@ function Logout() {
   return (
     <div>
       {user && token && sessionToken &&
-        <button className="logout-button" type="submit" onClick={() => {userLogout({'logoutToken': token.logout_token, 'sessionToken': sessionToken})}}><FaSignOutAlt /></button>
+        <Submit
+          className="logout-button"
+          value={ <FaSignOutAlt /> }
+          onClick={() => {
+            userLogout({'logoutToken': token.logout_token, 'sessionToken': sessionToken})
+          }}
+        />
       }
     </div>
   )

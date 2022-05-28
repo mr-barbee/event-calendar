@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
-import { Button, Row, Col } from 'react-bootstrap'
+import { Row, Col } from 'react-bootstrap'
 import { useUser } from '../../hooks/useUser'
+import { Submit } from '../_common/FormElements'
 import './style.scss'
 
 function Dashboard() {
@@ -32,16 +33,27 @@ function Dashboard() {
         <Col sm={12}>
           <Row className="mb-5">
             <p>Click here if you need to update your contact and/or profile information.</p>
-            <Button variant="secondary" type="submit" onClick={() => {navigation('profile')}}>Update Profile</Button>
+            <Submit
+              variant="secondary"
+              value='Update Profile'
+              onClick={() => { navigation('profile') }}
+            />
           </Row>
           <Row className="mb-5">
             <p>If you wish to delete your profile please click here.</p>
-            <Button variant="secondary" type="submit" onClick={() => {navigation('delete')}}>Delete Profile</Button>
+            <Submit
+              variant="secondary"
+              value='Delete Profile'
+              onClick={() => { navigation('delete') }}
+            />
           </Row>
         </Col>
         <Col sm={12}>
           <Row className="mb-5">
-            <Button variant="primary" type="submit" onClick={() => {navigation('events')}}>View Event Calendar</Button>
+            <Submit
+              value='View Event Calendar'
+              onClick={() => { navigation('events') }}
+            />
           </Row>
         </Col>
       </Row>
