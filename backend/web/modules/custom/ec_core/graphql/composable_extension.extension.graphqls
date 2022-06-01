@@ -15,3 +15,7 @@ extend type Query {
     id: Int = 0
   ): TaxonomyConnection!
 }
+
+extend type Mutation {
+  updateEvent(data: EventInput): EventResponse
+}

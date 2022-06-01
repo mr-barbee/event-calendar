@@ -21,7 +21,16 @@ const useEventService = () => {
       }
     })
   }
-  return [getEvent, getEvents]
+  function updateEvent(parameters) {
+    return request({
+      url: 'graphql_api',
+      method: 'POST',
+      data: {
+        query : GRAPHQL.UPDATEEVENT(parameters)
+      }
+    })
+  }
+  return [getEvent, getEvents, updateEvent]
 }
 
 export default useEventService

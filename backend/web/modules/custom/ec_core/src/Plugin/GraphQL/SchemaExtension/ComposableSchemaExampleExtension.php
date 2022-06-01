@@ -6,6 +6,7 @@ use Drupal\graphql\GraphQL\ResolverBuilder;
 use Drupal\graphql\GraphQL\ResolverRegistryInterface;
 use Drupal\graphql\GraphQL\Response\ResponseInterface;
 use Drupal\graphql\Plugin\GraphQL\SchemaExtension\SdlSchemaExtensionPluginBase;
+use Drupal\ec_core\GraphQL\Response\EventResponse;
 use Drupal\ec_core\Wrappers\QueryConnection;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\Core\Datetime\DrupalDateTime;
@@ -29,6 +30,7 @@ class ComposableSchemaExampleExtension extends SdlSchemaExtensionPluginBase {
     $builder = new ResolverBuilder();
     // Get the query and fields needed.
     $this->addQueryFields($registry, $builder);
+    $this->addMutationFields($registry, $builder);
     $this->addUserFields($registry, $builder);
     $this->addEventFields($registry, $builder);
     $this->addTaxonomyFields($registry, $builder);
@@ -37,6 +39,55 @@ class ComposableSchemaExampleExtension extends SdlSchemaExtensionPluginBase {
       // Re-usable connection type fields.
       $this->addConnectionFields($type, $registry, $builder);
     }
+  }
+
+  /**
+   * @param \Drupal\graphql\GraphQL\ResolverRegistryInterface $registry
+   * @param \Drupal\graphql\GraphQL\ResolverBuilder $builder
+   */
+  protected function addMutationFields(ResolverRegistryInterface $registry, ResolverBuilder $builder): void {
+    // Create event mutation.
+    $registry->addFieldResolver('Mutation', 'updateEvent',
+      $builder->produce('update_event')
+        ->map('data', $builder->fromArgument('data'))
+    );
+
+    $registry->addFieldResolver('EventResponse', 'event',
+      $builder->callback(function (EventResponse $response) {
+        return $response->event();
+      })
+    );
+
+    $registry->addFieldResolver('EventResponse', 'errors',
+      $builder->callback(function (EventResponse $response) {
+        return $response->getViolations();
+      })
+    );
+    // Response type resolver.
+    $registry->addTypeResolver('Response', [
+      __CLASS__,
+      'resolveResponse',
+    ]);
+  }
+
+  /**
+   * Resolves the response type.
+   *
+   * @param \Drupal\graphql\GraphQL\Response\ResponseInterface $response
+   *   Response object.
+   *
+   * @return string
+   *   Response type.
+   *
+   * @throws \Exception
+   *   Invalid response type.
+   */
+  public static function resolveResponse(ResponseInterface $response): string {
+    // Resolve content response.
+    if ($response instanceof EventResponse) {
+      return 'EventResponse';
+    }
+    throw new \Exception('Invalid response type.');
   }
 
   /**
@@ -296,7 +347,8 @@ class ComposableSchemaExampleExtension extends SdlSchemaExtensionPluginBase {
             $categories[] = [
               'id' => $paragraph->field_event_category->target_id,
               'category' => Term::load($paragraph->field_event_category->target_id)->get('name')->value,
-              'count' => $paragraph->field_event_category_count->value
+              'count' => $paragraph->field_event_category_count->value,
+              'remaining' => $paragraph->field_event_category_remaining->value
             ];
           }
         }
@@ -313,15 +365,23 @@ class ComposableSchemaExampleExtension extends SdlSchemaExtensionPluginBase {
         foreach ( $entity as $element ) {
           // Load the paragraph and user.
           $paragraph = Paragraph::load( $element['target_id'] );
-          if (!empty($paragraph->field_event_volunteer->target_id)) {
+          // Only pull back the volunteers that match the current user.
+          $user = User::load(\Drupal::currentUser()->id());
+          $roles = $user->getRoles();
+          // allow if the user is an admin, event admin, or is usr own event hours.
+          $allow = in_array('administrator', $roles) || in_array('event_admin', $roles) || $paragraph->field_event_volunteer->target_id == \Drupal::currentUser()->id();
+          if (!empty($paragraph->field_event_volunteer->target_id) && $allow) {
             $user = User::load($paragraph->field_event_volunteer->target_id);
-            $category = !empty(Term::load($paragraph->field_event_category->target_id)) ? Term::load($paragraph->field_event_category->target_id)->get('name')->value : '';
+            $categories = [];
+            foreach($paragraph->get('field_event_volunteer_category')->getValue() as $category) {
+              $categories[] = $category['target_id'];
+            }
             // And the user to the array.
             if (!empty($user)) {
               $volunteers[] = [
                 'id' => $paragraph->field_event_volunteer->target_id,
                 'volunteer' => $user->getDisplayName(),
-                'category' => $category,
+                'categories' => $categories,
                 'hours' => $paragraph->field_event_volunteer_hrs_avail->value,
                 'note' => $paragraph->field_event_volunteer_notes->value
               ];

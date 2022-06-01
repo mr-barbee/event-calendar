@@ -1,19 +1,22 @@
-import { useState } from 'react'
-import { useQuery } from 'react-query'
+import { useState, useEffect, useCallback } from 'react'
+import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { useUser } from '../../hooks/useUser'
 import { Formik } from 'formik'
-import { Spinner, Modal, Col, Row, Form } from 'react-bootstrap'
+import { Spinner, Modal, Col, Row, Form, Button } from 'react-bootstrap'
 import { Submit, Input, Check  } from '../_common/FormElements'
 import useEventService from '../../api/useEventService'
 import ValidationSchema from './validation'
 
 function EventDetail(props) {
+  const queryClient = useQueryClient()
   const user = useUser()
+  const [error, setError] = useState('')
   const [show, setShow] = useState(true)
-  const [getEvent] = useEventService()
+  const [getEvent, , updateEvent] = useEventService()
   const { isLoading, data } = useQuery([`get-event-${props.id}`], () => getEvent(props.id))
+  const { data: mutationEventData, mutate: mutateEvent } = useMutation((values) => updateEvent(values))
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     // Close the modal.
     setShow(false)
     // We want to wait for the
@@ -21,12 +24,50 @@ function EventDetail(props) {
     setTimeout(function () {
       props.onHide()
     }, 500)
-  }
+  }, [props])
 
   const formSubmit = values => {
-    console.log(values)
-    handleClose()
+    // Add the id to the values.
+    values.id = props.id
+    values.remove = false
+    // Update the event with
+    // the event volunteer data.
+    mutateEvent(values, {
+      onSuccess: () => {
+        // refetch the event data
+        queryClient.invalidateQueries([`get-event-${props.id}`])
+      }
+   })
   }
+
+  const removeVolunteer = () => {
+    // Add the id to the values.
+    const values = {
+      id: props.id,
+      categories:[],
+      hours:0,
+      note:'',
+      remove: true
+    }
+    // Update the event with
+    // the event volunteer data.
+    mutateEvent(values, {
+      onSuccess: () => {
+        // refetch the event data
+        queryClient.invalidateQueries([`get-event-${props.id}`])
+      }
+   })
+  }
+
+  useEffect(() => {
+    if (mutationEventData) {
+      if (mutationEventData.errors) {
+        setError(mutationEventData.errors[0].message)
+      } else {
+        handleClose()
+      }
+    }
+  }, [mutationEventData, handleClose])
 
   return (
     <Modal
@@ -42,9 +83,9 @@ function EventDetail(props) {
       {data && !isLoading &&
         <Formik
           initialValues={{
-            categories: [],
-            hours: '',
-            note: ''
+            categories: data.event.volunteers.length ? data.event.volunteers[0].categories : [],
+            hours: data.event.volunteers.length ? data.event.volunteers[0].hours : '',
+            note: data.event.volunteers.length && data.event.volunteers[0].note ? data.event.volunteers[0].note : ''
           }}
           validationSchema={ValidationSchema}
           onSubmit={(values, {setSubmitting, resetForm}) => { formSubmit(values) }}
@@ -80,7 +121,7 @@ function EventDetail(props) {
                     inline={true}
                     value={values.categories}
                     values={data.event.categories.map((items) => (
-                      {id:items.name, label:items.category + " (" + items.count + ")", value:items.id}
+                      {id:items.name, label:items.category + " (" + items.remaining + ")", value:items.id}
                     ))}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -124,6 +165,9 @@ function EventDetail(props) {
                 </Row>
               </Modal.Body>
               <Modal.Footer>
+                {data.event.volunteers.length > 0 &&
+                  <Button variant="secondary" onClick={removeVolunteer}>Remove Volunteer</Button>
+                }
                 <Submit variant="secondary" onClick={handleClose} value="Close" />
                 <Submit value="Volunteer Now" />
               </Modal.Footer>
@@ -135,6 +179,9 @@ function EventDetail(props) {
         <Spinner animation="border" role="status" size="lg" >
           <span className="visually-hidden">Loading...</span>
         </Spinner>
+      }
+      {error &&
+        <p>{ error }</p>
       }
     </Modal>
   )

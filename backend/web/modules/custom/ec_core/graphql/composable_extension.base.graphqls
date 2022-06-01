@@ -1,4 +1,5 @@
-# type Mutation
+type Mutation
+
 scalar Violation
 scalar Date
 scalar Array
@@ -30,6 +31,23 @@ type Event {
 type EventConnection {
   total: Int!
   items: [Event!]
+}
+
+type EventResponse implements Response {
+  errors: [Violation]
+  event: Event
+}
+
+interface Response {
+  errors: [Violation]
+}
+
+input EventInput {
+  id: Int!
+  categories: Array
+  hours: Float
+  note: String
+  remove: Boolean
 }
 
 type Taxonomy {

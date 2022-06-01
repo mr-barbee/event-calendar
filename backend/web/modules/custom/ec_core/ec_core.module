@@ -4,7 +4,13 @@ use \Drupal\user\Entity\User;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\paragraphs\Entity\Paragraph;
 
+/**
+ * [ec_core_preprocess_page description]
+ * @return [type] [description]
+ */
 function ec_core_preprocess_page() {
   if (!\Drupal::currentUser()->isAnonymous()) {
     $user = User::load(\Drupal::currentUser()->id());
@@ -16,5 +22,47 @@ function ec_core_preprocess_page() {
       $homeResponse = new RedirectResponse(Url::fromRoute('user.login')->toString());
       $homeResponse->send();
     }
+  }
+}
+
+/**
+ * [ec_core_entity_presave description]
+ * @param  EntityInterface $entity               [description]
+ * @return [type]                  [description]
+ */
+function ec_core_entity_presave(EntityInterface $entity) {
+  try {
+    if ($entity->getEntityTypeId() == 'node' && $entity->getType() == 'event') {
+      // We want to loop through all of the volunteers already saved.
+      $volunteers = $entity->get('field_event_volunteers')->getValue();
+      $volunteers_categories = [];
+      foreach($volunteers as $volunteer) {
+        // Update the volunteer sections tied to the event if set.
+        $paragraph = Paragraph::load($volunteer['target_id']);
+        foreach($paragraph->get('field_event_volunteer_category')->getValue() as $category) {
+          !empty($volunteers_categories[$category['target_id']]) ? $volunteers_categories[$category['target_id']]++ : $volunteers_categories[$category['target_id']] = 1;
+        }
+      }
+
+      $categories = $entity->get('field_event_volunteer_categories')->getValue();
+      // Loop through all of the categories in the group.
+      foreach($categories as $category) {
+        $paragraph = Paragraph::load($category['target_id']);
+        $target_id = $paragraph->get('field_event_category')->getValue()[0]['target_id'];
+        // Get the event category count.
+        $count = (int) $paragraph->get('field_event_category_count')->getValue()[0]['value'];
+        if (isset($volunteers_categories[$target_id])) {
+          // We figure out the amout of seats remaing.
+          $paragraph->set('field_event_category_remaining', $count - $volunteers_categories[$target_id]);
+        }
+        else {
+          $paragraph->set('field_event_category_remaining', $count);
+        }
+        $paragraph->save();
+      }
+    }
+  }
+  catch (\Exception $e) {
+    \Drupal::logger('ec_core')->error($e->getMessage());
   }
 }

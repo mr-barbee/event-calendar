@@ -46,3 +46,14 @@ export const GETEVENTS = parameters => `query GetEvents{
     }
   }
 }`
+
+export const UPDATEEVENT = parameters => `mutation UpdateEvent {
+  updateEvent(data: { id:${parameters.id}, categories:[${parameters.categories}], hours:${parameters.hours}, note:"${parameters.note}", remove:${parameters.remove}}) {
+    ... on EventResponse {
+      event {
+        id
+      }
+      errors
+    }
+  }
+}`
