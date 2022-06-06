@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
-import { useUser } from '../../hooks/useUser'
+import { useUser } from '../../../hooks/useUser'
 import { Formik } from 'formik'
-import { Spinner, Modal, Col, Row, Form, Button } from 'react-bootstrap'
-import { Submit, Input, Check  } from '../_common/FormElements'
-import useEventService from '../../api/useEventService'
+import { Spinner, Modal, Col, Row, Form } from 'react-bootstrap'
+import Moment from 'moment'
+import { Submit, Input, Check } from '../../_common/FormElements'
+import useEventService from '../../../api/useEventService'
+import useRemoveVolunteer from '../hooks/useRemoveVolunteer'
 import ValidationSchema from './validation'
 
 function EventDetail(props) {
@@ -13,8 +15,10 @@ function EventDetail(props) {
   const [error, setError] = useState('')
   const [show, setShow] = useState(true)
   const [getEvent, , updateEvent] = useEventService()
+  const [eventData, removeVolunteer] = useRemoveVolunteer()
   const { isLoading, data } = useQuery([`get-event-${props.id}`], () => getEvent(props.id))
   const { data: mutationEventData, mutate: mutateEvent } = useMutation((values) => updateEvent(values))
+  const eventValid = data ? Moment(data.event.end).isSameOrAfter(new Date(), "day") : true
 
   const handleClose = useCallback(() => {
     // Close the modal.
@@ -36,38 +40,28 @@ function EventDetail(props) {
       onSuccess: () => {
         // refetch the event data
         queryClient.invalidateQueries([`get-event-${props.id}`])
+        queryClient.invalidateQueries(['get-user-events'])
       }
    })
   }
 
-  const removeVolunteer = () => {
-    // Add the id to the values.
-    const values = {
-      id: props.id,
-      categories:[],
-      hours:0,
-      note:'',
-      remove: true
-    }
-    // Update the event with
-    // the event volunteer data.
-    mutateEvent(values, {
-      onSuccess: () => {
-        // refetch the event data
-        queryClient.invalidateQueries([`get-event-${props.id}`])
-      }
-   })
-  }
+  const remove = useCallback(() => {
+    // Close the modal.
+    removeVolunteer(props.id)
+  }, [props, removeVolunteer])
 
   useEffect(() => {
-    if (mutationEventData) {
-      if (mutationEventData.errors) {
+    if (mutationEventData || eventData) {
+      if (mutationEventData && mutationEventData.errors) {
         setError(mutationEventData.errors[0].message)
-      } else {
+      } else if (eventData && eventData.errors)  {
+        setError(eventData.errors[0].message)
+      }
+      else {
         handleClose()
       }
     }
-  }, [mutationEventData, handleClose])
+  }, [eventData, mutationEventData, handleClose])
 
   return (
     <Modal
@@ -87,6 +81,7 @@ function EventDetail(props) {
             hours: data.event.volunteers.length ? data.event.volunteers[0].hours : '',
             note: data.event.volunteers.length && data.event.volunteers[0].note ? data.event.volunteers[0].note : ''
           }}
+          enableReinitialize={true}
           validationSchema={ValidationSchema}
           onSubmit={(values, {setSubmitting, resetForm}) => { formSubmit(values) }}
         >
@@ -99,13 +94,32 @@ function EventDetail(props) {
                 <Row>
                   <Col sm={12}>
                     <p><strong>Username</strong>: {user.name}</p>
-                    <div className="content" dangerouslySetInnerHTML={{__html: data.event.body}}></div>
                   </Col>
                 </Row>
                 <Row>
+                  <Col sm={12}>
+                    <div className="content" dangerouslySetInnerHTML={{__html: data.event.body}}></div>
+                  </Col>
+                </Row>
+                <Row className="mb-3">
+                  <Col sm={12}><strong>Time:</strong></Col>
+                  {data.event.start &&
+                    <Col sm={12}>
+                      Start: {Moment(data.event.start).format('M/DD/YYYY - h:mma')}
+                    </Col>
+                  }
+                  {data.event.end &&
+                    <Col sm={12}>
+                      End: {Moment(data.event.end).format('M/DD/YYYY - h:mma')}
+                    </Col>
+                  }
+                </Row>
+                <Row>
                   <Col>
-                    <p>A list of the volunteer duties that need to be done for the event.<br />
-                      Select all that you wish to volunteer for:</p>
+                    <p><strong>Volunteer Categories:</strong><br />
+                      A list of the volunteer duties that need to be done for the event.<br />
+                      Select all that you wish to volunteer for:
+                    </p>
                   </Col>
                 </Row>
                 <Row>
@@ -115,14 +129,17 @@ function EventDetail(props) {
                     type="checkbox"
                     controlId="formCategories"
                     groupClassName="mb-3"
-                    formLabel={<p>The number next to the category depicts how many volunteer spots are still needed</p>}
+                    helperText={<p>The number next to the category depicts how many volunteer spots are still needed</p>}
                     name="categories"
                     checkColumn="3"
                     inline={true}
                     value={values.categories}
-                    values={data.event.categories.map((items) => (
-                      {id:items.name, label:items.category + " (" + items.remaining + ")", value:items.id}
-                    ))}
+                    values={data.event.categories.map((items) => ({
+                      id: items.name,
+                      label: items.category + " (" + items.remaining + ")",
+                      value: items.id,
+                      disabled: items.remaining === '0'
+                    }))}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     errors={touched.categories && errors.categories ? errors.categories : null}
@@ -165,11 +182,13 @@ function EventDetail(props) {
                 </Row>
               </Modal.Body>
               <Modal.Footer>
-                {data.event.volunteers.length > 0 &&
-                  <Button variant="secondary" onClick={removeVolunteer}>Remove Volunteer</Button>
+                {data.event.volunteers.length > 0 && eventValid &&
+                  <Submit variant="secondary" onClick={remove} value="Remove Volunteer" />
                 }
                 <Submit variant="secondary" onClick={handleClose} value="Close" />
-                <Submit value="Volunteer Now" />
+                {eventValid &&
+                  <Submit value="Volunteer Now" />
+                }
               </Modal.Footer>
             </Form>
           )}

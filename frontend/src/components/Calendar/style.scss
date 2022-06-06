@@ -1,3 +1,10 @@
 .fc-license-message {
   display: none !important;
 }
+.modal {
+  .modal-body {
+    tbody {
+      text-align: center;
+    }
+  }
+}

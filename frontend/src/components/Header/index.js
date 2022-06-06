@@ -14,15 +14,15 @@ export default function Header() {
       <div className="header--wrapper">
         <div className="header--back">
           {!homePage && !login &&
-            <Submit 
+            <Submit
               className="back-button"
               value={ <FaReply /> }
-              onClick={() => { navigate(-1)}}
+              onClick={() => { navigate(-1) }}
             />
           }
         </div>
         <div className="header--title">
-          <div>Event Volunteers</div>
+          <div onClick={() => { navigate('/') }} >Event Volunteers</div>
         </div>
         <div className="header--login">
           {!login &&

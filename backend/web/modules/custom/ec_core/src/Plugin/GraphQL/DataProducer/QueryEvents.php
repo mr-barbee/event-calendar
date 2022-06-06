@@ -126,17 +126,19 @@ class QueryEvents extends DataProducerPluginBase implements ContainerFactoryPlug
       ->currentRevision()
       ->accessCheck();
     $query->condition($entityType->getKey('bundle'), 'event');
-    // Make the new date for the checking.
-    $date = new DrupalDateTime($date);
-    // Format the date to be used for seaching the database.
-    $formatted = $date->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT);
-    $query->condition('field_event_start_date.value', $formatted, '>=');
-    // Modify the date to get
-    // the range to look at.
-    $date->modify($range);
-    // Format the date to be used for seaching the database.
-    $formatted = $date->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT);
-    $query->condition('field_event_start_date.value', $formatted, '<=');
+    if (!empty($date)) {
+      // Make the new date for the checking.
+      $date = new DrupalDateTime($date);
+      // Format the date to be used for seaching the database.
+      $formatted = $date->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT);
+      $query->condition('field_event_start_date.value', $formatted, '>=');
+      // Modify the date to get
+      // the range to look at.
+      $date->modify($range);
+      // Format the date to be used for seaching the database.
+      $formatted = $date->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT);
+      $query->condition('field_event_start_date.value', $formatted, '<=');
+    }
     // This is passed from the previous query that got all the users in
     // the volunteer paragraph assigned to the event
     if (!empty($results) && is_array($results)) {

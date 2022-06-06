@@ -21,7 +21,9 @@ export const PageRoutes = () => {
               <Route exact path='/' element={<Dashboard />}/>
               <Route exact path='/contact-form' element={<ContactForm />}/>
               <Route exact path='/delete-user' element={<DeleteUser />}/>
-              <Route exact path='/event-calendar' element={<EventCalendar />}/>
+              <Route exact path='/event-calendar' element={<EventCalendar />}>
+                <Route path=':id' element={<EventCalendar />}/>
+              </Route>
             </Route>
             <Route path='/login' element={<Login />}/>
             <Route path='/please-verify' element={<ValidateUser />}/>

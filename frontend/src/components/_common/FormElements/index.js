@@ -24,7 +24,7 @@ export function Submit(props) {
       variant={props.variant ?? 'primary'}
       onClick={props.onClick}
       className={props.className}
-      type="submit"
+      type={props.onClick ? "button" : "submit" }
     >
       {props.value}
     </Button>
@@ -80,6 +80,7 @@ export function Check(props) {
               label={value.label}
               name={props.name}
               value={value.value}
+              disabled={value.disabled ?? false}
               checked={props.type === "radio" ?
                 props.value === value.value :
                 !Array.isArray(props.value) ?
