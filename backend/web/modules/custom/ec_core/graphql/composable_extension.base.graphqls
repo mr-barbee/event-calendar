@@ -50,6 +50,25 @@ input EventInput {
   remove: Boolean
 }
 
+type UserResponse implements Response {
+  errors: [Violation]
+  user: User
+}
+
+input UserInput {
+  name: String
+  email: String
+  pass: String
+  currPass: String
+  fullName: String
+  phone: String
+  primary: String
+  contact: Boolean
+  categories: Array
+  experiences: Array
+  note: String
+}
+
 type Taxonomy {
   id: Int!
   name: String

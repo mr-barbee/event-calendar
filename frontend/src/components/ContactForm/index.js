@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Navigate } from 'react-router-dom'
-import { useQuery, useMutation } from 'react-query'
+import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { Formik } from 'formik'
 import useUserService from '../../api/useUserService'
 import useUtilityService from '../../api/useUtilityService'
@@ -9,34 +9,46 @@ import { Submit, Input, Check } from '../_common/FormElements'
 import ValidationSchema from './validation'
 
 function ContactForm() {
+  const queryClient = useQueryClient()
   const navigate = useNavigate()
   const [error, setError] = useState('')
   const [verification, setVerification] = useState('')
-  const [getCurrentUser] = useUserService()
+  const [getCurrentUser,,,,, updateUser] = useUserService()
   const [getTaxonomy, sendVerificationToken] = useUtilityService()
-  const { isLoading, data } = useQuery(['get-user'], () => getCurrentUser())
+  const { isLoading, data: userData } = useQuery(['get-user'], () => getCurrentUser())
   const { isLoading: categoriesLoading, data: categories } = useQuery(['get-volunteer-categories'], () => getTaxonomy('volunteer_categories'))
   const { isLoading: skillsLoading, data: experiences } = useQuery(['get-experience-skills'], () => getTaxonomy('experience_skills'))
-
+  const { mutate: mutateUser } = useMutation((values) => updateUser(values))
   const { data: verificationData, mutate: sendVerification } = useMutation((values) => sendVerificationToken(values))
 
   const formSubmit = values => {
-    // We want to verify the data the contact information.
-    // Reasons why we need to verify the contact info.
-    // 1. Perfered primary contact was changed.
-    // 2. The users account was never verified.
-    // 3. The user updated there primary contact info.
-    if (data.currentUser.primary !== values.primaryContact) {
-      const type = values.primaryContact === 'e' ? 'email' : 'sms';
-      const contact = values.primaryContact === 'e' ? values.email : `+1${values.phone}`
-      sendVerification({'contact': contact, 'type': type}, { onError: (res) => setError(res.data.error_message) })
-    } else {
-      // We only want navigate to
-      // profile page if we dont
-      // need to validate contact.
-      navigate('/')
-    }
+    mutateUser(values, {
+      onError: (res) => setError(res.data.updateUser.errors.message),
+      onSuccess: (data) => {
+        if (data.errors) {
+          setError(data.errors[0].message)
+        } else {
+          // refetch the user data
+          queryClient.invalidateQueries(['get-user'])
+          // We want to verify the data the contact information.
+          // Reasons why we need to verify the contact info.
+          // 1. Perfered primary contact was changed.
+          // 2. The users account was never verified.
+          // 3. The user updated there primary contact info.
+          if (userData.currentUser.primary !== values.primary) {
+            const type = values.primary === 'e' ? 'email' : 'sms';
+            const contact = values.primary === 'e' ? values.email : `+1${values.phone}`
+            sendVerification({'contact': contact, 'type': type}, { onError: (res) => setError(res.data.error_message) })
+          } else {
+            // We only want navigate to
+            // profile page if we dont
+            // need to validate contact.
+            navigate('/')
+          }
+        }
 
+      }
+    })
   }
 
   useEffect(() => {
@@ -57,18 +69,21 @@ function ContactForm() {
   return (
     <div className="contact-form">
       <h3>Please fill out the form below:</h3>
-      {data && !isLoading &&
+      {userData && !isLoading &&
         <Formik
           initialValues={{
-            userName: data.currentUser.name,
-            fullName: data.currentUser.fullName,
-            phone: data.currentUser.phone,
-            email: data.currentUser.email,
-            primaryContact: data.currentUser.primary,
-            categories: Object.keys(data.currentUser.categories),
-            notify: data.currentUser.contact,
-            experiences: Object.keys(data.currentUser.experiences),
-            note: data.currentUser.note ?? ''
+            name: userData.currentUser.name,
+            email: userData.currentUser.email,
+            currPass: '',
+            pass: '',
+            confirmPass: '',
+            fullName: userData.currentUser.fullName,
+            phone: userData.currentUser.phone,
+            primary: userData.currentUser.primary,
+            categories: Object.keys(userData.currentUser.categories),
+            contact: userData.currentUser.contact,
+            experiences: Object.keys(userData.currentUser.experiences),
+            note: userData.currentUser.note ?? ''
           }}
           validationSchema={ValidationSchema}
           onSubmit={(values, {setSubmitting, resetForm}) => { formSubmit(values) }}
@@ -80,34 +95,18 @@ function ContactForm() {
                 <Input
                   as={Col}
                   column="6"
-                  controlId="formUserName"
+                  controlId="formName"
                   type="text"
-                  name="userName"
+                  name="name"
                   placeholder="* Username"
-                  value={values.userName}
+                  value={values.name}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  isValid={touched.userName && !errors.userName}
-                  className={touched.userName && errors.userName ? "error" : null}
-                  errors={touched.userName && errors.userName ? errors.userName : null}
+                  isValid={touched.name && !errors.name}
+                  className={touched.name && errors.name ? "error" : null}
+                  errors={touched.name && errors.name ? errors.name : null}
                   helperText="Several special characters are allowed, including space, period (.), hyphen (-), apostrophe (&#39;), underscore (_), and the @ sign."
                 />
-                <Input
-                  as={Col}
-                  column="6"
-                  controlId="formFullName"
-                  type="text"
-                  name="fullName"
-                  placeholder="* Full Name"
-                  value={values.fullName}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  isValid={touched.fullName && !errors.fullName}
-                  className={touched.fullName && errors.fullName ? "error" : null}
-                  errors={touched.fullName && errors.fullName ? errors.fullName : null}
-                />
-              </Row>
-              <Row className="mb-3">
                 <Input
                   as={Col}
                   column="6"
@@ -122,6 +121,70 @@ function ContactForm() {
                   className={touched.email && errors.email ? "error" : null}
                   errors={touched.email && errors.email ? errors.email : null}
                   helperText="A valid email address. All emails from the system will be sent to this address. The email address is not made public and will only be used if you wish to receive a new password or wish to receive certain news or notifications by email."
+                />
+              </Row>
+              <Row className="mb-3">
+                <Input
+                  as={Col}
+                  column="6"
+                  controlId="formCurrPass"
+                  type="password"
+                  name="currPass"
+                  placeholder="* Current Password"
+                  value={values.currPass}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  isValid={touched.currPass && !errors.currPass}
+                  className={touched.currPass && errors.currPass ? "error" : null}
+                  errors={touched.currPass && errors.currPass ? errors.currPass : null}
+                  helperText="If your updating your username, email or password you must enter your current password. Otherwise leave this blank."
+                />
+              </Row>
+              <Row className="mb-3">
+                <Input
+                  as={Col}
+                  column="6"
+                  controlId="formPass"
+                  type="password"
+                  name="pass"
+                  placeholder="* Password"
+                  value={values.pass}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  isValid={touched.pass && !errors.pass}
+                  className={touched.pass && errors.pass ? "error" : null}
+                  errors={touched.pass && errors.pass ? errors.pass : null}
+                  helperText="To change user password, enter the new password in both fields. Otherwise leave this blank."
+                />
+                <Input
+                  as={Col}
+                  column="6"
+                  controlId="formConfirmPass"
+                  type="password"
+                  name="confirmPass"
+                  placeholder="* Confirm Password"
+                  value={values.confirmPass}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  isValid={touched.confirmPass && !errors.confirmPass}
+                  className={touched.confirmPass && errors.confirmPass ? "error" : null}
+                  errors={touched.confirmPass && errors.confirmPass ? errors.confirmPass : null}
+                />
+              </Row>
+              <Row className="mb-3">
+                <Input
+                  as={Col}
+                  column="6"
+                  controlId="formFullName"
+                  type="text"
+                  name="fullName"
+                  placeholder="* Full Name"
+                  value={values.fullName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  isValid={touched.fullName && !errors.fullName}
+                  className={touched.fullName && errors.fullName ? "error" : null}
+                  errors={touched.fullName && errors.fullName ? errors.fullName : null}
                 />
                 <Input
                   as={Col}
@@ -147,21 +210,21 @@ function ContactForm() {
                   as={Col}
                   column="6"
                   type="radio"
-                  controlId="formPrimaryContact"
+                  controlId="formPrimary"
                   groupClassName="mb-3"
                   formLabel="Primary Contact:"
-                  name="primaryContact"
+                  name="primary"
                   checkColumn="12"
                   inline={false}
-                  value={values.primaryContact}
+                  value={values.primary}
                   values={[
                     {id:"email", label:"Email", value:"e"},
                     {id:"phone", label:"Phone", value:"p"}
                   ]}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  isValid={touched.primaryContact && !errors.primaryContact}
-                  errors={touched.primaryContact && errors.primaryContact ? errors.primaryContact : null}
+                  isValid={touched.primary && !errors.primary}
+                  errors={touched.primary && errors.primary ? errors.primary : null}
                   helperText="Please include the area code."
                 />
               </Row>
@@ -193,12 +256,12 @@ function ContactForm() {
                   as={Col}
                   column="12"
                   type="checkbox"
-                  controlId="formNotify"
-                  name="notify"
+                  controlId="formContact"
+                  name="contact"
                   className="mb-3"
                   inline={true}
-                  value={values.notify}
-                  values={[{id:"notify", label:"Contact Me when volunteers are needed based on my categories selected.", value:values.notify}]}
+                  value={values.contact}
+                  values={[{id:"contact", label:"Contact Me when volunteers are needed based on my categories selected.", value:values.contact}]}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />

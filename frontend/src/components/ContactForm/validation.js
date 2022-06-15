@@ -14,7 +14,7 @@ const ValidationSchema = Yup.object().shape({
   email: Yup.string()
     .email('Invalid email')
     .required('Required'),
-  primaryContact: Yup.string()
+  primary: Yup.string()
     .required('Required'),
 })
 

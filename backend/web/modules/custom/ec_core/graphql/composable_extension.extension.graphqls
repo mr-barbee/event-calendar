@@ -19,3 +19,7 @@ extend type Query {
 extend type Mutation {
   updateEvent(data: EventInput): EventResponse
 }
+
+extend type Mutation {
+  updateUser(data: UserInput): UserResponse
+}

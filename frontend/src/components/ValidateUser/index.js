@@ -13,7 +13,7 @@ function ValidateUser() {
   const [verified, setVerified] = useState(false)
   const sid = searchParams.get("sid")
   const [,, verifyToken] = useUtilityService()
-  const { data: verificationData, mutate: sendVerification } = useMutation((values) => verifyToken(values))
+  const { data: verificationData, mutate: sendVerification } = useMutation((values) => verifyToken(values), { retry: 0 })
 
   const formSubmit = values => {
     if (values.code) {

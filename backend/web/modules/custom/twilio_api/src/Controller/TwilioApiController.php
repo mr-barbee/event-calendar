@@ -7,7 +7,7 @@
 namespace Drupal\twilio_api\Controller;
 
 use Drupal\twilio_api\TwilioAPIHandler;
-
+use Drupal\user\Entity\User;
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -121,11 +121,31 @@ class TwilioApiController extends ControllerBase {
                                           );
 
         $status = $verification_check->status == 'approved' ? 200 : 400;
+
+
+
+        if ($data['user_id'] && $verification_check->status == 'approved') {
+          $user = User::load($data['user_id']);
+          // Update the verification setting for the user.
+          $user->set('field_user_verified', TRUE);
+          // Save the user.
+          $user->save();
+        }
+
+
+
+
         $response = [
           'valid' => $verification_check->valid,
           'token' => $verification_check->sid,
           'status' => $verification_check->status,
         ];
+
+
+
+
+
+
       }
       catch (\Exception $e) {
         \Drupal::logger(__CLASS__)->error($e->getMessage());

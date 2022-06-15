@@ -47,7 +47,17 @@ const useUserService = () => {
     })
   }
 
-  return [getCurrentUser, loginUser, facebookLoginUser, logoutUser, fetchSessionToken]
+  function updateUser(parameters) {
+    return request({
+      url: 'graphql_api',
+      method: 'POST',
+      data: {
+        query : GRAPHQL.UPDATEUSER(parameters)
+      }
+    })
+  }
+
+  return [getCurrentUser, loginUser, facebookLoginUser, logoutUser, fetchSessionToken, updateUser]
 }
 
 export default useUserService

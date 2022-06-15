@@ -7,6 +7,7 @@ use Drupal\graphql\GraphQL\ResolverRegistryInterface;
 use Drupal\graphql\GraphQL\Response\ResponseInterface;
 use Drupal\graphql\Plugin\GraphQL\SchemaExtension\SdlSchemaExtensionPluginBase;
 use Drupal\ec_core\GraphQL\Response\EventResponse;
+use Drupal\ec_core\GraphQL\Response\UserResponse;
 use Drupal\ec_core\Wrappers\QueryConnection;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\Core\Datetime\DrupalDateTime;
@@ -63,6 +64,24 @@ class ComposableSchemaExampleExtension extends SdlSchemaExtensionPluginBase {
         return $response->getViolations();
       })
     );
+
+    // Create user mutation.
+    $registry->addFieldResolver('Mutation', 'updateUser',
+      $builder->produce('update_user')
+        ->map('data', $builder->fromArgument('data'))
+    );
+
+    $registry->addFieldResolver('UserResponse', 'user',
+      $builder->callback(function (UserResponse $response) {
+        return $response->user();
+      })
+    );
+
+    $registry->addFieldResolver('UserResponse', 'errors',
+      $builder->callback(function (UserResponse $response) {
+        return $response->getViolations();
+      })
+    );
     // Response type resolver.
     $registry->addTypeResolver('Response', [
       __CLASS__,
@@ -86,6 +105,9 @@ class ComposableSchemaExampleExtension extends SdlSchemaExtensionPluginBase {
     // Resolve content response.
     if ($response instanceof EventResponse) {
       return 'EventResponse';
+    }
+    if ($response instanceof UserResponse) {
+      return 'UserResponse';
     }
     throw new \Exception('Invalid response type.');
   }

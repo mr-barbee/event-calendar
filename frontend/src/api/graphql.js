@@ -57,3 +57,26 @@ export const UPDATEEVENT = parameters => `mutation UpdateEvent {
     }
   }
 }`
+
+export const UPDATEUSER = parameters => `mutation UpdateUser {
+  updateUser(data: {
+      name: ${parameters.name !== 'undefined' ? `"${parameters.name}"` : null},
+      email: ${parameters.email !== 'undefined' ? `"${parameters.email}"` : null},
+      pass: ${parameters.pass !== 'undefined' ? `"${parameters.pass}"` : null},
+      currPass: ${parameters.currPass !== 'undefined' ? `"${parameters.currPass}"` : null},
+      fullName: ${parameters.fullName !== 'undefined' ? `"${parameters.fullName}"` : null},
+      phone: ${parameters.phone !== 'undefined' ? `"${parameters.phone}"` : null},
+      primary: ${parameters.primary !== 'undefined' ? `"${parameters.primary}"` : null},
+      contact: ${parameters.contact !== 'undefined' ? `${parameters.contact}` : null},
+      categories: ${parameters.categories !== 'undefined' ? `[${parameters.categories}]` : null},
+      experiences: ${parameters.experiences !== 'undefined' ? `[${parameters.experiences}]` : null},
+      note: ${parameters.note !== 'undefined' ? `"${parameters.note}"` : null}
+    }) {
+    ... on UserResponse {
+      user {
+        id
+      }
+      errors
+    }
+  }
+}`
