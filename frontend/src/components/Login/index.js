@@ -103,7 +103,7 @@ export default function Login() {
         <Row className="mb-3">
           <Col>
             <FacebookLogin
-              appId='1123351384872679'
+              appId={process.env.REACT_APP_FACEBOOK_APP_ID}
               autoLoad={false}
               fields='name,email,picture'
               scope='public_profile,user_friends'
