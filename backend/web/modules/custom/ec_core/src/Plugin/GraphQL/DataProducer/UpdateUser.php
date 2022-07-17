@@ -142,6 +142,11 @@ class UpdateUser extends DataProducerPluginBase implements ContainerFactoryPlugi
           $user->setEmail($data['email']);
         }
       }
+      // If the needs verification status is set
+      // then we need to verify the user.
+      if (isset($data['needs_verification']) && $data['needs_verification']) {
+        $user->set('field_user_verified', FALSE);
+      }
       //save to update node
       $user->save();
       $response->setUser($user);

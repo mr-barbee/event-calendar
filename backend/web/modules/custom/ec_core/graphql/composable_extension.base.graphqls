@@ -67,6 +67,7 @@ input UserInput {
   categories: Array
   experiences: Array
   note: String
+  needs_verification: Boolean
 }
 
 type Taxonomy {

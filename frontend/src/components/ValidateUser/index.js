@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Navigate, useSearchParams } from "react-router-dom"
 import { useMutation } from 'react-query'
 import useUtilityService from '../../api/useUtilityService'
+import { useUser } from '../../hooks/useUser'
 import { Formik } from 'formik'
 import { Form, Row, Col } from 'react-bootstrap'
 import { Submit, Input } from '../_common/FormElements'
@@ -9,6 +10,7 @@ import ValidationSchema from './validation'
 
 function ValidateUser() {
   let [searchParams] = useSearchParams()
+  const user = useUser()
   const [error, setError] = useState('')
   const [verified, setVerified] = useState(false)
   const sid = searchParams.get("sid")
@@ -17,7 +19,7 @@ function ValidateUser() {
 
   const formSubmit = values => {
     if (values.code) {
-      sendVerification({'sid': sid, 'code': values.code}, { onError: (res) => setError('There was an error with the verification') })
+      sendVerification({'user_id': user.uid, 'sid': sid, 'code': values.code}, { onError: (res) => setError('There was an error with the verification') })
     } else {
       setError("Token is not set.")
     }

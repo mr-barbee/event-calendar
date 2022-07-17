@@ -22,6 +22,9 @@ function ContactForm() {
   const { data: verificationData, mutate: sendVerification } = useMutation((values) => sendVerificationToken(values))
 
   const formSubmit = values => {
+    // @TODO Add to the values if the user needs to verify there primary contact.
+    values.needs_verification = userData.currentUser.primary !== values.primary
+    console.log(values)
     mutateUser(values, {
       onError: (res) => setError(res.data.updateUser.errors.message),
       onSuccess: (data) => {
@@ -46,7 +49,6 @@ function ContactForm() {
             navigate('/')
           }
         }
-
       }
     })
   }

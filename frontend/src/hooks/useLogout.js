@@ -21,6 +21,7 @@ const useLogout = () => {
     // Clear the token and queries
     localStorage.removeItem('token')
     queryClient.removeQueries('get-user')
+    queryClient.removeQueries('get-user-events')
     // We want to clear
     // all of the cache data.
     clearCacheData()

@@ -22,11 +22,13 @@ const useUtilityService = () => {
       }
     })
   }
+  // @TODO Add the user ID as well.
   function verifyToken(values) {
     return request({
       url: 'api/services/check-token',
       method: 'POST',
       data: {
+        user_id: values.user_id,
         sid: values.sid,
         code: values.code
       }

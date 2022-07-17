@@ -41,7 +41,7 @@ class TwilioApiController extends ControllerBase {
     // IP address is valid for access to this method.
     $api_error = TwilioApiHandler::validate_api_request($request);
     if (isset($api_error['status']) && $api_error['status'] == 'FAILURE'){
-      throw new AccessDeniedHttpException;
+      throw new Exception;
     }
 
     $data = json_decode($request->getContent(), TRUE);

@@ -70,7 +70,8 @@ export const UPDATEUSER = parameters => `mutation UpdateUser {
       contact: ${parameters.contact !== 'undefined' ? `${parameters.contact}` : null},
       categories: ${parameters.categories !== 'undefined' ? `[${parameters.categories}]` : null},
       experiences: ${parameters.experiences !== 'undefined' ? `[${parameters.experiences}]` : null},
-      note: ${parameters.note !== 'undefined' ? `"${parameters.note}"` : null}
+      note: ${parameters.note !== 'undefined' ? `"${parameters.note}"` : null},
+      needs_verification: ${parameters.needs_verification !== 'undefined' ? `${parameters.needs_verification}` : null},
     }) {
     ... on UserResponse {
       user {
