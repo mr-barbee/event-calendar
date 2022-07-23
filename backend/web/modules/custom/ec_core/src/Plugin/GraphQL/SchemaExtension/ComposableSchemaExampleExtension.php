@@ -305,19 +305,6 @@ class ComposableSchemaExampleExtension extends SdlSchemaExtensionPluginBase {
           ->map('path', $builder->fromValue('field_user_verified.value'))
       )
     );
-
-    $registry->addFieldResolver('User', 'never_verifed', $builder->compose(
-      $builder->produce('get_user'),
-      $builder->produce('entity_load')
-        ->map('type', $builder->fromValue('user'))
-        ->map('id', $builder->fromParent()),
-      $builder->callback(function ($entity) {
-        $roles = $entity->getRoles();
-        // If the volunteer role is not set then
-        // we classify this user as never verified.
-        return !in_array('volunteer', $roles);
-      })
-    ));
   }
 
   /**
