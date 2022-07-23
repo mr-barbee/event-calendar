@@ -25,6 +25,7 @@
         "drupal/graphql": "^4.3",
         "drupal/paragraphs": "^1.13",
         "drupal/require_login": "^2.4",
+        "drupal/rules": "^3.0@alpha",
         "drupal/social_api": "^3.0",
         "drupal/social_auth": "^3.0",
         "drupal/social_auth_facebook": "^3.0",

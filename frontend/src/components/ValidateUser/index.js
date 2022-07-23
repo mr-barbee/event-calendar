@@ -14,12 +14,14 @@ function ValidateUser() {
   const [error, setError] = useState('')
   const [verified, setVerified] = useState(false)
   const sid = searchParams.get("sid")
+  const uid = searchParams.get("uid")
   const [,, verifyToken] = useUtilityService()
   const { data: verificationData, mutate: sendVerification } = useMutation((values) => verifyToken(values), { retry: 0 })
 
   const formSubmit = values => {
     if (values.code) {
-      sendVerification({'user_id': user.uid, 'sid': sid, 'code': values.code}, { onError: (res) => setError('There was an error with the verification') })
+      let user_id = uid ?? user.uid
+      sendVerification({'user_id': user_id, 'sid': sid, 'code': values.code}, { onError: (res) => setError('There was an error with the verification') })
     } else {
       setError("Token is not set.")
     }

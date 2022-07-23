@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Login from '../components/Login'
+import Register from '../components/Register'
 import Dashboard from '../components/Dashboard'
 import ContactForm from '../components/ContactForm'
 import ValidateUser from '../components/ValidateUser'
@@ -26,6 +27,7 @@ export const PageRoutes = () => {
               </Route>
             </Route>
             <Route path='/login' element={<Login />}/>
+            <Route path='/register' element={<Register />}/>
             <Route path='/please-verify' element={<ValidateUser />}/>
           </Routes>
         </Container>

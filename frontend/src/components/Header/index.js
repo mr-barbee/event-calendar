@@ -8,12 +8,13 @@ export default function Header() {
   const navigate = useNavigate()
   const homePage = useMatch('/')
   const login = useMatch('/login')
+  const register = useMatch('/register')
 
   return (
     <header className="header">
       <div className="header--wrapper">
         <div className="header--back">
-          {!homePage && !login &&
+          {!homePage && !login && !register &&
             <Submit
               className="back-button"
               value={ <FaReply /> }

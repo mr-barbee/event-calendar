@@ -12,13 +12,13 @@ const useUserService = () => {
       }
     })
   }
-  function loginUser(values) {
+  function loginUser(parameters) {
     return request({
       url: 'user/login?_format=json',
       method: 'POST',
       data: {
-        name: values.email,
-        pass: values.password
+        name: parameters.email,
+        pass: parameters.password
       }
     })
   }
@@ -31,12 +31,12 @@ const useUserService = () => {
       }
     })
   }
-  function logoutUser(values) {
+  function logoutUser(parameters) {
     return request({
-      url: `user/logout?_format=json&token=${values.logoutToken}`,
+      url: `user/logout?_format=json&token=${parameters.logoutToken}`,
       method: 'POST',
       headers: {
-        'X-CSRF-Token': values.sessionToken
+        'X-CSRF-Token': parameters.sessionToken
       }
     })
   }
@@ -57,7 +57,19 @@ const useUserService = () => {
     })
   }
 
-  return [getCurrentUser, loginUser, facebookLoginUser, logoutUser, fetchSessionToken, updateUser]
+  function registerUser(parameters) {
+    return request({
+      url: 'api/services/register-user',
+      method: 'POST',
+      data: {
+        name: parameters.name,
+        email: parameters.email,
+        pass: parameters.password
+      }
+    })
+  }
+
+  return [getCurrentUser, loginUser, facebookLoginUser, logoutUser, fetchSessionToken, updateUser, registerUser]
 }
 
 export default useUserService

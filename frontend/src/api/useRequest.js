@@ -31,7 +31,7 @@ const useRequest = () => {
     if (typeof error.response !== 'undefined' && error.response.status === 403) logout()
     return Promise.reject(error.response)
   }
-  const request = async function (options, store) {
+  const request = async function (options) {
     // Adding the axios client.
     return AxiosClient(options).then(onSuccess).catch(onError)
   }

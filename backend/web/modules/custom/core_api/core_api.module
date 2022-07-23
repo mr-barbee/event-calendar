@@ -3,6 +3,6 @@
 /**
  * Implements hook_preprocess_node().
  */
-function twilio_api_preprocess_page(&$variables) {
+function core_api_preprocess_page(&$variables) {
 
 }

@@ -59,8 +59,7 @@ function ContactForm() {
       if (verificationData.status === 'pending') {
         setVerification(verificationData.token)
       } else {
-        const error = verificationData.error_message ?? 'There was an error with the verification'
-        setError(error)
+        setError('There was an error with the verification. Please contact site administator.')
       }
     }
   }, [verificationData, setVerification])

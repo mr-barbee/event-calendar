@@ -16,6 +16,7 @@ type User {
   experiences: Array
   note: String
   verified: Boolean
+  never_verifed: Boolean
 }
 
 type Event {

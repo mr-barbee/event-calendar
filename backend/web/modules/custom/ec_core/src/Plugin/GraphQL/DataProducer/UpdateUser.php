@@ -6,10 +6,8 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\graphql\Plugin\GraphQL\DataProducer\DataProducerPluginBase;
 use Drupal\ec_core\GraphQL\Response\UserResponse;
-use Drupal\node\Entity\Node;
 use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Password\PasswordInterface;
 
 /**

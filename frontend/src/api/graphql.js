@@ -10,6 +10,8 @@ export const GETUSER = `query GetUser {
     categories
     experiences
     note
+    verified
+    never_verifed
   }
 }`
 

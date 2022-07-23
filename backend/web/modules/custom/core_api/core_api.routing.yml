@@ -1,0 +1,44 @@
+core_api.send_token:
+  path: '/api/services/send-token'
+  defaults:
+    _controller: 'Drupal\core_api\Controller\TwilioApiController::twilioTokenRequest'
+    _title: 'Send Verfication Token'
+  methods:  [POST]
+  requirements:
+    _permission: 'access content'
+
+core_api.check_token:
+  path: '/api/services/check-token'
+  defaults:
+    _controller: 'Drupal\core_api\Controller\TwilioApiController::checkVerificationToken'
+    _title: 'Check Verification Token'
+  methods:  [POST]
+  requirements:
+    _permission: 'access content'
+
+core_api.register_user:
+  path: '/api/services/register-user'
+  defaults:
+    _controller: 'Drupal\core_api\Controller\CoreApiController::registerUserAccount'
+    _title: 'Register User'
+  methods:  [POST]
+  requirements:
+    _permission: 'access content'
+
+core_api.update_password:
+  path: '/api/services/update-password'
+  defaults:
+    _controller: 'Drupal\core_api\Controller\CoreApiController::updateUserPassword'
+    _title: 'Update User Password'
+  methods:  [POST]
+  requirements:
+    _permission: 'access content'
+
+core_api.settings:
+  path: '/admin/config/system/settings/core_api'
+  base_route_name: core_api.admin.config
+  defaults:
+    _form: '\Drupal\core_api\Form\CoreApiSettings'
+    _title: 'Core API Settings'
+  requirements:
+    _permission: 'admin core api'
