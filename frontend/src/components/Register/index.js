@@ -16,7 +16,7 @@ export default function Register() {
   const [error, setError] = useState('')
   const [,, facebookLoginUser,,,, registerUser] = useUserService()
   // Login mutation for the login form with an email and password.
-  const { data: registerData, mutate: register } = useMutation((values) => registerUser(values))
+  const { data: registerData, mutate: register } = useMutation((values) => registerUser(values), { retry: 0 })
   // Login mutation for the facebook data.
   const { data: facebookData, mutate: mutateFacebookLogin } = useMutation((accessToken) => facebookLoginUser(accessToken))
   // Reponse callback for the facebook login.

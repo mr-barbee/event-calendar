@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react'
 import { Navigate, useSearchParams } from 'react-router-dom'
 import { Formik } from 'formik'
 import { useMutation } from 'react-query'
-import useUserService from '../../../api/useUserService'
+import useUserService from '../../api/useUserService'
 import { Form, Row, Col } from 'react-bootstrap'
-import { Submit, Input } from '../../_common/FormElements'
-import { PasswordSchema } from '../validation'
-import '../style.scss'
+import { Submit, Input } from '../_common/FormElements'
+import { PasswordSchema } from './validation'
+import './style.scss'
 
 export default function MakePassword() {
   let [searchParams] = useSearchParams()
@@ -46,7 +46,7 @@ export default function MakePassword() {
   return (
     <div className="login">
       <>
-        <h3>Set Your Password</h3>
+        <h3>Set Your New Password</h3>
         <Formik
           initialValues={{
             pass: '',

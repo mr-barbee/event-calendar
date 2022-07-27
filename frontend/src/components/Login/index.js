@@ -43,7 +43,7 @@ export default function Login() {
   return (
     <div className="login">
       <>
-        <h3>Please Sign in below with your <strong>Email</strong>:</h3>
+        <h4>Please Login with your <strong>Email</strong> or <strong>Username</strong></h4>
         <Formik
           initialValues={{
             email: '',
@@ -69,7 +69,7 @@ export default function Login() {
                   isValid={touched.email && !errors.email}
                   className={touched.email && errors.email ? "error" : null}
                   errors={touched.email && errors.email ? errors.email : null}
-                  helperText="Please input the email you used when signing up with."
+                  helperText="You can use your username or email address to login."
                 />
               </Row>
               <Row className="mb-3">
@@ -91,7 +91,7 @@ export default function Login() {
               </Row>
               <Row className="mb-3">
                 <Col>
-                  <Link to={`/forgot-password`}>Forgot Your Password?</Link>
+                  <Link to={`/locate-account`}>Forgot Your Password?</Link>
                 </Col>
               </Row>
               <Row className="mb-3">

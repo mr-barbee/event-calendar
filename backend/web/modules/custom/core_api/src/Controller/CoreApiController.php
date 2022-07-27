@@ -196,4 +196,65 @@ class CoreApiController extends ControllerBase {
    // return the response.
    return new JsonResponse($response, $status);
   }
+
+  /**
+   * [locateUserAndSendVerification description]
+   * @param  Request $request [description]
+   * @return [type]           [description]
+   */
+  public function locateUserAndSendVerification(Request $request) {
+    $status = 200;
+    $response = [];
+
+    try {
+      CoreApiHandler::validate_api_request($request);
+      // Get the data from the request.
+      $data = json_decode($request->getContent(), TRUE);
+      // Update the request with the data.
+      $request->request->replace( is_array( $data ) ? $data : [] );
+      if (isset($data['email']) || isset($data['name'])) {
+        // Gather the user email.
+        $query = \Drupal::entityQuery('user');
+        if (!empty($data['name'])) $query->condition('name', $data['name']);
+        else $query->condition('mail', $data['email']);
+        $id = $query->range(0, 1)
+          ->execute();
+        $id = reset($id);
+        if (empty($id)) {
+          $response = ['error_message' => 'Cannot locate your account. Please contact site administator.', 'status' => 'error'];
+          throw new \Exception();
+        }
+        else {
+          // Send out the twilio verification email.
+          $twilio = new TwilioApiController();
+          if ($twilio_response = $twilio->sendVerificationToken($id, 'password_reset')) {
+            $response = [
+              'uid' => $id,
+              'valid' => $twilio_response['valid'],
+              'token' => $twilio_response['token'],
+              'status' => $twilio_response['status']
+            ];
+          }
+          else {
+            $response = ['error_message' => 'There was an issue sending verification email. Please contact site administator.', 'status' => 'error'];
+            throw new \Exception();
+          }
+        }
+      }
+      else {
+        $response = ['error_message' => 'Invalid Parameters.', 'status' => 'error'];
+        throw new \Exception();
+      }
+    }
+    catch (\Exception $e) {
+     if (empty($response['error_message'])) {
+       \Drupal::logger(__CLASS__)->error($e->getMessage());
+       $response = ['error_message' => 'We\'re currenlty experiency some technical difficulties. Please contact site administrator.', 'status' => 'error'];
+     }
+     $status = 400;
+    }
+
+   // return the response.
+   return new JsonResponse($response, $status);
+  }
 }

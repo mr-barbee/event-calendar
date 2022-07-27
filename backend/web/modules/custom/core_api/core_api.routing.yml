@@ -34,6 +34,15 @@ core_api.update_password:
   requirements:
     _permission: 'access content'
 
+core_api.locate_user:
+  path: '/api/services/locate-user'
+  defaults:
+    _controller: 'Drupal\core_api\Controller\CoreApiController::locateUserAndSendVerification'
+    _title: 'Locate User'
+  methods:  [POST]
+  requirements:
+    _permission: 'access content'
+
 core_api.settings:
   path: '/admin/config/system/settings/core_api'
   base_route_name: core_api.admin.config

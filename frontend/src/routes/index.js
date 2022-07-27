@@ -3,7 +3,8 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Login from '../components/Login'
 import Register from '../components/Register'
-import MakePassword from '../components/Register/components/MakePassword'
+import MakePassword from '../components/MakePassword'
+import LocateUser from '../components/LocateUser'
 import Dashboard from '../components/Dashboard'
 import ContactForm from '../components/ContactForm'
 import ValidateUser from '../components/ValidateUser'
@@ -32,6 +33,7 @@ export const PageRoutes = () => {
             </Route>
             <Route path='/login' element={<Login />}/>
             <Route path='/register' element={<Register />}/>
+            <Route path='/locate-account' element={<LocateUser />}/>
             <Route path='/verify-account' element={<ValidateUser />}/>
             <Route path='/activate-account' element={<MakePassword />}/>
           </Routes>

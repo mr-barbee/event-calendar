@@ -78,7 +78,19 @@ const useUserService = () => {
     })
   }
 
-  return [getCurrentUser, loginUser, facebookLoginUser, logoutUser, fetchSessionToken, updateUser, registerUser, updateUserPassword]
+  function locateUser(parameters) {
+    return request({
+      url: 'api/services/locate-user',
+      method: 'POST',
+      data: {
+        email: parameters.email,
+        name: parameters.name,
+        phone: parameters.phone
+      }
+    })
+  }
+
+  return [getCurrentUser, loginUser, facebookLoginUser, logoutUser, fetchSessionToken, updateUser, registerUser, updateUserPassword, locateUser]
 }
 
 export default useUserService

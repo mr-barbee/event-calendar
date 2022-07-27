@@ -23,6 +23,7 @@
         "drupal/core-project-message": "^9.3",
         "drupal/core-recommended": "^9.3",
         "drupal/graphql": "^4.3",
+        "drupal/mail_login": "^2.6",
         "drupal/paragraphs": "^1.13",
         "drupal/require_login": "^2.4",
         "drupal/rules": "^3.0@alpha",

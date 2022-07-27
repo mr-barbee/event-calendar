@@ -64,7 +64,7 @@ function ContactForm() {
   }, [verificationData, setVerification])
 
   // Direct to the verification page if token is set.
-  if (verification) return <Navigate to={`/verify?sid=${verification}`} />
+  if (verification) return <Navigate to={`/verify`} />
 
   return (
     <div className="contact-form">
