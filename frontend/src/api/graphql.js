@@ -11,7 +11,6 @@ export const GETUSER = `query GetUser {
     experiences
     note
     verified
-    never_verifed
   }
 }`
 

@@ -34,10 +34,7 @@ const useUserService = () => {
   function logoutUser(parameters) {
     return request({
       url: `user/logout?_format=json&token=${parameters.logoutToken}`,
-      method: 'POST',
-      headers: {
-        'X-CSRF-Token': parameters.sessionToken
-      }
+      method: 'POST'
     })
   }
   function fetchSessionToken() {
@@ -64,12 +61,24 @@ const useUserService = () => {
       data: {
         name: parameters.name,
         email: parameters.email,
-        pass: parameters.password
+        fullName: parameters.fullName
       }
     })
   }
 
-  return [getCurrentUser, loginUser, facebookLoginUser, logoutUser, fetchSessionToken, updateUser, registerUser]
+  function updateUserPassword(parameters) {
+    return request({
+      url: 'api/services/update-password',
+      method: 'POST',
+      data: {
+        uid: parameters.uid,
+        password: parameters.pass,
+        sid: parameters.sid
+      }
+    })
+  }
+
+  return [getCurrentUser, loginUser, facebookLoginUser, logoutUser, fetchSessionToken, updateUser, registerUser, updateUserPassword]
 }
 
 export default useUserService

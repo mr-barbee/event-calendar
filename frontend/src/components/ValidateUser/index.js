@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Navigate, useSearchParams } from "react-router-dom"
+import { Navigate, useSearchParams, useMatch } from "react-router-dom"
 import { useMutation } from 'react-query'
 import useUtilityService from '../../api/useUtilityService'
 import { useUser } from '../../hooks/useUser'
@@ -7,44 +7,74 @@ import { Formik } from 'formik'
 import { Form, Row, Col } from 'react-bootstrap'
 import { Submit, Input } from '../_common/FormElements'
 import ValidationSchema from './validation'
+import './style.scss'
 
 function ValidateUser() {
   let [searchParams] = useSearchParams()
   const user = useUser()
   const [error, setError] = useState('')
   const [verified, setVerified] = useState(false)
-  const sid = searchParams.get("sid")
+  const newUser = useMatch('/verify-account')
   const uid = searchParams.get("uid")
+  const token = searchParams.get("token")
   const [,, verifyToken] = useUtilityService()
-  const { data: verificationData, mutate: sendVerification } = useMutation((values) => verifyToken(values), { retry: 0 })
+  const [, sendVerificationToken] = useUtilityService()
+  const { data: verifyData, mutate: verify } = useMutation((values) => verifyToken(values), { retry: 0 })
+  const { data: verificationData, mutate: sendVerification } = useMutation((values) => sendVerificationToken(values))
+  let userId = uid ?? user.uid
 
   const formSubmit = values => {
     if (values.code) {
-      let user_id = uid ?? user.uid
-      sendVerification({'user_id': user_id, 'sid': sid, 'code': values.code}, { onError: (res) => setError('There was an error with the verification') })
+      verify({'uid': userId, 'code': values.code}, { onError: (res) => setError('There was an error with the verification') })
     } else {
       setError("Token is not set.")
     }
   }
 
+  const resendCode = () => {
+    sendVerification({'uid': userId}, { onError: (res) => setError(res.data.error_message) })
+  }
+
+  useEffect(() => {
+    if (token) {
+      verify({'uid': userId, 'code': token}, { onError: (res) => setError('There was an error with the verification') })
+    }
+  }, [userId, token, verify])
+
   useEffect(() => {
     if (verificationData) {
-      // we want to verify the status is pending.
-      if (verificationData.status === 'approved') {
-        setVerified(true)
+      if (verificationData.status === 'pending') {
+        setError('New Code Sent.')
       } else {
-        const error = verificationData.error_message ?? 'There was an error with the verification'
-        setError(error)
+        setError(verificationData.error_message ?? 'There was an error with the verification')
       }
     }
   }, [verificationData, setVerified])
 
+  useEffect(() => {
+    if (verifyData) {
+      // we want to verify the status is pending.
+      if (verifyData.status === 'approved') {
+        setVerified(true)
+      } else {
+        setError(verifyData.error_message ?? 'There was an error with the verification')
+      }
+    }
+  }, [verifyData, setVerified])
+
   // Direct to the portal page if token is set.
-  if (verified) return <Navigate to="/" />
+  if (verified) return <Navigate to={newUser ? `/activate-account?sid=${verifyData.token}&uid=${userId}` : '/'} />
 
   return (
     <div className="validate-user">
-      <h3>Enter Code sent to device:</h3>
+      {newUser &&
+        <>
+          <h3>Please confirm your account. See your email for further steps.</h3>
+          <p>Your account has been made and we have sent a confirmatio email to you. Please check your email and get started.</p>
+          <p><i>Please also check you *SPAM* Folder! Click the link attached to the email or copy the activation code in the field below.</i></p>
+        </>
+      }
+      <h4>Enter Code sent to device:</h4>
       <Formik
         initialValues={{
           code: '',
@@ -71,11 +101,18 @@ function ValidateUser() {
               />
             </Row>
             <Row className="mb-3">
-              <Col><Submit value='Verify' /></Col>
+              <Col><Submit value={newUser ? 'Activate Account' : 'Verify'} /></Col>
             </Row>
           </Form>
         )}
       </Formik>
+      <Row className="mb-3">
+        <Col>
+          <Col sm="6">
+            Resend the Code? <button className='resend-link' onClick={() => { resendCode() }}>Click Here</button>
+          </Col>
+        </Col>
+      </Row>
       {error &&
         <p>{ error }</p>
       }

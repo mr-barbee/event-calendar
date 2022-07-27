@@ -6,7 +6,8 @@ import { useMutation } from 'react-query'
 import useUserService from '../../api/useUserService'
 import { Form, Row, Col } from 'react-bootstrap'
 import { Submit, Input } from '../_common/FormElements'
-import ValidationSchema from './validation'
+import { RegisterSchema } from './validation'
+import { useToken } from '../../hooks/useToken'
 import './style.scss'
 
 export default function Register() {
@@ -15,7 +16,7 @@ export default function Register() {
   const [error, setError] = useState('')
   const [,, facebookLoginUser,,,, registerUser] = useUserService()
   // Login mutation for the login form with an email and password.
-  const { data: mutationData, mutate: mutatePostLogin } = useMutation((values) => registerUser(values))
+  const { data: registerData, mutate: register } = useMutation((values) => registerUser(values))
   // Login mutation for the facebook data.
   const { data: facebookData, mutate: mutateFacebookLogin } = useMutation((accessToken) => facebookLoginUser(accessToken))
   // Reponse callback for the facebook login.
@@ -29,22 +30,21 @@ export default function Register() {
   }
 
   useEffect(() => {
-    if (mutationData || facebookData) {
+    if (registerData || facebookData) {
       // we want to run the
       // current user api.
-      if (mutationData && mutationData.status === 'pending') {
-        setVerification(mutationData)
+      if (registerData && registerData.status === 'pending') {
+        setVerification(registerData)
       } else if (facebookData) {
-        // @TODO Set the users email preference and verfication status.
-        setToken(tokenData)
+        setToken(facebookData)
       } else {
         setError('There was an error with the verification. Please contact site administrator.')
       }
     }
-  }, [mutationData, facebookData, setVerification, setError])
+  }, [registerData, facebookData, setVerification, setError, setToken])
 
   // Direct to the verification page if token is set to verify user email.
-  if (verification) return <Navigate to={`/please-verify?sid=${verification.token}&uid=${verification.uid}`}/>
+  if (verification) return <Navigate to={`/verify-account?uid=${verification.uid}`}/>
 
   // Direct to the home page if verified var is set
   // bc the user doesn not need to be verifed.
@@ -58,11 +58,10 @@ export default function Register() {
           initialValues={{
             name: '',
             email: '',
-            password: '',
-            confirmPass: ''
+            fullName: ''
           }}
-          validationSchema={ValidationSchema}
-          onSubmit={(values, {setSubmitting, resetForm}) => { mutatePostLogin(values, { onError: (res) => setError(res.data.error_message) }) }}
+          validationSchema={RegisterSchema}
+          onSubmit={(values, {setSubmitting, resetForm}) => { register(values, { onError: (res) => setError(res.data.error_message) }) }}
         >
           {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
             <Form onSubmit={handleSubmit}>
@@ -83,6 +82,8 @@ export default function Register() {
                   errors={touched.email && errors.email ? errors.email : null}
                   helperText="A valid email address. All emails from the system will be sent to this address. The email address is not made public and will only be used if you wish to receive a new password or wish to receive certain news or notifications by email."
                 />
+              </Row>
+              <Row className="mb-3">
                 <Input
                   as={Col}
                   column="6"
@@ -103,31 +104,16 @@ export default function Register() {
                 <Input
                   as={Col}
                   column="6"
-                  controlId="formPassword"
-                  groupClassName="position-relative"
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  value={values.password}
+                  controlId="formFullName"
+                  type="text"
+                  name="fullName"
+                  placeholder="* Full Name"
+                  value={values.fullName}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  isValid={touched.password && !errors.password}
-                  className={touched.password && errors.password ? "error" : null}
-                  errors={touched.password && errors.password ? errors.password : null}
-                />
-                <Input
-                  as={Col}
-                  column="6"
-                  controlId="formConfirmPass"
-                  type="password"
-                  name="confirmPass"
-                  placeholder="* Confirm Password"
-                  value={values.confirmPass}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  isValid={touched.confirmPass && !errors.confirmPass}
-                  className={touched.confirmPass && errors.confirmPass ? "error" : null}
-                  errors={touched.confirmPass && errors.confirmPass ? errors.confirmPass : null}
+                  isValid={touched.fullName && !errors.fullName}
+                  className={touched.fullName && errors.fullName ? "error" : null}
+                  errors={touched.fullName && errors.fullName ? errors.fullName : null}
                 />
               </Row>
               <Row className="mb-3">

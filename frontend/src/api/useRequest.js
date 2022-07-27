@@ -1,19 +1,23 @@
 import axios from 'axios'
 import useLogout from '../hooks/useLogout'
-
-const AxiosClient = (() => {
-  return axios.create({
-    baseURL: process.env.REACT_APP_BASE_URL,
-    timeout: 1000,
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    withCredentials: true
-  })
-})()
+import { useSessionToken } from '../hooks/useSessionToken'
 
 // The base request used to get query data.
 const useRequest = () => {
+  const [sessionToken] = useSessionToken()
+
+  const AxiosClient = (() => {
+    return axios.create({
+      baseURL: process.env.REACT_APP_BASE_URL,
+      timeout: 1000,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': sessionToken
+      },
+      withCredentials: true
+    })
+  })()
+
   const [logout] = useLogout()
   // Success hanlder for the request
   const onSuccess = function (response) {

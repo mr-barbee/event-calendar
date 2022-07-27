@@ -17,8 +17,7 @@ const useUtilityService = () => {
       url: 'api/services/send-token',
       method: 'POST',
       data: {
-        contact: values.contact,
-        type: values.type
+        uid: values.uid
       }
     })
   }
@@ -28,8 +27,7 @@ const useUtilityService = () => {
       url: 'api/services/check-token',
       method: 'POST',
       data: {
-        user_id: values.user_id,
-        sid: values.sid,
+        uid: values.uid,
         code: values.code
       }
     })

@@ -4,11 +4,13 @@ import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { Formik } from 'formik'
 import useUserService from '../../api/useUserService'
 import useUtilityService from '../../api/useUtilityService'
+import { useUser } from '../../hooks/useUser'
 import { Spinner, Form, Row, Col } from 'react-bootstrap'
 import { Submit, Input, Check } from '../_common/FormElements'
 import ValidationSchema from './validation'
 
 function ContactForm() {
+  const user = useUser()
   const queryClient = useQueryClient()
   const navigate = useNavigate()
   const [error, setError] = useState('')
@@ -24,7 +26,6 @@ function ContactForm() {
   const formSubmit = values => {
     // @TODO Add to the values if the user needs to verify there primary contact.
     values.needs_verification = userData.currentUser.primary !== values.primary
-    console.log(values)
     mutateUser(values, {
       onError: (res) => setError(res.data.updateUser.errors.message),
       onSuccess: (data) => {
@@ -39,9 +40,7 @@ function ContactForm() {
           // 2. The users account was never verified.
           // 3. The user updated there primary contact info.
           if (userData.currentUser.primary !== values.primary) {
-            const type = values.primary === 'e' ? 'email' : 'sms';
-            const contact = values.primary === 'e' ? values.email : `+1${values.phone}`
-            sendVerification({'contact': contact, 'type': type}, { onError: (res) => setError(res.data.error_message) })
+            sendVerification({'uid': user.uid}, { onError: (res) => setError(res.data.error_message) })
           } else {
             // We only want navigate to
             // profile page if we dont
@@ -65,7 +64,7 @@ function ContactForm() {
   }, [verificationData, setVerification])
 
   // Direct to the verification page if token is set.
-  if (verification) return <Navigate to={`/please-verify?sid=${verification}`} />
+  if (verification) return <Navigate to={`/verify?sid=${verification}`} />
 
   return (
     <div className="contact-form">
@@ -226,7 +225,7 @@ function ContactForm() {
                   onBlur={handleBlur}
                   isValid={touched.primary && !errors.primary}
                   errors={touched.primary && errors.primary ? errors.primary : null}
-                  helperText="Please include the area code."
+                  helperText="Please confirm your primary contact."
                 />
               </Row>
               {/* Volunteer Categories */}

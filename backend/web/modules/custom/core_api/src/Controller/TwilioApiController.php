@@ -63,9 +63,7 @@ class TwilioApiController extends ControllerBase {
   public function sendVerificationToken($uid, $email_template = FALSE) {
     try {
       $user = User::load($uid);
-      if (empty($user)) {
-        throw new \Exception('uid is missing');
-      }
+      if (empty($user)) throw new \Exception('uid is missing');
       $config = $this->getConfigs();
       // Find your Account SID and Auth Token at twilio.com/console
       // and set the environment variables. See http://twil.io/secure
@@ -77,7 +75,8 @@ class TwilioApiController extends ControllerBase {
       $primary_contact = $user->get('field_user_primary_contact')->getValue()[0]['value'];
       if ($primary_contact == 'p') {
         $type = 'sms';
-        $contact = $user->get('field_user_phone')->getValue()[0]['value'];
+        // @TODO allow users to update the country code.
+        $contact = '+1' . $user->get('field_user_phone')->getValue()[0]['value'];
       }
       else {
         $type = 'email';
@@ -202,7 +201,8 @@ class TwilioApiController extends ControllerBase {
 
         if (empty($data['sid'])) {
           $primary_contact = $user->get('field_user_primary_contact')->getValue()[0]['value'];
-          $to = $primary_contact == 'p' ? $user->get('field_user_phone')->getValue()[0]['value'] : $user->getEmail();
+          // @TODO allow users to update the country code.
+          $to = $primary_contact == 'p' ? '+1' . $user->get('field_user_phone')->getValue()[0]['value'] : $user->getEmail();
           $options = ['to' => $to];
         }
         else {

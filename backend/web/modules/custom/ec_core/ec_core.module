@@ -18,7 +18,7 @@ function ec_core_preprocess_page() {
     // We only allow certian roles to login.
     if (!in_array('administrator', $roles) && !in_array('event_admin', $roles) ) {
       user_logout();
-      \Drupal::messenger()->addMessage(t('You dont have access to this '), 'error');
+      \Drupal::messenger()->addMessage(t('You dont have access to this site.'), 'error');
       $homeResponse = new RedirectResponse(Url::fromRoute('user.login')->toString());
       $homeResponse->send();
     }

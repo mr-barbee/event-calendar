@@ -4,6 +4,8 @@ description: Adds the API to be leveraged by the system.
 core: 8.x
 core_version_requirement: '^8 || ^9'
 package: Custom
+dependencies:
+  - social_auth
 # dependencies:
 #   - twilio:sdk
 # configure: twilio_api.settings

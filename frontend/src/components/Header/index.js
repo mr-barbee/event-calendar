@@ -9,12 +9,14 @@ export default function Header() {
   const homePage = useMatch('/')
   const login = useMatch('/login')
   const register = useMatch('/register')
+  const activate = useMatch('/activate-account')
+  const verify = useMatch('/verify-account')
 
   return (
     <header className="header">
       <div className="header--wrapper">
         <div className="header--back">
-          {!homePage && !login && !register &&
+          {!homePage && !login && !register && !activate && !verify &&
             <Submit
               className="back-button"
               value={ <FaReply /> }

@@ -3,3 +3,10 @@
 #     class: Drupal\twilio_api\Authentication\AuthToken
 #     tags:
 #       - { name: authentication_provider, provider_id: 'token_auth', priority: 10 }
+services:
+  core_api.event_subscriber:
+    class: Drupal\core_api\EventSubscriber\SocialAuthSubscriber
+    arguments:
+      - '@messenger'
+    tags:
+      - { name: 'event_subscriber' }
