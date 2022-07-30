@@ -14,7 +14,7 @@ function Logout() {
   // Login mutation for the login form with an email and password.
   const { isError, error, mutate: userLogout } = useMutation((values) => logoutUser(values), { onSuccess: () => logout() })
 
-  if (isError) console.log(error.message)
+  if (isError) console.log(error)
 
   return (
     <div>

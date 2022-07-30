@@ -305,6 +305,19 @@ class ComposableSchemaExampleExtension extends SdlSchemaExtensionPluginBase {
           ->map('path', $builder->fromValue('field_user_verified.value'))
       )
     );
+
+    $registry->addFieldResolver('User', 'socialLogin',
+      $builder->compose(
+        $builder->produce('get_user'),
+        $builder->produce('entity_load')
+          ->map('type', $builder->fromValue('user'))
+          ->map('id', $builder->fromParent()),
+        $builder->produce('property_path')
+          ->map('type', $builder->fromValue('entity:user'))
+          ->map('value', $builder->fromParent())
+          ->map('path', $builder->fromValue('field_user_active_social_login.value'))
+      )
+    );
   }
 
   /**

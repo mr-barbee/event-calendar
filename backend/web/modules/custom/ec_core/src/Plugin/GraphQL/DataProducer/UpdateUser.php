@@ -90,6 +90,23 @@ class UpdateUser extends DataProducerPluginBase implements ContainerFactoryPlugi
     try {
 
       $user = User::load($this->currentUser->id());
+      // We want to verify the data the contact information.
+      // Reasons why we need to verify the contact info.
+      $needs_verification = FALSE;
+      $primary_contact = $user->get('field_user_primary_contact')->getValue()[0]['value'];
+      // 1. Perfered primary contact was changed.
+      // 2. The users account was never verified.
+      // 3. The user updated there primary contact info.
+      if (($primary_contact !== $data['primary']) ||
+          ($primary_contact === 'e' && $user->getEmail() !== $data['email']) ||
+          ($primary_contact === 'p' && $user->get('field_user_phone')->getValue()[0]['value'] !== $data['phone'])) {
+        $needs_verification = TRUE;
+      }
+      // If the needs verification status is set
+      // then we need to verify the user.
+      if ($needs_verification) {
+        $user->set('field_user_verified', FALSE);
+      }
       // The fullname cant be empty.
       if (!empty($data['fullName'])) {
         $user->set('field_user_full_name', $data['fullName']);
@@ -120,30 +137,31 @@ class UpdateUser extends DataProducerPluginBase implements ContainerFactoryPlugi
         }
         $user->set('field_user_experience_skills', $experiences);
       }
-      // We only want to update the username, password,
-      // and email if the current password is set.
+
+      $social_login_update = !empty($data['pass']) && !empty($user->get('field_user_active_social_login')->getValue()[0]['value']);
+      // We only want to update the username, password, and email if the current password is set.
       // We only change these if the data is set.
-      if (isset($data['currPass']) && !empty($data['currPass'])) {
-        // Check to see if the current password is correct.
-        if (!$this->passwordHasher->check($data['currPass'], $user->getPassword())) {
+      // We also check if the social login is set bc a current password wouldnt be set either.
+      if (!empty($data['currPass']) || $social_login_update) {
+        // Check to see if the current password is correct and the user was a social login user.
+        if (!$social_login_update && !$this->passwordHasher->check($data['currPass'], $user->getPassword())) {
           throw new \Exception('Your current password is not correct.');
         }
-        if (!empty($data['name'])) {
-          $user->setUsername($data['name']);
+        else {
+          // We want to remove the social media login flag.
+          $user->set('field_user_active_social_login', null);
+          if (!empty($data['name'])) {
+            $user->setUsername($data['name']);
+          }
+          // Check the plain password with the
+          // hashed password from db
+          if (!empty($data['pass'])) {
+            $user->setPassword($data['pass']);
+          }
+          if (!empty($data['email'])) {
+            $user->setEmail($data['email']);
+          }
         }
-        // Check the plain password with the
-        // hashed password from db
-        if (!empty($data['pass'])) {
-          $user->setPassword($data['pass']);
-        }
-        if (!empty($data['email'])) {
-          $user->setEmail($data['email']);
-        }
-      }
-      // If the needs verification status is set
-      // then we need to verify the user.
-      if (isset($data['needs_verification']) && $data['needs_verification']) {
-        $user->set('field_user_verified', FALSE);
       }
       //save to update node
       $user->save();

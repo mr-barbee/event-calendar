@@ -16,6 +16,16 @@ const ValidationSchema = Yup.object().shape({
     .required('Required'),
   primary: Yup.string()
     .required('Required'),
+  categories: Yup.array()
+     .min(1, 'Required'),
+  pass: Yup.string(),
+  confirmPass: Yup.string()
+     .oneOf([Yup.ref('pass'), null], "Passwords don't match!")
+     .when('pass', {
+       is: (pass) => pass && pass.length > 0,
+       then: Yup.string()
+         .required('Field is required')
+     })
 })
 
 export default ValidationSchema

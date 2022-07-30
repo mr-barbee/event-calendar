@@ -55,9 +55,11 @@ class SocialAuthSubscriber implements EventSubscriberInterface {
     $user = $event->getUser();
     // Adds a prefix with the implementer id on username.
     $user->setUsername($user->getDisplayName());
-    // @Set the plugin ID using $event->getPluginId().
+    // set the roles for the user and primay contact.
     $user->addRole('volunteer');
     $user->set('field_user_primary_contact', 'e');
+    // We want to add which social login the user used to sign in.
+    $user->set('field_user_active_social_login', $event->getPluginId());
     // Update the verification setting for the user.
     $user->set('field_user_verified', TRUE);
     // We want to save
@@ -73,8 +75,12 @@ class SocialAuthSubscriber implements EventSubscriberInterface {
    *   The Social Auth user event object.
    */
   public function onUserLogin(UserEvent $event) {
-    // If we have some login logic for social auth users.
-    // $this->messenger->addStatus('User has logged in with a Social Auth implementer. Implementer for ' . $event->getPluginId());
+    $user = $event->getUser();
+    // We want to add which social login the user used to sign in.
+    $user->set('field_user_active_social_login', $event->getPluginId());
+    // We want to save
+    // user.
+    $user->save();
   }
 
 
