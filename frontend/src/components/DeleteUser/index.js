@@ -1,19 +1,26 @@
-import { Form, Row } from 'react-bootstrap'
+import { Row, Col } from 'react-bootstrap'
+import { useState } from 'react'
 import { Submit } from '../_common/FormElements'
+import DeleteModal from './components/DeleteModal'
 
 function DeleteUser() {
-
-  function handleSubmit() {
-    console.log('in')
-  }
+  const [openList, setOpenList] = useState(false)
 
   return (
     <div className="delete-user">
-      <Form onSubmit={handleSubmit}>
-        <Row>
-          <Submit value='Delete User' />
-        </Row>
-      </Form>
+      {openList &&
+        <DeleteModal
+          onHide={() => setOpenList(false)}
+        />
+      }
+      <Row>
+        <Col sm={12}>
+          <p>This will disable your account. If you want to fully delete your account please contact site administrator.</p>
+        </Col>
+        <Col sm={12}>
+          <Submit onClick={() => setOpenList(true)} value='Cancel Account' />
+        </Col>
+      </Row>
     </div>
   )
 }

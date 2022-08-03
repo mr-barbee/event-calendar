@@ -137,7 +137,7 @@ class UpdateUser extends DataProducerPluginBase implements ContainerFactoryPlugi
         }
         $user->set('field_user_experience_skills', $experiences);
       }
-
+      // if the password is set and the social login is set as well then this is a social login update.
       $social_login_update = !empty($data['pass']) && !empty($user->get('field_user_active_social_login')->getValue()[0]['value']);
       // We only want to update the username, password, and email if the current password is set.
       // We only change these if the data is set.

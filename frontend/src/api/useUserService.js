@@ -90,7 +90,14 @@ const useUserService = () => {
     })
   }
 
-  return [getCurrentUser, loginUser, facebookLoginUser, logoutUser, fetchSessionToken, updateUser, registerUser, updateUserPassword, locateUser]
+  function cancelUser() {
+    return request({
+      url: 'api/services/cancel-user',
+      method: 'POST'
+    })
+  }
+
+  return [getCurrentUser, loginUser, facebookLoginUser, logoutUser, fetchSessionToken, updateUser, registerUser, updateUserPassword, locateUser, cancelUser]
 }
 
 export default useUserService

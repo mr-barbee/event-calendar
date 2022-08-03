@@ -257,4 +257,45 @@ class CoreApiController extends ControllerBase {
    // return the response.
    return new JsonResponse($response, $status);
   }
+
+  /**
+   * [disableUserAccount description]
+   * @param  Request $request               [description]
+   * @return [type]           [description]
+   */
+  public function disableUserAccount(Request $request) {
+    $status = 200;
+    $response = [];
+
+    try {
+      CoreApiHandler::validate_api_request($request);
+      if ($this->currentUser->isAnonymous()) throw new AccessDeniedHttpException;
+      $user = User::load($this->currentUser->id());
+      $roles = $user->getRoles();
+      // this should only be accessed by the volunteer roles.
+      if (!in_array('volunteer', $roles)) throw new AccessDeniedHttpException;
+      // Block the users account.
+      user_cancel([], $this->currentUser->id(), 'user_cancel_block');
+      // Invoke the Batch API and execute.
+      $batch = &batch_get();
+      $batch['progressive'] = FALSE;
+      batch_process();
+      $response = [
+        'success' => TRUE
+      ];
+    }
+    catch (AccessDeniedHttpException $e) {
+      $response = ['error_message' => 'You dont have the priviledges to access this url.', 'status' => 'error'];
+      $status = 403;
+    }
+    catch (\Exception $e) {
+      if (empty($response['error_message'])) {
+        \Drupal::logger(__CLASS__)->error($e->getMessage());
+        $response = ['error_message' => 'We\'re currenlty experiency some technical difficulties. Please contact site administrator.', 'status' => 'error'];
+      }
+      $status = 400;
+    }
+    // return the response.
+    return new JsonResponse($response, $status);
+  }
 }
