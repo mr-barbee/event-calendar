@@ -15,7 +15,8 @@ function DeleteUser() {
       }
       <Row>
         <Col sm={12}>
-          <p>This will disable your account. If you want to fully delete your account please contact site administrator.</p>
+          <p>This will disable your account and prevent all notifications and emails to be sent to out.</p>
+          <p>If you want to fully delete your account please contact site administrator.</p>
         </Col>
         <Col sm={12}>
           <Submit onClick={() => setOpenList(true)} value='Cancel Account' />
