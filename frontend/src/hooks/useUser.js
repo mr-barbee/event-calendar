@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react'
-import { useToken } from './useToken'
+import { useState, useEffect, useContext } from 'react'
+import { SessionContext } from '../context'
 
 export function useUser() {
-  const [token] = useToken()
+  const { token } = useContext(SessionContext)
 
   const getPayloadFromToken = token => {
     return token.current_user

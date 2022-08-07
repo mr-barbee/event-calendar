@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Navigate, Link } from 'react-router-dom'
 import FacebookLogin from 'react-facebook-login'
 import { Formik } from 'formik'
@@ -7,12 +7,12 @@ import useUserService from '../../api/useUserService'
 import { Form, Row, Col } from 'react-bootstrap'
 import { Submit, Input } from '../_common/FormElements'
 import { RegisterSchema } from './validation'
-import { useToken } from '../../hooks/useToken'
+import { SessionContext } from '../../context'
 import './style.scss'
 
 export default function Register() {
   const [verification, setVerification] = useState('')
-  const [token, setToken] = useToken()
+  const { token, setToken } = useContext(SessionContext)
   const [error, setError] = useState('')
   const [,, facebookLoginUser,,,, registerUser] = useUserService()
   // Login mutation for the login form with an email and password.

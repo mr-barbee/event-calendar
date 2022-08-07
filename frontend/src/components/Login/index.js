@@ -4,7 +4,6 @@ import FacebookLogin from 'react-facebook-login'
 import { Formik } from 'formik'
 import { useMutation } from 'react-query'
 import useUserService from '../../api/useUserService'
-import { useToken } from '../../hooks/useToken'
 import { Form, Row, Col } from 'react-bootstrap'
 import { Submit, Input } from '../_common/FormElements'
 import ValidationSchema from './validation'
@@ -12,10 +11,9 @@ import { SessionContext } from '../../context'
 import './style.scss'
 
 export default function Login() {
-  const [token, setToken] = useToken()
   const [error, setError] = useState('')
   const [, loginUser, facebookLoginUser] = useUserService()
-  const { setSessionToken } = useContext(SessionContext)
+  const { token, setToken, setSessionToken } = useContext(SessionContext)
   // Login mutation for the login form with an email and password.
   const { data: mutationData, mutate: mutatePostLogin } = useMutation((values) => loginUser(values))
   // Login mutation for the facebook data.

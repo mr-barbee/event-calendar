@@ -49,9 +49,9 @@ export default function Register() {
                   column="6"
                   controlId="formEmail"
                   groupClassName="position-relative"
-                  type="email"
+                  type="text"
                   name="email"
-                  placeholder="Email"
+                  placeholder="Email or Username"
                   value={values.email}
                   onChange={handleChange}
                   onBlur={handleBlur}

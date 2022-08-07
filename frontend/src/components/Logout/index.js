@@ -1,4 +1,5 @@
-import { useToken } from '../../hooks/useToken'
+import { useContext} from 'react'
+import { SessionContext } from '../../context'
 import { useUser } from '../../hooks/useUser'
 import useUserService from '../../api/useUserService'
 import { FaSignOutAlt } from "react-icons/fa"
@@ -8,7 +9,7 @@ import { Submit } from '../_common/FormElements'
 
 function Logout() {
   const user = useUser()
-  const [token] = useToken()
+  const { token } = useContext(SessionContext)
   const [logout] = useLogout()
   const [,,, logoutUser] = useUserService()
   // Login mutation for the login form with an email and password.

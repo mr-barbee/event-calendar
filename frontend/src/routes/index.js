@@ -13,48 +13,50 @@ import ContactForm from '../components/ContactForm'
 import ValidateUser from '../components/ValidateUser'
 import DeleteUser from '../components/DeleteUser'
 import EventCalendar from '../components/Calendar'
-import { Container } from 'react-bootstrap'
+import IdleTimer from '../components/IdleTimer'
+import { Container, Spinner } from 'react-bootstrap'
 import { PrivateRoute } from './PrivateRoute'
 import { SessionContext } from '../context'
 
 export default function PageRoutes() {
-  // let logoutTimer
   const [,,,, fetchSessionToken] = useUserService()
   const [sessionToken, setSessionToken] = useState()
-  const { isLoading, data: token, refetch } = useQuery(['session-token'], () => fetchSessionToken())
-  // const [tokenExpirationTime, setTokenExpirationTime] = useState()
+  // Get the user session token.
+  const { isLoading, data, refetch } = useQuery(['session-token'], () => fetchSessionToken(), { staleTime: 1800000 })
+  // Fetch the login token from starage.
+  const [token, setTokenInternal] = useState(() => {
+    return JSON.parse(localStorage.getItem('token'))
+  });
+  // save the Token to local starage.
+  const setToken = newToken => {
+    localStorage.setItem('token', JSON.stringify(newToken))
+    setTokenInternal(newToken)
+  }
 
   useEffect(() => {
     // if the user is set and data empty run the
     // query if not loading.
-    if (token && !isLoading) {
+    if (data && !isLoading) {
       // Set session token to be
       // used on every api call.
-      setSessionToken(token)
+      setSessionToken(data)
     }
-  }, [token, setSessionToken, isLoading])
+  }, [data, setSessionToken, isLoading])
 
-  // @TODO new useEffect hook to set the timer if the expiration time is in future otherwise we clear the timer here
-  // useEffect(() => {
-  //     if (token && tokenExpirationTime) {
-  //        const remainingTime = tokenExpirationTime.getTime() - new Date().getTime()
-  //        logoutTimer = setTimeout(refetch(), remainingTime)
-  //      } else {
-  //        clearTimeout(logoutTimer);
-  //      }
-  //  }, [token, tokenExpirationTime]);
-
-
-  if (!sessionToken && !isLoading) return <p>Error loading browser session</p>
+  if (!sessionToken && !isLoading) return <h1>Error loading browser session</h1>
 
   return (
     <SessionContext.Provider value={{
+      token: token,
       sessionToken: sessionToken,
       setSessionToken: (value) => { setSessionToken(value) },
-      refetchSession: () => { refetch() }
+      refetchSession: () => { refetch() },
+      setToken: (value) => { setToken(value) }
     }}>
       {isLoading &&
-        <p>Loading</p>
+        <Spinner animation="border" role="status" size="lg" >
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
       }
       {!isLoading && sessionToken &&
         <Router>
@@ -79,6 +81,9 @@ export default function PageRoutes() {
                 </Routes>
               </Container>
             </div>
+            {token &&
+              <IdleTimer />
+            }
           <Footer />
         </Router>
       }
