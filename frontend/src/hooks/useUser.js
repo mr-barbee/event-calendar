@@ -14,6 +14,9 @@ export function useUser() {
   });
 
   useEffect(() => {
+    // Here we check if the token is
+    // not set and the expiration time
+    // has not yet expired.
     if (!token) {
       setUser(null)
     } else {

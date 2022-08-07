@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Navigate, Link } from 'react-router-dom'
 import FacebookLogin from 'react-facebook-login'
 import { Formik } from 'formik'
@@ -8,34 +8,34 @@ import { useToken } from '../../hooks/useToken'
 import { Form, Row, Col } from 'react-bootstrap'
 import { Submit, Input } from '../_common/FormElements'
 import ValidationSchema from './validation'
+import { SessionContext } from '../../context'
 import './style.scss'
 
 export default function Login() {
   const [token, setToken] = useToken()
   const [error, setError] = useState('')
   const [, loginUser, facebookLoginUser] = useUserService()
+  const { setSessionToken } = useContext(SessionContext)
   // Login mutation for the login form with an email and password.
   const { data: mutationData, mutate: mutatePostLogin } = useMutation((values) => loginUser(values))
   // Login mutation for the facebook data.
   const { data: facebookData, mutate: mutateFacebookLogin } = useMutation((accessToken) => facebookLoginUser(accessToken))
   // Reponse callback for the facebook login.
   const responseFacebook = response => {
-    if (response.accessToken) {
-      // Set the data from the Facebook API.
-      mutateFacebookLogin(response.accessToken, { onError: (res) => setError(res.data.message) })
-    } else {
-      setError('Sorry, unable to authenticate with Facebook.')
-    }
+    // Set the data from the Facebook API.
+    if (response.accessToken) mutateFacebookLogin(response.accessToken, { onError: (res) => setError(res.data.message) })
+    else setError('Sorry, unable to authenticate with Facebook.')
   }
 
   useEffect(() => {
     if (mutationData || facebookData) {
       // we want to run the
       // current user api.
-      let tokenData = mutationData ? mutationData : facebookData
+      let tokenData = mutationData ?? facebookData
       setToken(tokenData)
+      setSessionToken(tokenData.csrf_token)
     }
-  }, [mutationData, facebookData, setToken])
+  }, [mutationData, facebookData, setToken, setSessionToken])
 
   // Direct to the login page if token is set.
   if (token) return <Navigate to="/" />

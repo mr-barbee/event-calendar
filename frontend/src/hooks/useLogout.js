@@ -1,12 +1,13 @@
+import { useContext } from 'react'
 import { useQueryClient } from 'react-query'
-import { useNavigate } from 'react-router-dom'
 import { useToken } from './useToken'
+import { SessionContext } from '../context'
 
 // We want to clear user queries, cache
 // and token and redirect to the login page.
 const useLogout = () => {
   const queryClient = useQueryClient()
-  const navigate = useNavigate()
+  const { setSessionToken } = useContext(SessionContext)
   const [, setToken] = useToken()
   // Helper function to clear user
   // data saved in browser.
@@ -20,7 +21,6 @@ const useLogout = () => {
   const logout = () => {
     // Clear the token and queries
     localStorage.removeItem('token')
-    localStorage.removeItem('sessionToken')
     queryClient.removeQueries('get-user')
     queryClient.removeQueries('session-token')
     // We want to clear
@@ -28,9 +28,10 @@ const useLogout = () => {
     clearCacheData()
     // Set the user token to null.
     setToken(null)
-    // We want to navigate
-    // back to the login page.
-    navigate('/login')
+    // set the session token
+    // to null. This will
+    // refresh the app as well.
+    setSessionToken(null)
   }
 
   return [logout]

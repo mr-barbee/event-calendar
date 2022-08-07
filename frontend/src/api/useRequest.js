@@ -1,10 +1,11 @@
+import { useContext } from 'react'
 import axios from 'axios'
 import useLogout from '../hooks/useLogout'
-import { useSessionToken } from '../hooks/useSessionToken'
+import { SessionContext } from '../context'
 
 // The base request used to get query data.
 const useRequest = () => {
-  const [sessionToken] = useSessionToken()
+  const { sessionToken } = useContext(SessionContext)
 
   const AxiosClient = (() => {
     return axios.create({

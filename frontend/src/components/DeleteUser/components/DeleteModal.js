@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react'
 import { Modal, Row, Col } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
 import { useMutation } from 'react-query'
 import useUserService from '../../../api/useUserService'
 import { Submit } from '../../_common/FormElements'
@@ -8,14 +7,10 @@ import useLogout from '../../../hooks/useLogout'
 
 export default function DeleteModal(props) {
   const [show, setShow] = useState(true)
-  const navigate = useNavigate()
   const [logout] = useLogout()
   const [,,,,,,,,, cancelUser] = useUserService()
   const { mutate: cancel } = useMutation(() => cancelUser(), {
-    onSuccess: () => {
-      logout()
-      navigate('/login')
-    }
+    onSuccess: () => { logout() }
   })
 
   const handleClose = useCallback(() => {
