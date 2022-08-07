@@ -18,10 +18,15 @@ export default function Login() {
   const { data: mutationData, mutate: mutatePostLogin } = useMutation((values) => loginUser(values))
   // Login mutation for the facebook data.
   const { data: facebookData, mutate: mutateFacebookLogin } = useMutation((accessToken) => facebookLoginUser(accessToken))
+  const formatError = error => {
+    // if this error returns than the user some how has a loged in session.
+    if (error.includes('This route can only be accessed by anonymous users')) setError('Please clear your browser cookies.')
+    else setError(error)
+  }
   // Reponse callback for the facebook login.
   const responseFacebook = response => {
     // Set the data from the Facebook API.
-    if (response.accessToken) mutateFacebookLogin(response.accessToken, { onError: (res) => setError(res.data.message) })
+    if (response.accessToken) mutateFacebookLogin(response.accessToken, { onError: (res) => formatError(res.data.message) })
     else setError('Sorry, unable to authenticate with Facebook.')
   }
 
@@ -48,7 +53,7 @@ export default function Login() {
             password: ''
           }}
           validationSchema={ValidationSchema}
-          onSubmit={(values, {setSubmitting, resetForm}) => { mutatePostLogin(values, { onError: (res) => setError(res.data.message) }) }}
+          onSubmit={(values, {setSubmitting, resetForm}) => { mutatePostLogin(values, { onError: (res) => formatError(res.data.message) }) }}
         >
           {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
             <Form onSubmit={handleSubmit}>
