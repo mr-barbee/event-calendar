@@ -6,7 +6,7 @@ import { SessionContext } from '../context'
 // and token and redirect to the login page.
 const useLogout = () => {
   const queryClient = useQueryClient()
-  const { setToken, setSessionToken } = useContext(SessionContext)
+  const { setToken } = useContext(SessionContext)
   // Helper function to clear user
   // data saved in browser.
   const clearCacheData = () => {
@@ -26,10 +26,6 @@ const useLogout = () => {
     // Set the user
     // token to null.
     setToken(null)
-    // set the session token
-    // to null. This will
-    // refresh the app as well.
-    setSessionToken(null)
   }
 
   return [logout]
