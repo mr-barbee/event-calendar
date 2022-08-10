@@ -14,6 +14,7 @@ import ValidateUser from '../components/ValidateUser'
 import DeleteUser from '../components/DeleteUser'
 import EventCalendar from '../components/Calendar'
 import IdleTimer from '../components/IdleTimer'
+import PageNotFound from '../components/PageNotFound'
 import { Container, Spinner } from 'react-bootstrap'
 import { PrivateRoute } from './PrivateRoute'
 import { SessionContext } from '../context'
@@ -78,6 +79,7 @@ export default function PageRoutes() {
                   <Route path='/locate-account' element={<LocateUser />}/>
                   <Route path='/verify-account' element={<ValidateUser />}/>
                   <Route path='/activate-account' element={<MakePassword />}/>
+                  <Route path='*' element={<PageNotFound />}/>
                 </Routes>
               </Container>
             </div>
