@@ -32,8 +32,13 @@ const useRequest = () => {
   // Catch the error response.
   const onError = function (error) {
     // we want to clear cache and log browser out if we get a 403 access denied error.
-    // @TODO only do this for certain request or have a way this can be bypassed.
-    if (typeof error.response !== 'undefined' && error.response.status === 403 && error.response.data.message.includes('permission is required')) logout()
+    // @TODO Find a better way t hanlde this request.
+    if (typeof error.response !== 'undefined' && error.response.status === 403) {
+      if (error.response.data.message.includes('permission is required') ||
+          error.response.data.message.includes('This route can only be accessed by authenticated users')) {
+        logout()
+      }
+    }
     return Promise.reject(error.response)
   }
   const request = async function (options) {

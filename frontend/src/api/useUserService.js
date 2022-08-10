@@ -22,6 +22,15 @@ const useUserService = () => {
       }
     })
   }
+  function googleLoginUser(accessToken) {
+    return request({
+      url: 'user/login/google?_format=json',
+      method: 'POST',
+      data: {
+        access_token: accessToken
+      }
+    })
+  }
   function facebookLoginUser(accessToken) {
     return request({
       url: 'user/login/facebook?_format=json',
@@ -97,7 +106,19 @@ const useUserService = () => {
     })
   }
 
-  return [getCurrentUser, loginUser, facebookLoginUser, logoutUser, fetchSessionToken, updateUser, registerUser, updateUserPassword, locateUser, cancelUser]
+  return [
+    getCurrentUser,
+    loginUser,
+    facebookLoginUser,
+    logoutUser,
+    fetchSessionToken,
+    updateUser,
+    registerUser,
+    updateUserPassword,
+    locateUser,
+    cancelUser,
+    googleLoginUser
+  ]
 }
 
 export default useUserService

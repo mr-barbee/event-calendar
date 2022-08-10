@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "55251af8eead7c0aab8cbd33c4e17f1b",
+    "content-hash": "49f7f8f816a9d137b63b47d6dafc1c47",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2564,6 +2564,59 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/social_auth_google",
                 "issues": "https://www.drupal.org/project/issues/social_auth_google"
+            }
+        },
+        {
+            "name": "drupal/social_auth_google_api",
+            "version": "dev-3.0.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/social_auth_google_api.git",
+                "reference": "54b7438466e1b4490f570db98a99e0f1c6fc35fa"
+            },
+            "require": {
+                "drupal/core": "^8.7 || ^9",
+                "drupal/social_auth_decoupled": "^3.0",
+                "drupal/social_auth_google": "^3.0",
+                "php": ">=7.0.8"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-3.0.x": "3.0.x-dev"
+                },
+                "drupal": {
+                    "version": "3.0.x-dev",
+                    "datestamp": "1645020719",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "lawxen",
+                    "homepage": "https://www.drupal.org/user/2936003"
+                },
+                {
+                    "name": "murilohp",
+                    "homepage": "https://www.drupal.org/user/3650571"
+                },
+                {
+                    "name": "zterry95",
+                    "homepage": "https://www.drupal.org/user/1952394"
+                }
+            ],
+            "description": "Social auth google api.",
+            "homepage": "https://www.drupal.org/project/social_auth_google_api",
+            "support": {
+                "source": "https://git.drupalcode.org/project/social_auth_google_api",
+                "issues": "https://drupal.org/project/issues/social_auth_google_api"
             }
         },
         {
@@ -7691,7 +7744,8 @@
         "drupal/bootstrap_business": 10,
         "drupal/rules": 15,
         "drupal/social_auth_facebook_api": 5,
-        "drupal/social_auth_google": 5
+        "drupal/social_auth_google": 5,
+        "drupal/social_auth_google_api": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

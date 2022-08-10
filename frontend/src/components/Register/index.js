@@ -1,47 +1,34 @@
 import { useState, useEffect, useContext } from 'react'
 import { Navigate, Link } from 'react-router-dom'
-import FacebookLogin from 'react-facebook-login'
 import { Formik } from 'formik'
 import { useMutation } from 'react-query'
 import useUserService from '../../api/useUserService'
 import { Form, Row, Col } from 'react-bootstrap'
 import { Submit, Input } from '../_common/FormElements'
+import { SocialLogins } from '../_common/SocialLogins'
 import { RegisterSchema } from './validation'
 import { SessionContext } from '../../context'
 import './style.scss'
 
 export default function Register() {
   const [verification, setVerification] = useState('')
-  const { token, setToken } = useContext(SessionContext)
+  const { token } = useContext(SessionContext)
   const [error, setError] = useState('')
-  const [,, facebookLoginUser,,,, registerUser] = useUserService()
+  const [,,,,,, registerUser] = useUserService()
   // Login mutation for the login form with an email and password.
   const { data: registerData, mutate: register } = useMutation((values) => registerUser(values), { retry: 0 })
-  // Login mutation for the facebook data.
-  const { data: facebookData, mutate: mutateFacebookLogin } = useMutation((accessToken) => facebookLoginUser(accessToken))
-  // Reponse callback for the facebook login.
-  const responseFacebook = response => {
-    if (response.accessToken) {
-      // Set the data from the Facebook API.
-      mutateFacebookLogin(response.accessToken, { onError: (res) => setError(res.data.message) })
-    } else {
-      setError('Sorry, unable to authenticate with Facebook.')
-    }
-  }
 
   useEffect(() => {
-    if (registerData || facebookData) {
+    if (registerData) {
       // we want to run the
       // current user api.
       if (registerData && registerData.status === 'pending') {
         setVerification(registerData)
-      } else if (facebookData) {
-        setToken(facebookData)
       } else {
         setError('There was an error with the verification. Please contact site administrator.')
       }
     }
-  }, [registerData, facebookData, setVerification, setError, setToken])
+  }, [registerData, setVerification, setError])
 
   // Direct to the verification page if token is set to verify user email.
   if (verification) return <Navigate to={`/verify-account?uid=${verification.uid}`}/>
@@ -129,14 +116,8 @@ export default function Register() {
         </Row>
         <Row className="mb-3">
           <Col>
-            <FacebookLogin
-              appId={process.env.REACT_APP_FACEBOOK_APP_ID}
-              autoLoad={false}
-              fields='name,email,picture'
-              scope='public_profile,user_friends'
-              callback={responseFacebook}
-              icon='fa-facebook'
-              textButton='Sign up with Facebook'
+            <SocialLogins
+              onError={(error) => {setError(error)}}
             />
           </Col>
         </Row>
