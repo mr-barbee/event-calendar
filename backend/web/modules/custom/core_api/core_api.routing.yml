@@ -16,6 +16,15 @@ core_api.check_token:
   requirements:
     _permission: 'access content'
 
+core_api.verify_session:
+  path: '/api/services/verify-session'
+  defaults:
+    _controller: 'Drupal\core_api\Controller\CoreApiController::veritySession'
+    _title: 'Verify Session'
+  methods:  [GET]
+  requirements:
+    _permission: 'access content'
+
 core_api.register_user:
   path: '/api/services/register-user'
   defaults:

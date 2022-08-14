@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from 'react'
-import { useMutation } from 'react-query'
+import { useMutation, useQuery } from 'react-query'
 import { useIdleTimer } from 'react-idle-timer'
 import { Modal, Row, Col } from 'react-bootstrap'
 import { Submit } from '../_common/FormElements'
@@ -10,9 +10,13 @@ import useUserService from '../../api/useUserService'
 export default function IdleTimer(props) {
   const { token, refetchSession } = useContext(SessionContext)
   const [logout] = useLogout()
-  const [,,, logoutUser] = useUserService()
+  const [,,, logoutUser,,,,,,,, verifySession] = useUserService()
   // Login mutation for the login form with an email and password.
   const { isError, error, mutate: userLogout } = useMutation((values) => logoutUser(values), { onSuccess: () => logout() })
+  // We want to verify that the user still has a valid user session after 30 mins.
+  const { isLoading: verifyLoading, data: verify } = useQuery(['verify-session'], () => verifySession(), {
+    staleTime: 1800000, refetchOnWindowFocus: true
+  })
   if (isError) console.log(error)
   // Set timeout values
   const timeout = 1000 * 60 * 30
@@ -74,6 +78,14 @@ export default function IdleTimer(props) {
       clearInterval(interval)
     }
   }, [getRemainingTime, isPrompted])
+
+  useEffect(() => {
+    // This mwans the user is no longer logged in so log them out.
+    if (!verifyLoading && verify && verify.is_authenticated === false) {
+      logout()
+      setRemaining(0)
+    }
+  }, [verify, verifyLoading, setRemaining, logout])
 
   return (
     <Modal

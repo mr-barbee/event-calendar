@@ -298,4 +298,28 @@ class CoreApiController extends ControllerBase {
     // return the response.
     return new JsonResponse($response, $status);
   }
+
+  /**
+   * [veritySession description]
+   * @param  Request $request               [description]
+   * @return [type]           [description]
+   */
+  public function veritySession(Request $request) {
+    $status = 200;
+    $response = [ 'is_authenticated' => FALSE ];
+
+    try {
+      CoreApiHandler::validate_api_request($request);
+      if ($this->currentUser->isAuthenticated()) $response = [ 'is_authenticated' => TRUE ];
+    }
+    catch (\Exception $e) {
+      if (empty($response['error_message'])) {
+        \Drupal::logger(__CLASS__)->error($e->getMessage());
+        $response = ['error_message' => 'We\'re currenlty experiency some technical difficulties. Please contact site administrator.', 'status' => 'error'];
+      }
+      $status = 400;
+    }
+    // return the response.
+    return new JsonResponse($response, $status);
+  }
 }

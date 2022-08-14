@@ -34,7 +34,7 @@ export default function App() {
         <div className="app">
           <PageRoutes />
         </div>
-        <ReactQueryDevtools initialIsOpen={true} />
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </GoogleOAuthProvider>
   )

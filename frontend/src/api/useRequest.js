@@ -1,11 +1,12 @@
 import { useContext } from 'react'
 import axios from 'axios'
-import useLogout from '../hooks/useLogout'
+import { useQueryClient } from 'react-query'
 import { SessionContext } from '../context'
 
 // The base request used to get query data.
 const useRequest = () => {
   const { sessionToken } = useContext(SessionContext)
+  const queryClient = useQueryClient()
 
   const AxiosClient = (() => {
     return axios.create({
@@ -19,7 +20,6 @@ const useRequest = () => {
     })
   })()
 
-  const [logout] = useLogout()
   // Success hanlder for the request
   const onSuccess = function (response) {
     const {
@@ -31,14 +31,8 @@ const useRequest = () => {
   }
   // Catch the error response.
   const onError = function (error) {
-    // we want to clear cache and log browser out if we get a 403 access denied error.
-    // @TODO Find a better way t hanlde this request.
-    if (typeof error.response !== 'undefined' && error.response.status === 403) {
-      if (error.response.data.message.includes('permission is required') ||
-          error.response.data.message.includes('This route can only be accessed by authenticated users')) {
-        logout()
-      }
-    }
+    // we verify the session if we get a 403 access denied error.
+    if (typeof error.response !== 'undefined' && error.response.status === 403) queryClient.invalidateQueries('verify-session')
     return Promise.reject(error.response)
   }
   const request = async function (options) {

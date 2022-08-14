@@ -106,6 +106,13 @@ const useUserService = () => {
     })
   }
 
+  function verifySession() {
+    return request({
+      url: 'api/services/verify-session',
+      method: 'GET'
+    })
+  }
+
   return [
     getCurrentUser,
     loginUser,
@@ -117,7 +124,8 @@ const useUserService = () => {
     updateUserPassword,
     locateUser,
     cancelUser,
-    googleLoginUser
+    googleLoginUser,
+    verifySession
   ]
 }
 
