@@ -29,6 +29,7 @@ export const GETEVENT = id => `query GetEvent {
   event(id: ${id}) {
     id
     title
+    summary
     body
     start
     end
@@ -42,6 +43,7 @@ export const GETEVENTS = parameters => `query GetEvents{
     total
     items {
       id
+      summary
       title
       start
       end

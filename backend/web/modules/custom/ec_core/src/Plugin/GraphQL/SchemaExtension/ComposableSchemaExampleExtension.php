@@ -346,6 +346,13 @@ class ComposableSchemaExampleExtension extends SdlSchemaExtensionPluginBase {
         ->map('path', $builder->fromValue('body.value'))
     );
 
+    $registry->addFieldResolver('Event', 'summary',
+      $builder->produce('property_path')
+        ->map('type', $builder->fromValue('entity:node'))
+        ->map('value', $builder->fromParent())
+        ->map('path', $builder->fromValue('body.summary'))
+    );
+
     $registry->addFieldResolver('Event', 'start', $builder->compose(
       $builder->produce('property_path')
         ->map('type', $builder->fromValue('entity:node:event'))

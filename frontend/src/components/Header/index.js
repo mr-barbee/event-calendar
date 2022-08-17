@@ -1,6 +1,6 @@
 import Logout from '../Logout'
 import { useNavigate, useMatch } from "react-router-dom"
-import { FaReply } from "react-icons/fa"
+import { FaHome } from "react-icons/fa"
 import { Submit } from '../_common/FormElements'
 import './style.scss'
 
@@ -19,13 +19,13 @@ export default function Header() {
           {!homePage && !login && !register && !activate && !verify &&
             <Submit
               className="back-button"
-              value={ <FaReply /> }
-              onClick={() => { navigate(-1) }}
+              value={ <FaHome /> }
+              onClick={() => { navigate('/') }}
             />
           }
         </div>
         <div className="header--title">
-          <div onClick={() => { navigate('/') }} >Event Volunteers</div>
+          <div>Event Volunteers</div>
         </div>
         <div className="header--login">
           {!login &&

@@ -98,6 +98,7 @@ function EventDetail(props) {
                 </Row>
                 <Row>
                   <Col sm={12}>
+                    <div><p>{ data.event.summary }</p></div>
                     <div className="content" dangerouslySetInnerHTML={{__html: data.event.body}}></div>
                   </Col>
                 </Row>

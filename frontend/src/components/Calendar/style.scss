@@ -1,10 +1,154 @@
-.fc-license-message {
-  display: none !important;
-}
-.modal {
-  .modal-body {
-    tbody {
-      text-align: center;
+.event-calendar {
+  .fc-license-message {
+    display: none !important;
+  }
+  .modal {
+    .modal-body {
+      tbody {
+        text-align: center;
+      }
+    }
+  }
+  .events-tile.card {
+    display: inline-flex;
+  }
+  .card-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    // justify-content: center;
+  }
+  a {
+    color: inherit;
+    text-decoration: inherit;
+    &:hover {
+      color: inherit;
+    }
+  }
+  .current.card {
+    display: block;
+    position: relative;
+    max-width: 262px;
+    background-color: #f2f8f9;
+    border-radius: 4px;
+    padding: 32px 24px;
+    margin: 12px;
+    text-decoration: none;
+    z-index: 0;
+    overflow: hidden;
+    &:hover {
+      transition: all 0.2s ease-out;
+      box-shadow: 0px 4px 8px rgba(38, 38, 38, 0.2);
+      top: -4px;
+      border: 1px solid #cccccc;
+      background-color: white;
+    }
+    &:before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      top: -16px;
+      right: -16px;
+      background: #00838d;
+      height: 32px;
+      width: 32px;
+      border-radius: 32px;
+      transform: scale(1);
+      transform-origin: 50% 50%;
+      transition: transform 0.25s ease-out;
+    }
+    &:hover:before {
+      transform: scale(21);
+    }
+    &:hover {
+      p {
+        transition: all 0.3s ease-out;
+        color: rgba(255, 255, 255, 0.8);
+      }
+      h3 {
+        transition: all 0.3s ease-out;
+        color: #ffffff;
+      }
+
+    }
+    .go-corner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      overflow: hidden;
+      top: 0;
+      right: 0;
+      background-color: #00838d;
+      border-radius: 0 4px 0 32px;
+    }
+    .go-arrow {
+      margin-top: -4px;
+      margin-right: -4px;
+      color: white;
+      font-family: courier, sans;
+    }
+  }
+
+  .archive.card {
+    display: block;
+    top: 0px;
+    position: relative;
+    width: 100%;
+    max-width: 262px;
+    background-color: #f2f8f9;
+    border-radius: 4px;
+    padding: 32px 24px;
+    margin: 12px;
+    text-decoration: none;
+    z-index: 0;
+    overflow: hidden;
+    border: 1px solid #f2f8f9;
+    &:hover {
+      transition: all 0.2s ease-out;
+      box-shadow: 0px 4px 8px rgba(38, 38, 38, 0.2);
+      top: -4px;
+      border: 1px solid #cccccc;
+      background-color: white;
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+  .hr-text {
+    line-height: 1em;
+    position: relative;
+    outline: 0;
+    border: 0;
+    color: white;
+    text-align: center;
+    height: 1.5em;
+    opacity: .5;
+    &:before {
+      content: '';
+      // use the linear-gradient for the fading effect
+      // use a solid background color for a solid bar
+      background: linear-gradient(to right, transparent, #818078, transparent);
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 100%;
+      height: 1px;
+    }
+    &:after {
+      content: attr(data-content);
+      position: relative;
+      display: inline-block;
+      color: black;
+
+      padding: 0 .5em;
+      line-height: 1.5em;
+      // this is really the only tricky part, you need to specify the background color of the container element...
+      color: #818078;
+      background-color: #fcfcfa;
     }
   }
 }

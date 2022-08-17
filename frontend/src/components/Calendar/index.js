@@ -8,6 +8,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import bootstrap5Plugin from '@fullcalendar/bootstrap5'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import EventList from './components/EventList'
+import EventListView from './components/EventListView'
 import EventDetail from './components/EventDetail'
 import { Submit } from '../_common/FormElements'
 import useEventService from '../../api/useEventService'
@@ -20,6 +21,7 @@ function EventCalendar() {
   const { id } = useParams()
   const calendarRef = useRef(null)
   const [eventDetail, setEventDetail] = useState(false)
+  const [listView, setListView] = useState(true)
   const [openList, setOpenList] = useState(false)
   const [, getEvents] = useEventService()
   const { isLoading: eventsLoading, data: eventData } = useQuery(['get-events'], () => getEvents({
@@ -81,17 +83,31 @@ function EventCalendar() {
         <>
           <div className="mb-3 mt-3">
             <p><strong>View your current list of events you volunteered for.</strong></p>
-            <Submit onClick={() => setOpenList(true)} value="Volunteer List" />
+            <Submit onClick={() => setOpenList(true)} value="Your Volunteer List" />
           </div>
-          <FullCalendar
-            ref={calendarRef}
-            plugins={[ dayGridPlugin, interactionPlugin, bootstrap5Plugin, timeGridPlugin, timelinePlugin ]}
-            initialView="dayGridMonth"
-            events={eventData.events.items}
-            dateClick={handleDateClick}
-            themeSystem="bootstrap5"
-            eventClick={handleEventClick}
-          />
+          <div className="mb-3 mt-3">
+            {listView === false &&
+              <Submit onClick={() => setListView(true)} value="List View" />
+            }
+            {listView &&
+              <Submit onClick={() => setListView(false)} value="Calendar View" />
+            }
+          </div>
+          {listView === false &&
+            <FullCalendar
+              ref={calendarRef}
+              plugins={[ dayGridPlugin, interactionPlugin, bootstrap5Plugin, timeGridPlugin, timelinePlugin ]}
+              initialView="dayGridMonth"
+              events={eventData.events.items}
+              dateClick={handleDateClick}
+              themeSystem="bootstrap5"
+              eventClick={handleEventClick}
+            />
+          }
+          {listView &&
+            <EventListView events={eventData.events.items} />
+          }
+
           {/* @TODO REMOVE THIS EVENTUALLY. JUST TESTING*/}
           {/*<Button variant="primary" type="submit" onClick={someMethod}>Next Page</Button>*/}
         </>
