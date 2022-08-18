@@ -36,7 +36,7 @@ export default function Login() {
   return (
     <div className="login">
       <>
-        <h4>Please Login with your <strong>Email</strong> or <strong>Username</strong></h4>
+        <h5>Please Login with your <strong>Email</strong> or <strong>Username</strong></h5>
         <Formik
           initialValues={{
             email: '',
@@ -55,7 +55,7 @@ export default function Login() {
                   groupClassName="position-relative"
                   type="text"
                   name="email"
-                  placeholder="Email"
+                  placeholder="Email or Username"
                   value={values.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -96,7 +96,7 @@ export default function Login() {
           )}
         </Formik>
         <Row className="mb-3">
-          <Col><p><strong>-- OR --</strong></p></Col>
+          <hr className="hr-text" data-content="OR" />
         </Row>
         <Row className="mb-3">
           <Col>

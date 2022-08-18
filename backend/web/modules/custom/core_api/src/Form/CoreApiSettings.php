@@ -58,6 +58,13 @@ class CoreApiSettings extends ConfigFormBase {
       '#description' => $this->t('The template ID that contains the activation link.'),
     ];
 
+    $form['reset_email_template_id'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Reset Password Link Template ID'),
+      '#default_value' => $config->get('core_api_settings_form.reset_email_template_id'),
+      '#description' => $this->t('The template ID that contains the activation link.'),
+    ];
+
     $form['allowed_ips'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Allowed IP\'s'),
@@ -84,6 +91,7 @@ class CoreApiSettings extends ConfigFormBase {
     $config->set('core_api_settings_form.auth_token', $form_state->getValue('auth_token'));
     $config->set('core_api_settings_form.service_id', $form_state->getValue('service_id'));
     $config->set('core_api_settings_form.verify_email_template_id', $form_state->getValue('verify_email_template_id'));
+    $config->set('core_api_settings_form.reset_email_template_id', $form_state->getValue('reset_email_template_id'));
     $config->set('core_api_settings_form.allowed_ips', $form_state->getValue('allowed_ips'));
     $config->save();
     return parent::submitForm($form, $form_state);

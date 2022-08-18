@@ -31,7 +31,7 @@ export default function Register() {
   }, [registerData, setVerification, setError])
 
   // Direct to the verification page if token is set to verify user email.
-  if (verification) return <Navigate to={`/verify-account?uid=${verification.uid}`}/>
+  if (verification) return <Navigate to={`/verify?uid=${verification.uid}&updatePassword=true&newUser=true`}/>
 
   // Direct to the home page if verified var is set
   // bc the user doesn not need to be verifed.
@@ -40,7 +40,7 @@ export default function Register() {
   return (
     <div className="login">
       <>
-        <h3>It's a great day to Volunteer</h3>
+        <h5>It's a great day to Volunteer</h5>
         <Formik
           initialValues={{
             name: '',
@@ -112,7 +112,7 @@ export default function Register() {
           )}
         </Formik>
         <Row className="mb-3">
-          <Col><p><strong>-- OR --</strong></p></Col>
+          <hr className="hr-text" data-content="OR" />
         </Row>
         <Row className="mb-3">
           <Col>

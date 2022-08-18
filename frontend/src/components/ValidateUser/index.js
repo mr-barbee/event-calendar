@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Navigate, useSearchParams, useMatch } from "react-router-dom"
+import { Navigate, useSearchParams } from "react-router-dom"
 import { useMutation } from 'react-query'
 import useUtilityService from '../../api/useUtilityService'
 import { useUser } from '../../hooks/useUser'
@@ -13,33 +13,41 @@ function ValidateUser() {
   let [searchParams] = useSearchParams()
   const user = useUser()
   const [error, setError] = useState('')
+  const [uid, setUid] = useState(searchParams.get('uid'))
   const [verified, setVerified] = useState(false)
-  const newUser = useMatch('/verify-account')
-  const uid = searchParams.get("uid")
   const token = searchParams.get("token")
   const [,, verifyToken] = useUtilityService()
   const [, sendVerificationToken] = useUtilityService()
   const { data: verifyData, mutate: verify } = useMutation((values) => verifyToken(values), { retry: 0 })
   const { data: verificationData, mutate: sendVerification } = useMutation((values) => sendVerificationToken(values))
-  let userId = uid ?? user.uid
+  const updatePassword = searchParams.get('updatePassword')
+  const newUser = searchParams.get('newUser')
 
   const formSubmit = values => {
     if (values.code) {
-      verify({'uid': userId, 'code': values.code}, { onError: (res) => setError('There was an error with the verification') })
+      verify({'uid': uid, 'code': values.code}, { onError: () => setError('There was an error with the verification') })
     } else {
       setError("Token is not set.")
     }
   }
 
   const resendCode = () => {
-    sendVerification({'uid': userId}, { onError: (res) => setError(res.data.error_message) })
+    sendVerification({'uid': uid}, { onError: (res) => setError(res.data.error_message) })
   }
 
   useEffect(() => {
-    if (token) {
-      verify({'uid': userId, 'code': token}, { onError: (res) => setError('There was an error with the verification') })
+    if (uid === null && user === null) {
+      setError('Theres an issue verfiying your accounts identity!')
+    } else if (user && uid === null) {
+      setUid(user.uid)
     }
-  }, [userId, token, verify])
+  }, [uid, user, setError])
+
+  useEffect(() => {
+    if (token) {
+      verify({'uid': uid, 'code': token}, { onError: () => setError('There was an error with the verification') })
+    }
+  }, [uid, token, verify])
 
   useEffect(() => {
     if (verificationData) {
@@ -63,7 +71,7 @@ function ValidateUser() {
   }, [verifyData, setVerified])
 
   // Direct to the portal page if token is set.
-  if (verified) return <Navigate to={newUser ? `/activate-account?sid=${verifyData.token}&uid=${userId}` : '/'} />
+  if (verified) return <Navigate to={updatePassword ? `/activate-account?sid=${verifyData.token}&uid=${uid}` : '/'} />
 
   return (
     <div className="validate-user">

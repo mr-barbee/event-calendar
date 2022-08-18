@@ -1,0 +1,31 @@
+.kep-login-facebook {
+  width: 100%;
+}
+.google-button.btn-primary {
+  width:100%;
+  background: #4285f4;
+  padding: 0px;
+  #googleBtn {
+    .google-icon {
+      float: left;
+      background-color: #fff;
+      border-radius: 1px;
+      padding: 15px;
+      img {
+        width: 35px;
+      }
+    }
+    .buttonText {
+      font-weight: 700;
+      font-size: calc(.27548vw + 12.71074px);
+      text-transform: uppercase;
+      padding: calc(0.34435vw + 13.38843px) calc(0.34435vw + 18.38843px);
+      display: table;
+      margin: 0 auto;
+    }
+  }
+  &:hover, &:focus, &:disabled {
+    background-color: #4285f4;
+    border-color: #4285f4;
+  }
+}

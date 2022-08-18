@@ -7,6 +7,7 @@ import { Row, Col } from 'react-bootstrap'
 import { Submit } from '../FormElements'
 import { SessionContext } from '../../../context'
 import GoogleIcon from './images/icons8-google.svg'
+import './style.scss'
 
 export function SocialLogins({ onError }) {
   const [,, facebookLoginUser,,,,,,,, googleLoginUser] = useUserService()
@@ -52,13 +53,14 @@ export function SocialLogins({ onError }) {
       <Row className="mb-3">
         <Col>
           <Submit value={
-            <div id="customBtn" className="customGPlusSignIn">
+            <div id='googleBtn' className='customGPlusSignIn'>
               <div className='google-icon'>
                 <img src={GoogleIcon} alt='Google Icon' />
               </div>
               <span className='buttonText'>Login with Google</span>
             </div>
             }
+            className='google-button'
             onClick={() => { googleLogin() }}
           />
         </Col>

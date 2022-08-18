@@ -93,7 +93,7 @@ class TwilioApiController extends ControllerBase {
               $options['channelConfiguration']['template_id'] = $config->get('core_api_settings_form.verify_email_template_id');
               break;
             case 'password_reset':
-
+              $options['channelConfiguration']['template_id'] = $config->get('core_api_settings_form.reset_email_template_id');
               break;
           }
         }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Navigate, Link } from 'react-router-dom'
 import { Formik } from 'formik'
 import { useMutation } from 'react-query'
 import useUserService from '../../api/useUserService'
@@ -28,7 +28,7 @@ export default function Register() {
   }, [locateData, setVerification, setError])
 
   // Direct to the verification page if token is set to verify user email.
-  if (verification) return <Navigate to={`/verify-account?uid=${verification.uid}`}/>
+  if (verification) return <Navigate to={`/verify?uid=${verification.uid}&updatePassword=true`}/>
 
   return (
     <div className="login">
@@ -46,7 +46,7 @@ export default function Register() {
               <Row className="mb-3">
                 <Input
                   as={Col}
-                  column="6"
+                  column="12"
                   controlId="formEmail"
                   groupClassName="position-relative"
                   type="text"
@@ -61,12 +61,12 @@ export default function Register() {
                 />
               </Row>
               <Row className="mb-3">
-                <Col><center><p><strong>-- OR --</strong></p></center></Col>
+                <hr className="hr-text" data-content="OR" />
               </Row>
               <Row className="mb-3">
                 <Input
                   as={Col}
-                  column="6"
+                  column="12"
                   controlId="formName"
                   type="text"
                   name="name"
@@ -82,6 +82,13 @@ export default function Register() {
               <Row className="mb-3">
                 <Col>
                   <Submit value='Locate Account' />
+                </Col>
+              </Row>
+              <Row className="mb-3">
+                <Col>
+                  <Col sm="6">
+                    Remember you login? <Link to={`/login`}>Click Here</Link>
+                  </Col>
                 </Col>
               </Row>
             </Form>
