@@ -5,7 +5,7 @@ import useEventService from '../../../api/useEventService'
 const useRemoveVolunteer = () => {
   const queryClient = useQueryClient()
   const [,, updateEvent] = useEventService()
-  const { data: mutationEventData, mutate: mutateEvent } = useMutation((values) => updateEvent(values))
+  const { isLoading: eventMutationLoading, data: mutationEventData, mutate: mutateEvent } = useMutation((values) => updateEvent(values))
 
   const [eventData, setEventData] = useState(() => {
     if (!mutationEventData) return null
@@ -40,7 +40,7 @@ const useRemoveVolunteer = () => {
     }
   }, [mutationEventData])
 
-  return [eventData, removeVolunteer]
+  return [eventMutationLoading, eventData, removeVolunteer]
 }
 
 export default useRemoveVolunteer

@@ -24,9 +24,10 @@ export function Submit(props) {
       variant={props.variant ?? 'primary'}
       onClick={props.onClick}
       className={props.className}
+      disabled={props.isLoading}
       type={props.onClick ? "button" : "submit" }
     >
-      {props.value}
+      {props.isLoading ? 'Loading…' : props.value}
     </Button>
   )
 }

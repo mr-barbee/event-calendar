@@ -15,7 +15,7 @@ export default function Login() {
   const [, loginUser] = useUserService()
   const { token, setToken, setSessionToken } = useContext(SessionContext)
   // Login mutation for the login form with an email and password.
-  const { data: mutationData, mutate: mutatePostLogin } = useMutation((values) => loginUser(values))
+  const { isLoading, data: mutationData, mutate: mutatePostLogin } = useMutation((values) => loginUser(values))
   const formatError = error => {
     // if this error returns than the user some how has a loged in session.
     if (error.includes('This route can only be accessed by anonymous users')) setError('Please clear your browser cookies.')
@@ -89,7 +89,7 @@ export default function Login() {
               </Row>
               <Row className="mb-3">
                 <Col>
-                  <Submit value='Login' />
+                  <Submit value='Login' isLoading={isLoading} />
                 </Col>
               </Row>
             </Form>

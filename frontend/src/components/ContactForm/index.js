@@ -21,7 +21,7 @@ function ContactForm() {
   const { isLoading, data: userData } = useQuery(['get-user'], () => getCurrentUser())
   const { isLoading: categoriesLoading, data: categories } = useQuery(['get-volunteer-categories'], () => getTaxonomy('volunteer_categories'))
   const { isLoading: skillsLoading, data: experiences } = useQuery(['get-experience-skills'], () => getTaxonomy('experience_skills'))
-  const { mutate: mutateUser } = useMutation((values) => updateUser(values))
+  const { isLoading: mutationLoading, mutate: mutateUser } = useMutation((values) => updateUser(values))
   const { data: verificationData, mutate: sendVerification } = useMutation((values) => sendVerificationToken(values))
 
   const formSubmit = values => {
@@ -336,7 +336,7 @@ function ContactForm() {
                 />
               </Row>
               <Row className="mb-3">
-                <Col><Submit value='Submit' /></Col>
+                <Col><Submit value='Submit' isLoading={mutationLoading} /></Col>
               </Row>
             </Form>
           )}

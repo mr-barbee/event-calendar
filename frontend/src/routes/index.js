@@ -3,7 +3,7 @@ import useUserService from '../api/useUserService'
 import { useQuery } from 'react-query'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Header from '../components/Header'
-import Footer from '../components/Footer'
+// import Footer from '../components/Footer'
 import Login from '../components/Login'
 import Register from '../components/Register'
 import MakePassword from '../components/MakePassword'
@@ -18,6 +18,7 @@ import PageNotFound from '../components/PageNotFound'
 import { Container, Spinner } from 'react-bootstrap'
 import { PrivateRoute } from './PrivateRoute'
 import { SessionContext } from '../context'
+import './style.scss'
 
 export default function PageRoutes() {
   const [,,,, fetchSessionToken] = useUserService()
@@ -46,6 +47,7 @@ export default function PageRoutes() {
 
   if (!sessionToken && !isLoading) return <h1>Error loading browser session</h1>
 
+
   return (
     <SessionContext.Provider value={{
       token: token,
@@ -61,7 +63,36 @@ export default function PageRoutes() {
       }
       {!isLoading && sessionToken &&
         <Router>
-          <Header />
+          <div className="split left">
+            <div className="centered">
+
+
+
+
+
+
+              <blockquote>
+                <p>
+                  <span data-duration="1.1" data-delay=".23" data-blur="1">"من أتى مسجدًا وكان هَمُهُ أن يَتَعَلَمَ أو يُعَلِمَ خيرًا كَانَ لَهُ أجرُ حَجٍ وَعُمرَةٍ تَامين"</span>
+                </p>
+                <p>
+                  <span data-duration="1.4" data-delay=".43" data-blur="2">It means:&nbsp;</span>
+                  <span data-duration="1.8" data-delay=".42" data-blur="3">“The one who comes to a mosque and his concern is to learn or teach the goodness of the Religion,&nbsp;</span>
+                  <span data-duration="1.2" data-delay=".25" data-blur="4">would earn a reward similar to the reward of performing a complete Hajj (Pilgrimage) and ^Umrah.”:&nbsp;</span>
+                </p>
+                <cite>The Prophet sallallahu ^Alayhi wa Sallam</cite>
+              </blockquote>
+
+
+
+
+
+              
+            </div>
+          </div>
+
+          <div className="split right">
+            <Header />
             <div className="main">
               <Container fluid>
                 <Routes>
@@ -83,10 +114,11 @@ export default function PageRoutes() {
                 </Routes>
               </Container>
             </div>
-            {token &&
-              <IdleTimer />
-            }
-          <Footer />
+          </div>
+
+          {token &&
+            <IdleTimer />
+          }
         </Router>
       }
     </SessionContext.Provider>

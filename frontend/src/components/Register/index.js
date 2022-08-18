@@ -16,7 +16,7 @@ export default function Register() {
   const [error, setError] = useState('')
   const [,,,,,, registerUser] = useUserService()
   // Login mutation for the login form with an email and password.
-  const { data: registerData, mutate: register } = useMutation((values) => registerUser(values), { retry: 0 })
+  const { isLoading, data: registerData, mutate: register } = useMutation((values) => registerUser(values), { retry: 0 })
 
   useEffect(() => {
     if (registerData) {
@@ -55,7 +55,7 @@ export default function Register() {
               <Row>
                 <Input
                   as={Col}
-                  column="6"
+                  column="12"
                   controlId="formEmail"
                   groupClassName="position-relative"
                   type="email"
@@ -73,7 +73,7 @@ export default function Register() {
               <Row className="mb-3">
                 <Input
                   as={Col}
-                  column="6"
+                  column="12"
                   controlId="formName"
                   type="text"
                   name="name"
@@ -90,7 +90,7 @@ export default function Register() {
               <Row className="mb-3">
                 <Input
                   as={Col}
-                  column="6"
+                  column="12"
                   controlId="formFullName"
                   type="text"
                   name="fullName"
@@ -105,7 +105,7 @@ export default function Register() {
               </Row>
               <Row className="mb-3">
                 <Col>
-                  <Submit value='Sign up' />
+                  <Submit value='Sign up' isLoading={isLoading} />
                 </Col>
               </Row>
             </Form>

@@ -2,6 +2,17 @@
   .fc-license-message {
     display: none !important;
   }
+  .fc-h-event {
+    border: 1px solid #669933;
+    background-color: #669933;
+    cursor: pointer;
+  }
+  .fc-daygrid-event {
+    cursor: pointer;
+    .fc-daygrid-event-dot {
+      border: calc(8px / 2) solid #669933;
+    }
+  }
   .modal {
     .modal-body {
       tbody {
@@ -18,7 +29,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    // justify-content: center;
+    justify-content: center;
   }
   a {
     color: inherit;
@@ -51,7 +62,7 @@
       z-index: -1;
       top: -16px;
       right: -16px;
-      background: #00838d;
+      background: #669933;
       height: 32px;
       width: 32px;
       border-radius: 32px;
@@ -83,7 +94,7 @@
       overflow: hidden;
       top: 0;
       right: 0;
-      background-color: #00838d;
+      background-color: #669933;
       border-radius: 0 4px 0 32px;
     }
     .go-arrow {

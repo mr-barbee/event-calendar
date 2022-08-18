@@ -15,9 +15,9 @@ function EventDetail(props) {
   const [error, setError] = useState('')
   const [show, setShow] = useState(true)
   const [getEvent, , updateEvent] = useEventService()
-  const [eventData, removeVolunteer] = useRemoveVolunteer()
+  const [eventMutationLoading, eventData, removeVolunteer] = useRemoveVolunteer()
   const { isLoading, data } = useQuery([`get-event-${props.id}`], () => getEvent(props.id))
-  const { data: mutationEventData, mutate: mutateEvent } = useMutation((values) => updateEvent(values))
+  const { isLoading: eventLoading, data: mutationEventData, mutate: mutateEvent } = useMutation((values) => updateEvent(values))
   const eventValid = data ? Moment(data.event.end).isSameOrAfter(new Date(), "day") : true
 
   const handleClose = useCallback(() => {
@@ -184,11 +184,11 @@ function EventDetail(props) {
               </Modal.Body>
               <Modal.Footer>
                 {data.event.volunteers.length > 0 && eventValid &&
-                  <Submit variant="secondary" onClick={remove} value="Remove Volunteer" />
+                  <Submit variant="secondary" onClick={remove} value="Remove Volunteer" isLoading={eventMutationLoading}/>
                 }
                 <Submit variant="secondary" onClick={handleClose} value="Close" />
                 {eventValid &&
-                  <Submit value="Volunteer Now" />
+                  <Submit value="Volunteer Now" isLoading={eventLoading} />
                 }
               </Modal.Footer>
             </Form>

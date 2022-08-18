@@ -25,7 +25,6 @@ export default function Header() {
           }
         </div>
         <div className="header--title">
-          <div>Event Volunteers</div>
         </div>
         <div className="header--login">
           {!login &&

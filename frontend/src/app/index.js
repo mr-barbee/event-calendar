@@ -2,7 +2,6 @@ import PageRoutes from '../routes'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { GoogleOAuthProvider } from '@react-oauth/google'
-import './style.scss'
 
 // Create a client
 const queryClient = new QueryClient({

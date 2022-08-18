@@ -209,13 +209,11 @@ class TwilioApiController extends ControllerBase {
           // Allow user to verfiy by Sid.
           $options = ['verificationSid' => $data['sid']];
         }
-
+        $options['code'] = $data['code'];
         $twilio = new Client($account_sid, $token);
         $verification_check = $twilio->verify->v2->services($service_id)
                                           ->verificationChecks
-                                          ->create($data['code'],
-                                                   $options
-                                          );
+                                          ->create($options);
 
         $status = $verification_check->status == 'approved' ? 200 : 400;
         // @TODO Move this to anoter endpoint.
