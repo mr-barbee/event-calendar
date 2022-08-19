@@ -5,7 +5,7 @@ import { useMutation } from 'react-query'
 import useUserService from '../../api/useUserService'
 import { Form, Row, Col } from 'react-bootstrap'
 import { Submit, Input } from '../_common/FormElements'
-import { ValidationSchema } from './validation'
+import ValidationSchema from './validation'
 import './style.scss'
 
 export default function Register() {
@@ -51,7 +51,7 @@ export default function Register() {
                   groupClassName="position-relative"
                   type="text"
                   name="email"
-                  placeholder="Email or Username"
+                  placeholder="Email"
                   value={values.email}
                   onChange={handleChange}
                   onBlur={handleBlur}

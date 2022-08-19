@@ -19,7 +19,7 @@ function ValidateUser() {
   const [,, verifyToken] = useUtilityService()
   const [, sendVerificationToken] = useUtilityService()
   const { data: verifyData, mutate: verify } = useMutation((values) => verifyToken(values), { retry: 0 })
-  const { data: verificationData, mutate: sendVerification } = useMutation((values) => sendVerificationToken(values))
+  const { isLoading, data: verificationData, mutate: sendVerification } = useMutation((values) => sendVerificationToken(values))
   const updatePassword = searchParams.get('updatePassword')
   const newUser = searchParams.get('newUser')
 
@@ -109,7 +109,7 @@ function ValidateUser() {
               />
             </Row>
             <Row className="mb-3">
-              <Col><Submit value={newUser ? 'Activate Account' : 'Verify'} /></Col>
+              <Col><Submit value={newUser ? 'Activate Account' : 'Verify'} isLoading={isLoading} /></Col>
             </Row>
           </Form>
         )}

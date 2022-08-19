@@ -10,6 +10,77 @@ body {
 }
 
 body {
+  * {
+    transition: all 0.3s ease-out;
+  }
+  blockquote {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    max-width: 900px;
+    p,
+    cite {
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    p {
+      font-family: Georgia;
+      color: #fff;
+      font-size: 2.7rem;
+      font-style: italic;
+      font-weight: 300;
+      padding-bottom: 2rem;
+    }
+    span {
+      will-change: opacity;
+      opacity: 0;
+    }
+    span.animate {
+      opacity: 1;
+      -webkit-filter: blur(0) !important;
+    }
+    cite {
+      font-family: verdana;
+      font-size: 0.9rem;
+      color: #aaa;
+      opacity: 0;
+      font-style: normal;
+      font-weight: 500;
+    }
+    cite.animate {
+      opacity: 1;
+    }
+  }
+  /* Split the screen in half */
+  .split {
+    height: 100%;
+    width: 50%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    /* Control the left side */
+    &.left {
+      left: 0;
+      background-color: $primary-color;
+    }
+    &.right {
+      right: 0;
+    }
+    /* If you want the content centered horizontally and vertically */
+    .centered {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      img {
+        width: 150px;
+        border-radius: 50%;
+      }
+    }
+  }
   .main {
     width: 80%;
     margin: 0 auto;
@@ -25,71 +96,61 @@ body {
       padding-bottom: 40px;
       max-height: 100%;
     }
+    h3 {
+      color: #262626;
+      font-size: 17px;
+      line-height: 24px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    p {
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 20px;
+      color: #666666;
 
-  }
-  * {
-    transition: all 0.3s ease-out;
-  }
-  h3 {
-    color: #262626;
-    font-size: 17px;
-    line-height: 24px;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-  p {
-    font-size: 17px;
-    font-weight: 400;
-    line-height: 20px;
-    color: #666666;
-
-    &.small {
-      font-size: 14px;
+      &.small {
+        font-size: 14px;
+      }
+      &.xsmall {
+        font-size: 12px;
+      }
     }
-    &.xsmall {
-      font-size: 12px;
-    }
-  }
-  .hr-text {
-    line-height: 1em;
-    position: relative;
-    outline: 0;
-    border: 0;
-    color: white;
-    text-align: center;
-    height: 1.5em;
-    opacity: .5;
-    &:before {
-      content: '';
-      // use the linear-gradient for the fading effect
-      // use a solid background color for a solid bar
-      background: linear-gradient(to right, transparent, #818078, transparent);
-      position: absolute;
-      left: 0;
-      top: 50%;
-      width: 100%;
-      height: 1px;
-    }
-    &:after {
-      content: attr(data-content);
+    .hr-text {
+      line-height: 1em;
       position: relative;
-      display: inline-block;
-      color: black;
+      outline: 0;
+      border: 0;
+      color: white;
+      text-align: center;
+      height: 1.5em;
+      opacity: .5;
+      &:before {
+        content: '';
+        // use the linear-gradient for the fading effect
+        // use a solid background color for a solid bar
+        background: linear-gradient(to right, transparent, #818078, transparent);
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 100%;
+        height: 1px;
+      }
+      &:after {
+        content: attr(data-content);
+        position: relative;
+        display: inline-block;
+        color: black;
 
-      padding: 0 .5em;
-      line-height: 1.5em;
-      // this is really the only tricky part, you need to specify the background color of the container element...
-      color: #818078;
-      background-color: #fcfcfa;
+        padding: 0 .5em;
+        line-height: 1.5em;
+        // this is really the only tricky part, you need to specify the background color of the container element...
+        color: #818078;
+        background-color: #fcfcfa;
+      }
     }
   }
 }
-
-
-
-
-
-
 
 // * {
 //   margin: 0;
@@ -107,83 +168,3 @@ body {
 //   align-items: center;
 //   padding: 1rem;
 // }
-blockquote {
-  display: block;
-  margin: 0 auto;
-  text-align: center;
-  max-width: 900px;
-  p,
-  cite {
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  p {
-    font-family: Georgia;
-    color: #fff;
-    font-size: 2.7rem;
-    font-style: italic;
-    font-weight: 300;
-    padding-bottom: 2rem;
-  }
-  span {
-    will-change: opacity;
-    opacity: 0;
-  }
-  span.animate {
-    opacity: 1;
-    -webkit-filter: blur(0) !important;
-  }
-  cite {
-    font-family: verdana;
-    font-size: 0.9rem;
-    color: #aaa;
-    opacity: 0;
-    font-style: normal;
-    font-weight: 500;
-  }
-  cite.animate {
-    opacity: 1;
-  }
-}
-
-
-
-
-
-
-/* Split the screen in half */
-.split {
-  height: 100%;
-  width: 50%;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  overflow-x: hidden;
-}
-
-/* Control the left side */
-.left {
-  left: 0;
-  background-color: $primary-color;
-}
-
-/* Control the right side */
-.right {
-  right: 0;
-}
-
-/* If you want the content centered horizontally and vertically */
-.centered {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-
-/* Style the image inside the centered container, if needed */
-.centered img {
-  width: 150px;
-  border-radius: 50%;
-}

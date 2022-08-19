@@ -95,17 +95,8 @@ class UpdateUser extends DataProducerPluginBase implements ContainerFactoryPlugi
       $needs_verification = FALSE;
       $primary_contact = $user->get('field_user_primary_contact')->getValue()[0]['value'];
       // 1. Perfered primary contact was changed.
-      // 2. The users account was never verified.
-      // 3. The user updated there primary contact info.
-      if (($primary_contact !== $data['primary']) ||
-          ($primary_contact === 'e' && $user->getEmail() !== $data['email']) ||
-          ($primary_contact === 'p' && $user->get('field_user_phone')->getValue()[0]['value'] !== $data['phone'])) {
+      if ($primary_contact !== $data['primary']) {
         $needs_verification = TRUE;
-      }
-      // If the needs verification status is set
-      // then we need to verify the user.
-      if ($needs_verification) {
-        $user->set('field_user_verified', FALSE);
       }
       // The fullname cant be empty.
       if (!empty($data['fullName'])) {
@@ -116,9 +107,6 @@ class UpdateUser extends DataProducerPluginBase implements ContainerFactoryPlugi
       }
       if (isset($data['note'])) {
         $user->set('field_user_note', $data['note']);
-      }
-      if (isset($data['phone'])) {
-        $user->set('field_user_phone', $data['phone']);
       }
       if (isset($data['primary'])) {
         $user->set('field_user_primary_contact', $data['primary']);
@@ -153,6 +141,12 @@ class UpdateUser extends DataProducerPluginBase implements ContainerFactoryPlugi
           if (!empty($data['name'])) {
             $user->setUsername($data['name']);
           }
+          // 2. The users account was never verified.
+          // 3. The user updated there primary contact info.
+          if (($data['primary'] === 'e' && $user->getEmail() !== $data['email']) ||
+              ($data['primary'] === 'p' && $user->get('field_user_phone')->getValue()[0]['value'] !== $data['phone'])) {
+            $needs_verification = TRUE;
+          }
           // Check the plain password with the
           // hashed password from db
           if (!empty($data['pass'])) {
@@ -162,6 +156,15 @@ class UpdateUser extends DataProducerPluginBase implements ContainerFactoryPlugi
             $user->setEmail($data['email']);
           }
         }
+      }
+      // This needs to be done last bc of the verification.
+      if (isset($data['phone'])) {
+        $user->set('field_user_phone', $data['phone']);
+      }
+      // If the needs verification status is set
+      // then we need to verify the user.
+      if ($needs_verification) {
+        $user->set('field_user_verified', FALSE);
       }
       //save to update node
       $user->save();

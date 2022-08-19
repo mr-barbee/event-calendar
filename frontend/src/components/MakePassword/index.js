@@ -16,7 +16,7 @@ export default function MakePassword() {
   const [updated, setUpdated] = useState(false)
   const [,,,,,,, updateUserPassword] = useUserService()
   // Login mutation for the login form with an email and password.
-  const { data: updatePasswordData, mutate: updatePassword } = useMutation((values) => updateUserPassword(values))
+  const { isLoading, data: updatePasswordData, mutate: updatePassword } = useMutation((values) => updateUserPassword(values))
 
   const formSubmit = values => {
     console.log(values)
@@ -71,7 +71,7 @@ export default function MakePassword() {
                 isValid={touched.pass && !errors.pass}
                 className={touched.pass && errors.pass ? "error" : null}
                 errors={touched.pass && errors.pass ? errors.pass : null}
-                helperText="To change user password, enter the new password in both fields. Otherwise leave this blank."
+                helperText="Please enter your new password"
               />
               <Input
                 as={Col}
@@ -90,7 +90,7 @@ export default function MakePassword() {
             </Row>
               <Row className="mb-3">
                 <Col>
-                  <Submit value='Activate Account' />
+                  <Submit value='Set Password' isLoading={isLoading} />
                 </Col>
               </Row>
             </Form>

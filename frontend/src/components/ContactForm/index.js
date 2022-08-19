@@ -271,8 +271,8 @@ function ContactForm() {
                     formLabel={<><h5>Volunteer Categories:</h5><p>Check all that apply. Based on the options you select you will be notified when volunteer work is needed for that category.</p></>}
                     name="categories"
                     checkColumn="3"
-                    className="mb-3"
                     inline={true}
+                    className={touched.categories && errors.categories ? "error" : null}
                     value={values.categories}
                     values={categories.taxonomies.items.map((items) => (
                       {id:items.name, label:items.name, value:items.id}
