@@ -19,7 +19,6 @@ export default function MakePassword() {
   const { isLoading, data: updatePasswordData, mutate: updatePassword } = useMutation((values) => updateUserPassword(values))
 
   const formSubmit = values => {
-    console.log(values)
     // Add the verification sid
     // and user id to the values.
     values.sid = sid

@@ -107,7 +107,7 @@ export default function Login() {
         </Row>
         <Row className="mb-3">
           <Col>
-            <Col sm="6">
+            <Col sm="12">
               Are you a new volunteer? <Link to={`/register`}>Click Here</Link>
             </Col>
           </Col>

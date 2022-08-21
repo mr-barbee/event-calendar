@@ -10,6 +10,8 @@ use Drupal\core_api\CoreApiHandler;
 use Drupal\core_api\Controller\TwilioApiController;
 use Drupal\user\Entity\User;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\node\Entity\Node;
+use Drupal\paragraphs\Entity\Paragraph;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\Core\Session\AccountInterface;
@@ -322,4 +324,48 @@ class CoreApiController extends ControllerBase {
     // return the response.
     return new JsonResponse($response, $status);
   }
+
+  /**
+   * [retrieveBlockQuotes description]
+   * @param  Request $request               [description]
+   * @return [type]           [description]
+   */
+  public function retrieveBlockQuotes(Request $request) {
+    $status = 200;
+    $response = [];
+
+    try {
+      CoreApiHandler::validate_api_request($request);
+      $nids = \Drupal::entityQuery('node')->condition('type','block_quotes')->execute();
+      $nodes = Node::loadMultiple($nids);
+      $node = reset($nodes);
+      $block_quotes = [];
+      $field_block_quotes = $node->get('field_block_quotes')->getValue();
+      foreach ($field_block_quotes as $key => $block_quote) {
+        $paragraph = Paragraph::load($block_quote['target_id']);
+        \Drupal::logger('module_name')->notice('<pre><code>' . print_r($paragraph->get('field_block_quote_quote')->getValue()[0], TRUE) . '</code></pre>' );
+        // Retrieve the block quotes.
+        $block_quotes[] = [
+          'quote' => $paragraph->get('field_block_quote_quote')->getValue()[0]['value'],
+          'meaning' => $paragraph->get('field_block_quote_meaning')->getValue()[0]['value'],
+          'author' => $paragraph->get('field_block_quote_author')->getValue()[0]['value']
+        ];
+      }
+      $response = [ 'block_quotes' => $block_quotes ];
+    }
+    catch (AccessDeniedHttpException $e) {
+      $response = ['error_message' => 'You dont have the priviledges to access this url.', 'status' => 'error'];
+      $status = 403;
+    }
+    catch (\Exception $e) {
+      if (empty($response['error_message'])) {
+        \Drupal::logger(__CLASS__)->error($e->getMessage());
+        $response = ['error_message' => 'We\'re currenlty experiency some technical difficulties. Please contact site administrator.', 'status' => 'error'];
+      }
+      $status = 400;
+    }
+    // return the response.
+    return new JsonResponse($response, $status);
+  }
+
 }

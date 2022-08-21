@@ -12,6 +12,12 @@ const useUtilityService = () => {
       }
     })
   }
+  function getBlockQuotes() {
+    return request({
+      url: 'api/services/get-block-quotes',
+      method: 'GET'
+    })
+  }
   function sendVerificationToken(values) {
     return request({
       url: 'api/services/send-token',
@@ -32,7 +38,12 @@ const useUtilityService = () => {
       }
     })
   }
-  return [getTaxonomy, sendVerificationToken, verifyToken]
+  return [
+    getTaxonomy,
+    sendVerificationToken,
+    verifyToken,
+    getBlockQuotes
+  ]
 }
 
 export default useUtilityService
