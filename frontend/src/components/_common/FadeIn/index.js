@@ -10,7 +10,7 @@ export default function FadeIn({ children, vars }) {
       opacity: 0,
       ...vars
     });
-  }, [vars])
+  }, [vars, gsap])
 
   return <span ref={el}>{children}</span>;
 }

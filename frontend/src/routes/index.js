@@ -15,6 +15,7 @@ import EventCalendar from '../components/Calendar'
 import BlockQuote from '../components/BlockQuote'
 import IdleTimer from '../components/IdleTimer'
 import PageNotFound from '../components/PageNotFound'
+import FadeIn from '../components/_common/FadeIn'
 import { Container, Spinner } from 'react-bootstrap'
 import { PrivateRoute } from './PrivateRoute'
 import { SessionContext } from '../context'
@@ -23,6 +24,8 @@ import './style.scss'
 export default function PageRoutes() {
   const [,,,, fetchSessionToken] = useUserService()
   const [sessionToken, setSessionToken] = useState()
+  const [pageMessage, setPageMessage] = useState('')
+  const [pageMessageError, setPageMessageError] = useState('')
   // Get the user session token.
   const { isLoading, data, refetch } = useQuery(['session-token'], () => fetchSessionToken(), { staleTime: 1800000 })
   // Fetch the login token from starage.
@@ -34,6 +37,16 @@ export default function PageRoutes() {
     localStorage.setItem('token', JSON.stringify(newToken))
     setTokenInternal(newToken)
   }
+
+  useEffect(() => {
+    const interval = setTimeout(() => { setPageMessage('') }, 5000)
+    return () => { clearInterval(interval) }
+  }, [pageMessage])
+
+  useEffect(() => {
+    const interval = setTimeout(() => { setPageMessageError('') }, 5000)
+    return () => { clearInterval(interval) }
+  }, [pageMessageError])
 
   useEffect(() => {
     // if the user is set and data empty run the
@@ -53,7 +66,9 @@ export default function PageRoutes() {
       sessionToken: sessionToken,
       setSessionToken: (value) => { setSessionToken(value) },
       refetchSession: () => { refetch() },
-      setToken: (value) => { setToken(value) }
+      setToken: (value) => { setToken(value) },
+      setPageMessage: (value) => { setPageMessage(value) },
+      setPageMessageError: (value) => { setPageMessageError(value) }
     }}>
       {isLoading &&
         <Spinner animation="border" role="status" size="lg" >
@@ -71,6 +86,14 @@ export default function PageRoutes() {
             <Header />
             <div className="main">
               <Container className="main-container" fluid>
+                <div className="page-messages">
+                  {pageMessage &&
+                    <FadeIn vars={{startAt: {y: '-50%', opacity: 1}}}><h5>{ pageMessage }</h5></FadeIn>
+                  }
+                  {pageMessageError &&
+                    <FadeIn vars={{startAt: {y: '-50%', opacity: 1}}}><h5 className='error'>{ pageMessageError }</h5></FadeIn>
+                  }
+                </div>
                 <Routes>
                   <Route exact path='/' element={<PrivateRoute />}>
                     <Route exact path='/' element={<Dashboard />}/>

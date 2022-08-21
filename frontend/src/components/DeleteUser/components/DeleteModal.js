@@ -1,17 +1,24 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useContext } from 'react'
 import { Modal, Row, Col } from 'react-bootstrap'
 import { useMutation } from 'react-query'
 import useUserService from '../../../api/useUserService'
 import { Submit } from '../../_common/FormElements'
 import useLogout from '../../../hooks/useLogout'
+import { SessionContext } from '../../../context'
 
 export default function DeleteModal(props) {
   const [show, setShow] = useState(true)
   const [logout] = useLogout()
+  const { setPageMessage } = useContext(SessionContext)
   const [,,,,,,,,, cancelUser] = useUserService()
   const { mutate: cancel } = useMutation(() => cancelUser(), {
-    onSuccess: () => { logout() }
+    onSuccess: () => { logoutHandler() }
   })
+
+  const logoutHandler = () => {
+    setPageMessage('You account has been deactivated! To reactivate please contact site administator.')
+    logout()
+  }
 
   const handleClose = useCallback(() => {
     // Close the modal.

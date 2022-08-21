@@ -26,7 +26,7 @@ export default function BlockQuote() {
           setCurrentBlockQuote((currentBlockQuote + 1) % Object.keys(blockQuotes).length)
           tl.restart()
         },
-        20000
+        25000
       )
       return () => {
         clearInterval(interval)
@@ -53,7 +53,6 @@ export default function BlockQuote() {
             <span ref={blockone}>It means:&nbsp;</span>
             <span ref={blocktwo}>{blockQuotes[currentBlockQuote].meaning.substr(0, blockQuotes[currentBlockQuote].meaning.indexOf('<break>'))}</span>
             <span ref={blockthree}>{blockQuotes[currentBlockQuote].meaning.substr(blockQuotes[currentBlockQuote].meaning.indexOf('<break>') + 7 )}</span>
-
           </p>
           <cite ref={blockfour}>{blockQuotes[currentBlockQuote].author}</cite>
         </>

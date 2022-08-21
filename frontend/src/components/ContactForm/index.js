@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useNavigate, Navigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { Formik } from 'formik'
@@ -8,6 +8,7 @@ import { useUser } from '../../hooks/useUser'
 import { Spinner, Form, Row, Col } from 'react-bootstrap'
 import { Submit, Input, Check } from '../_common/FormElements'
 import ValidationSchema from './validation'
+import { SessionContext } from '../../context'
 
 function ContactForm() {
   const user = useUser()
@@ -18,6 +19,7 @@ function ContactForm() {
   const [verification, setVerification] = useState('')
   const [getCurrentUser,,,,, updateUser] = useUserService()
   const [getTaxonomy, sendVerificationToken] = useUtilityService()
+  const { setPageMessage } = useContext(SessionContext)
   const { isLoading, data: userData } = useQuery(['get-user'], () => getCurrentUser())
   const { isLoading: categoriesLoading, data: categories } = useQuery(['get-volunteer-categories'], () => getTaxonomy('volunteer_categories'))
   const { isLoading: skillsLoading, data: experiences } = useQuery(['get-experience-skills'], () => getTaxonomy('experience_skills'))
@@ -35,8 +37,10 @@ function ContactForm() {
           queryClient.invalidateQueries(['get-user'])
           // check to see if we need to verifu the users primary contact.
           if (data.updateUser.user.verified === false) {
+            setPageMessage('Profile Updated, but please verify your primary contact!')
             sendVerification({'uid': user.uid}, { onError: (res) => setError(res.data.error_message) })
           } else {
+            setPageMessage('Profile Updated!')
             // We only want navigate to
             // profile page if we dont
             // need to validate contact.

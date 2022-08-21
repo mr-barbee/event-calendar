@@ -9,7 +9,7 @@ import { Submit } from '../_common/FormElements'
 
 function Logout() {
   const user = useUser()
-  const { token } = useContext(SessionContext)
+  const { token, setPageMessage } = useContext(SessionContext)
   const [logout] = useLogout()
   const [,,, logoutUser] = useUserService()
   // Login mutation for the login form with an email and password.
@@ -24,6 +24,7 @@ function Logout() {
           className="logout-button"
           value={ <FaSignOutAlt /> }
           onClick={() => {
+            setPageMessage('You have successfully logged out!')
             userLogout({'logoutToken': token.logout_token})
           }}
         />

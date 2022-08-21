@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useContext } from 'react'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { useUser } from '../../../hooks/useUser'
 import { Formik } from 'formik'
@@ -7,10 +7,12 @@ import Moment from 'moment'
 import { Submit, Input, Check } from '../../_common/FormElements'
 import useEventService from '../../../api/useEventService'
 import useRemoveVolunteer from '../hooks/useRemoveVolunteer'
+import { SessionContext } from '../../../context'
 import ValidationSchema from './validation'
 
 function EventDetail(props) {
   const queryClient = useQueryClient()
+  const { setPageMessage } = useContext(SessionContext)
   const user = useUser()
   const [error, setError] = useState('')
   const [show, setShow] = useState(true)
@@ -41,6 +43,7 @@ function EventDetail(props) {
         // refetch the event data
         queryClient.invalidateQueries([`get-event-${props.id}`])
         queryClient.invalidateQueries(['get-user-events'])
+        setPageMessage('Volunteer Status Updated!')
       }
    })
   }

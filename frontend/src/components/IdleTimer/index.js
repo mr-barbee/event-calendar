@@ -8,7 +8,7 @@ import useLogout from '../../hooks/useLogout'
 import useUserService from '../../api/useUserService'
 
 export default function IdleTimer(props) {
-  const { token, refetchSession } = useContext(SessionContext)
+  const { token, refetchSession, setPageMessage } = useContext(SessionContext)
   const [logout] = useLogout()
   const [,,, logoutUser,,,,,,,, verifySession] = useUserService()
   // Login mutation for the login form with an email and password.
@@ -42,6 +42,7 @@ export default function IdleTimer(props) {
     // perform what ever idle action you want such as log out your user.
     // Events will be rebound as long as `stopOnMount` is not set.
     userLogout({'logoutToken': token.logout_token})
+    setPageMessage('Your session has timed out!')
     setOpen(false)
     setRemaining(0)
   }
@@ -80,12 +81,13 @@ export default function IdleTimer(props) {
   }, [getRemainingTime, isPrompted])
 
   useEffect(() => {
-    // This mwans the user is no longer logged in so log them out.
+    // This means the user is no longer logged in so log them out.
     if (!verifyLoading && verify && verify.is_authenticated === false) {
       logout()
+      setPageMessage('Your session has timed out!')
       setRemaining(0)
     }
-  }, [verify, verifyLoading, setRemaining, logout])
+  }, [verify, verifyLoading, setRemaining, logout, setPageMessage])
 
   return (
     <Modal

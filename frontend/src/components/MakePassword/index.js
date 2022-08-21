@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Navigate, useSearchParams } from 'react-router-dom'
 import { Formik } from 'formik'
 import { useMutation } from 'react-query'
@@ -6,6 +6,7 @@ import useUserService from '../../api/useUserService'
 import { Form, Row, Col } from 'react-bootstrap'
 import { Submit, Input } from '../_common/FormElements'
 import { PasswordSchema } from './validation'
+import { SessionContext } from '../../context'
 import './style.scss'
 
 export default function MakePassword() {
@@ -15,6 +16,7 @@ export default function MakePassword() {
   const uid = searchParams.get('uid')
   const [updated, setUpdated] = useState(false)
   const [,,,,,,, updateUserPassword] = useUserService()
+  const { setPageMessage } = useContext(SessionContext)
   // Login mutation for the login form with an email and password.
   const { isLoading, data: updatePasswordData, mutate: updatePassword } = useMutation((values) => updateUserPassword(values))
 
@@ -31,12 +33,13 @@ export default function MakePassword() {
       // we want to run the
       // current user api.
       if (updatePasswordData && updatePasswordData.valid) {
+        setPageMessage('Your password has been updated!')
         setUpdated(true)
       } else {
         setError('There was an error issue with setting your password. Please contact site administrator.')
       }
     }
-  }, [updatePasswordData, setError, setUpdated])
+  }, [updatePasswordData, setError, setUpdated, setPageMessage])
 
   // Direct to the home page if verified var is set
   // bc the user doesn not need to be verifed.

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Navigate, useSearchParams } from "react-router-dom"
 import { useMutation } from 'react-query'
 import useUtilityService from '../../api/useUtilityService'
@@ -7,6 +7,7 @@ import { Formik } from 'formik'
 import { Form, Row, Col } from 'react-bootstrap'
 import { Submit, Input } from '../_common/FormElements'
 import ValidationSchema from './validation'
+import { SessionContext } from '../../context'
 import './style.scss'
 
 function ValidateUser() {
@@ -18,6 +19,7 @@ function ValidateUser() {
   const token = searchParams.get("token")
   const [,, verifyToken] = useUtilityService()
   const [, sendVerificationToken] = useUtilityService()
+  const { setPageMessage } = useContext(SessionContext)
   const { data: verifyData, mutate: verify } = useMutation((values) => verifyToken(values), { retry: 0 })
   const { isLoading, data: verificationData, mutate: sendVerification } = useMutation((values) => sendVerificationToken(values))
   const updatePassword = searchParams.get('updatePassword')
@@ -63,12 +65,13 @@ function ValidateUser() {
     if (verifyData) {
       // we want to verify the status is pending.
       if (verifyData.status === 'approved') {
+        setPageMessage('Your account has been verified!')
         setVerified(true)
       } else {
         setError(verifyData.error_message ?? 'There was an error with the verification')
       }
     }
-  }, [verifyData, setVerified])
+  }, [verifyData, setVerified, setPageMessage])
 
   // Direct to the portal page if token is set.
   if (verified) return <Navigate to={updatePassword ? `/activate-account?sid=${verifyData.token}&uid=${uid}` : '/'} />
