@@ -4,6 +4,7 @@ html,
 body {
   font-family: "Nunito", sans-serif;
   font-size: 16px;
+  background-color: $background;
 }
 
 body {
@@ -129,6 +130,16 @@ body {
         // this is really the only tricky part, you need to specify the background color of the container element...
         color: #818078;
         background-color: #fcfcfa;
+      }
+    }
+  }
+  .modal {
+    .modal-content {
+      min-height: 100px;
+      .modal-body {
+        tbody {
+          text-align: center;
+        }
       }
     }
   }
