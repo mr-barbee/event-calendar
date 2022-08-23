@@ -2,6 +2,7 @@ import PageRoutes from '../routes'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { GoogleOAuthProvider } from '@react-oauth/google'
+import { ThemeProvider } from 'react-bootstrap'
 
 // Create a client
 const queryClient = new QueryClient({
@@ -30,9 +31,14 @@ export default function App() {
   return (
     <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
       <QueryClientProvider client={queryClient}>
-        <div className="app">
-          <PageRoutes />
-        </div>
+        <ThemeProvider
+          breakpoints={['xxxl', 'xxl', 'xl', 'lg', 'md', 'sm', 'xs', 'xxs']}
+          minBreakpoint="xxs"
+        >
+          <div className="app">
+            <PageRoutes />
+          </div>
+        </ThemeProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </GoogleOAuthProvider>

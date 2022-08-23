@@ -1,7 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Nunito:400,700');
-@import "~bootstrap/scss/bootstrap";
-$primary-color: #693;
-$border-dark: rgba($primary-color, 0.88);
+@import "../styles/base";
 
 html,
 body {
@@ -13,75 +10,38 @@ body {
   * {
     transition: all 0.3s ease-out;
   }
-  blockquote {
-    display: block;
-    margin: 0 auto;
-    text-align: center;
-    max-width: 900px;
-    p,
-    cite {
-      text-rendering: optimizeLegibility;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-    p {
-      font-family: Georgia;
-      color: #fff;
-      font-size: 1.7rem;
-      font-style: italic;
-      font-weight: 300;
-      padding-bottom: 2rem;
-      line-height: 35px;
-    }
-    span {
-      will-change: opacity;
-      opacity: 0;
-    }
-    span.animate {
-      opacity: 1;
-      -webkit-filter: blur(0) !important;
-    }
-    cite {
-      font-family: verdana;
-      font-size: 0.9rem;
-      color: #fff;
-      // opacity: 0;
-      font-style: normal;
-      font-weight: 500;
-      float: right;
-    }
-    cite {
-      will-change: opacity;
-      opacity: 0;
-    }
-    cite.animate {
-      opacity: 1;
-      -webkit-filter: blur(0) !important;
-    }
-  }
   /* Split the screen in half */
   .split {
-    height: 100%;
-    width: 50%;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    overflow-x: hidden;
+    @include medium {
+      height: 100%;
+      width: 50%;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      overflow-x: hidden;
+    }
     /* Control the left side */
     &.left {
-      left: 0;
+      @include medium {
+        left: 0;
+      }
       background-color: $primary-color;
     }
     &.right {
-      right: 0;
+      @include medium {
+        right: 0;
+      }
     }
     /* If you want the content centered horizontally and vertically */
     .centered {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
+      padding:15px;
+      @include medium {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+      }
       img {
         width: 150px;
         border-radius: 50%;
@@ -89,18 +49,26 @@ body {
     }
   }
   .main {
-    width: 80%;
+    width: 95%;
     margin: 0 auto;
     position: relative;
     height: 100%;
+    @include medium {
+      width: 80%;
+      height: 90%;
+      top: 70px;
+    }
     .main-container {
       margin: 0;
-      position: absolute;
-      top: 50%;
-      -ms-transform: translateY(-50%);
-      transform: translateY(-50%);
-      padding-top: 40px;
       padding-bottom: 40px;
+      @include medium {
+        position: absolute;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+        overflow: hidden;
+        overflow-y: scroll;
+      }
       max-height: 100%;
     }
     h3 {

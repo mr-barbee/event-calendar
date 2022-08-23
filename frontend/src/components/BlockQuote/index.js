@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import useGsap from '../../hooks/useGsap'
 import { useQuery } from 'react-query'
 import useUtilityService from '../../api/useUtilityService'
+import './style.scss'
 
 export default function BlockQuote() {
   const blockone = useRef()
@@ -48,13 +49,13 @@ export default function BlockQuote() {
     <blockquote>
       {blockQuotes[currentBlockQuote] &&
         <>
-          <p>{blockQuotes[currentBlockQuote].quote}</p>
+          <p className='title'>{blockQuotes[currentBlockQuote].quote}</p>
           <p>
             <span ref={blockone}>It means:&nbsp;</span>
             <span ref={blocktwo}>{blockQuotes[currentBlockQuote].meaning.substr(0, blockQuotes[currentBlockQuote].meaning.indexOf('<break>'))}</span>
             <span ref={blockthree}>{blockQuotes[currentBlockQuote].meaning.substr(blockQuotes[currentBlockQuote].meaning.indexOf('<break>') + 7 )}</span>
           </p>
-          <cite ref={blockfour}>{blockQuotes[currentBlockQuote].author}</cite>
+          <p><cite ref={blockfour}>{blockQuotes[currentBlockQuote].author}</cite></p>
         </>
       }
     </blockquote>

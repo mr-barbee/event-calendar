@@ -1,6 +1,10 @@
+@import "../../styles/base";
+
 .dashboard {
   text-align: center;
   margin: auto;
-  width: 60%;
-  padding: 10px;
+  @include large {
+    width: 60%;
+    padding: 10px;
+  }
 }

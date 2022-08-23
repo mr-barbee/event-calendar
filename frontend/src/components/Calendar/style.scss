@@ -2,15 +2,18 @@
   .fc-license-message {
     display: none !important;
   }
-  .fc-h-event {
-    border: 1px solid #669933;
-    background-color: #669933;
-    cursor: pointer;
-  }
-  .fc-daygrid-event {
-    cursor: pointer;
-    .fc-daygrid-event-dot {
-      border: calc(8px / 2) solid #669933;
+  .fc.fc-media-screen {
+    min-height: 550px;
+    .fc-h-event {
+      border: 1px solid #669933;
+      background-color: #669933;
+      cursor: pointer;
+    }
+    .fc-daygrid-event {
+      cursor: pointer;
+      .fc-daygrid-event-dot {
+        border: calc(8px / 2) solid #669933;
+      }
     }
   }
   .modal {

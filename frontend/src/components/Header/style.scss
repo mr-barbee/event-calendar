@@ -1,3 +1,5 @@
+@import "../../styles/base";
+
 .header {
   min-height: 80px;
   align-items: center;
@@ -6,11 +8,13 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-  width: 50%;
-  position: fixed;
   padding: 10px 0;
   top: 0;
   z-index: 10;
+  @include medium {
+    position: fixed;
+    width: 50%;
+  }
   .header--wrapper {
     display: flex;
     justify-content: space-between;
