@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Modal, Spinner, Table, Row, Col, Container } from 'react-bootstrap'
+import { Modal, Table, Row, Col, Container } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { useQuery } from 'react-query'
 import Moment from 'moment'
 import { useUser } from '../../../hooks/useUser'
 import useEventService from '../../../api/useEventService'
 import useRemoveVolunteer from '../hooks/useRemoveVolunteer'
+import Spinner from '../../_common/Spinner'
 
 function EventList(props) {
   const [show, setShow] = useState(true)
@@ -45,14 +46,16 @@ function EventList(props) {
       dialogClassName="modal-90w"
       size="lg"
       aria-labelledby="example-custom-modal-styling-title"
+      centered
     >
-      <Modal.Header closeButton>
-        <Modal.Title id="example-custom-modal-styling-title">
-          Your Event List
-        </Modal.Title>
-      </Modal.Header>
       {data && !eventsLoading &&
-        <Modal.Body>
+        <>
+          <Modal.Header closeButton>
+            <Modal.Title id="example-custom-modal-styling-title">
+              Your Event List
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
           <Table striped bordered hover size="lg">
             <thead>
               <tr>
@@ -83,11 +86,10 @@ function EventList(props) {
             </tbody>
           </Table>
         </Modal.Body>
+        </>
       }
       {eventsLoading &&
-        <Spinner animation="border" role="status" size="lg" >
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
+        <Spinner />
       }
       {error &&
         <p>{ error }</p>

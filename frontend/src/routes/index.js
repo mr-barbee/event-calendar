@@ -16,7 +16,8 @@ import BlockQuote from '../components/BlockQuote'
 import IdleTimer from '../components/IdleTimer'
 import PageNotFound from '../components/PageNotFound'
 import FadeIn from '../components/_common/FadeIn'
-import { Container, Spinner } from 'react-bootstrap'
+import Spinner from '../components/_common/Spinner'
+import { Container } from 'react-bootstrap'
 import { PrivateRoute } from './PrivateRoute'
 import { SessionContext } from '../context'
 import './style.scss'
@@ -71,9 +72,7 @@ export default function PageRoutes() {
       setPageMessageError: (value) => { setPageMessageError(value) }
     }}>
       {isLoading &&
-        <Spinner animation="border" role="status" size="lg" >
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
+        <Spinner />
       }
       {!isLoading && sessionToken &&
         <Router>

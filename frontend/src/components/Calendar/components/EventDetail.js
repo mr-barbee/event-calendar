@@ -2,9 +2,10 @@ import { useState, useEffect, useCallback, useContext } from 'react'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { useUser } from '../../../hooks/useUser'
 import { Formik } from 'formik'
-import { Spinner, Modal, Col, Row, Form } from 'react-bootstrap'
+import { Modal, Col, Row, Form } from 'react-bootstrap'
 import Moment from 'moment'
 import { Submit, Input, Check } from '../../_common/FormElements'
+import Spinner from '../../_common/Spinner'
 import useEventService from '../../../api/useEventService'
 import useRemoveVolunteer from '../hooks/useRemoveVolunteer'
 import { SessionContext } from '../../../context'
@@ -199,9 +200,7 @@ function EventDetail(props) {
         </Formik>
       }
       {isLoading &&
-        <Spinner animation="border" role="status" size="lg" >
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
+        <Spinner />
       }
       {error &&
         <p>{ error }</p>

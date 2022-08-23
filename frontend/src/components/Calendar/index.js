@@ -11,9 +11,9 @@ import EventList from './components/EventList'
 import EventListView from './components/EventListView'
 import EventDetail from './components/EventDetail'
 import { Submit } from '../_common/FormElements'
+import Spinner from '../_common/Spinner'
 import useEventService from '../../api/useEventService'
 import { useQuery } from 'react-query'
-import { Spinner } from 'react-bootstrap'
 import './style.scss'
 
 function EventCalendar() {
@@ -113,9 +113,7 @@ function EventCalendar() {
         </>
       }
       {eventsLoading &&
-        <Spinner animation="border" role="status" size="lg" >
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
+        <Spinner />
       }
       {!eventsLoading && eventData && eventData.errors !== undefined &&
         <h1>{eventData.errors[0].message ?? 'Sorry there was an issue loading the events.'}</h1>

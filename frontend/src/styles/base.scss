@@ -38,3 +38,14 @@ $border-dark: rgba($primary-color, 0.88);
     @content;
   }
 }
+
+.modal {
+  .modal-content {
+    min-height: 100px;
+    .modal-body {
+      tbody {
+        text-align: center;
+      }
+    }
+  }
+}

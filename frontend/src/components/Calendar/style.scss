@@ -1,3 +1,5 @@
+@import "../../styles/base";
+
 .event-calendar {
   .fc-license-message {
     display: none !important;
@@ -13,13 +15,6 @@
       cursor: pointer;
       .fc-daygrid-event-dot {
         border: calc(8px / 2) solid #669933;
-      }
-    }
-  }
-  .modal {
-    .modal-body {
-      tbody {
-        text-align: center;
       }
     }
   }

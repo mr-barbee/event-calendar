@@ -124,7 +124,7 @@ export default function Register() {
         <Row className="mb-3">
           <Col>
             <Col sm="6">
-              Already a Signed up? <Link to={`/login`}>Click Here</Link>
+              Already Signed up? <Link to={`/login`}>Click Here</Link>
             </Col>
           </Col>
         </Row>

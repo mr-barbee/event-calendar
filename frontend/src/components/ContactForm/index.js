@@ -5,10 +5,12 @@ import { Formik } from 'formik'
 import useUserService from '../../api/useUserService'
 import useUtilityService from '../../api/useUtilityService'
 import { useUser } from '../../hooks/useUser'
-import { Spinner, Form, Row, Col } from 'react-bootstrap'
+import { Form, Row, Col } from 'react-bootstrap'
 import { Submit, Input, Check } from '../_common/FormElements'
+import Spinner from '../_common/Spinner'
 import ValidationSchema from './validation'
 import { SessionContext } from '../../context'
+import './style.scss'
 
 function ContactForm() {
   const user = useUser()
@@ -349,9 +351,7 @@ function ContactForm() {
         </>
       }
       {isLoading &&
-        <Spinner animation="border" role="status" size="lg" >
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
+        <Spinner />
       }
       {error &&
         <p>{ error }</p>
@@ -360,4 +360,4 @@ function ContactForm() {
   )
 }
 
-export default ContactForm;
+export default ContactForm
