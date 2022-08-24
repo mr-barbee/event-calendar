@@ -286,6 +286,7 @@ function ContactForm() {
                       ))}
                       onChange={handleChange}
                       onBlur={handleBlur}
+                      errors={touched.categories && errors.categories ? errors.categories : null}
                     />
                   }
                 </Row>

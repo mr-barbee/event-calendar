@@ -1,4 +1,4 @@
-import { Button, Form, InputGroup, Row, Col } from 'react-bootstrap'
+import { Button, Form, InputGroup, Row, Col, Spinner } from 'react-bootstrap'
 import './style.scss'
 
 const FormControl = (props) => {
@@ -27,7 +27,21 @@ export function Submit(props) {
       disabled={props.isLoading}
       type={props.onClick ? "button" : "submit" }
     >
-      {props.isLoading ? 'Loading…' : props.value}
+      {props.isLoading &&
+        <>
+          <Spinner
+            as="span"
+            animation="border"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+          />
+          <span>&nbsp;Loading...</span>
+        </>
+      }
+      {!props.isLoading &&
+        props.value
+      }
     </Button>
   )
 }

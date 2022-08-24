@@ -45,7 +45,7 @@ export default function PageRoutes() {
   }, [pageMessage])
 
   useEffect(() => {
-    const interval = setTimeout(() => { setPageMessageError('') }, 5000)
+    const interval = setTimeout(() => { setPageMessageError('') }, 7000)
     return () => { clearInterval(interval) }
   }, [pageMessageError])
 
@@ -90,7 +90,7 @@ export default function PageRoutes() {
                     <FadeIn vars={{startAt: {y: '-50%', opacity: 1}}}><h5>{ pageMessage }</h5></FadeIn>
                   }
                   {pageMessageError &&
-                    <FadeIn vars={{startAt: {y: '-50%', opacity: 1}}}><h5 className='error'>{ pageMessageError }</h5></FadeIn>
+                    <FadeIn vars={{startAt: {y: '-50%', opacity: 1}}}><h5 className='error-message'>{ pageMessageError }</h5></FadeIn>
                   }
                 </div>
                 <Routes>
