@@ -125,7 +125,7 @@ function ValidateUser() {
         </Col>
       </Row>
       {error &&
-        <p>{ error }</p>
+        <p className="error-message">{ error }</p>
       }
     </div>
   )

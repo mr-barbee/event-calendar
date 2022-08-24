@@ -100,7 +100,7 @@ export default function MakePassword() {
         </Formik>
       </>
       {error &&
-        <p>{ error }</p>
+        <p className="error-message">{ error }</p>
       }
     </div>
   )

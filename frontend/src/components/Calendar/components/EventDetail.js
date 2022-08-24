@@ -203,7 +203,7 @@ function EventDetail(props) {
         <Spinner />
       }
       {error &&
-        <p>{ error }</p>
+        <p className="error-message">{ error }</p>
       }
     </Modal>
   )

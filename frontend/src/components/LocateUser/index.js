@@ -95,7 +95,7 @@ export default function Register() {
           )}
         </Formik>
       {error &&
-        <p>{ error }</p>
+        <p className="error-message">{ error }</p>
       }
     </div>
   )

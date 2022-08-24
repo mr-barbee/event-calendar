@@ -130,7 +130,7 @@ export default function Register() {
         </Row>
       </>
       {error &&
-        <p>{ error }</p>
+        <p className="error-message">{ error }</p>
       }
     </div>
   )

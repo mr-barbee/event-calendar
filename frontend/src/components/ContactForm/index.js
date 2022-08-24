@@ -354,7 +354,7 @@ function ContactForm() {
         <Spinner />
       }
       {error &&
-        <p>{ error }</p>
+        <p className="error-message">{ error }</p>
       }
     </div>
   )

@@ -16,4 +16,11 @@ button {
       border-color: #73ac39;
     }
   }
+  .error {
+    .form-check {
+      .form-check-input {
+        border-color: red;
+      }
+    }
+  }
 }
