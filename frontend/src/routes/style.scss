@@ -38,6 +38,23 @@ body {
     }
     /* Control the left side */
     &.left {
+      .app-title {
+        width: 90%;
+        padding-top: 10px;
+        margin: 0 auto;
+        @include medium {
+          width: 70%;
+          padding-top: 30px;
+        }
+        h1 {
+          font-size: 25px;
+          text-transform: uppercase;
+          color: white;
+          @include medium {
+            font-size: 35px;
+          }
+        }
+      }
       @include medium {
         left: 0;
       }
@@ -177,6 +194,20 @@ body {
         // this is really the only tricky part, you need to specify the background color of the container element...
         color: #818078;
         background-color: #fcfcfa;
+      }
+    }
+  }
+  .app-logo {
+    img {
+      height: 200px;
+      display: block;
+      margin: 0 auto;
+      @include medium {
+        height: 80px;
+        position: fixed;
+        float: right;
+        bottom: 5px;
+        right: 5px;
       }
     }
   }

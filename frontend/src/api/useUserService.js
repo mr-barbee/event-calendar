@@ -113,6 +113,13 @@ const useUserService = () => {
     })
   }
 
+  function forceLogout() {
+    return request({
+      url: 'api/services/force-logout',
+      method: 'POST'
+    })
+  }
+
   return [
     getCurrentUser,
     loginUser,
@@ -125,7 +132,8 @@ const useUserService = () => {
     locateUser,
     cancelUser,
     googleLoginUser,
-    verifySession
+    verifySession,
+    forceLogout
   ]
 }
 

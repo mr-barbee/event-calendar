@@ -12,13 +12,18 @@ import './style.scss'
 
 export default function Login() {
   const [error, setError] = useState('')
-  const [, loginUser] = useUserService()
+  const [, loginUser,,,,,,,,,,, forceLogout] = useUserService()
   const { token, setToken, setSessionToken } = useContext(SessionContext)
   // Login mutation for the login form with an email and password.
   const { isLoading, data: mutationData, mutate: mutatePostLogin } = useMutation((values) => loginUser(values))
+  const { mutate: mutateForceLogout } = useMutation((values) => forceLogout(values), {
+    onSuccess: () => setError('Error: Please try agian. If problem persists, please contact site administrator.'),
+    onError: () => setError('Error: Please try agian. If problem persists, please contact site administrator.')
+  })
   const formatError = error => {
     // if this error returns than the user some how has a loged in session.
-    if (error.includes('This route can only be accessed by anonymous users')) setError('Please clear your browser cookies.')
+    // If so we want to force logout that user from the backend.
+    if (error.includes('This route can only be accessed by anonymous users')) mutateForceLogout()
     else setError(error)
   }
 

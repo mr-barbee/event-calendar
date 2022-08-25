@@ -25,6 +25,15 @@ core_api.verify_session:
   requirements:
     _permission: 'access content'
 
+core_api.force_logout:
+  path: '/api/services/force-logout'
+  defaults:
+    _controller: 'Drupal\core_api\Controller\CoreApiController::forceLogoutCurrentUser'
+    _title: 'Force Logout'
+  methods:  [POST]
+  requirements:
+    _permission: 'access content'
+
 core_api.register_user:
   path: '/api/services/register-user'
   defaults:

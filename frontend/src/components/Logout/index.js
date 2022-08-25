@@ -1,4 +1,4 @@
-import { useContext} from 'react'
+import { useContext } from 'react'
 import { SessionContext } from '../../context'
 import { useUser } from '../../hooks/useUser'
 import useUserService from '../../api/useUserService'
@@ -13,10 +13,15 @@ function Logout() {
   const [logout] = useLogout()
   const [,,, logoutUser] = useUserService()
   // Login mutation for the login form with an email and password.
-  const { isError, error, mutate: userLogout } = useMutation((values) => logoutUser(values), { onSuccess: () => logout() })
-  // We want to se the page error message
-  // if an error was found.
-  if (isError) setPageMessageError(error)
+  const { mutate: userLogout } = useMutation((values) => logoutUser(values), {
+    // We want to se the page error message
+    // if an error was found.
+    onError: (res) => setPageMessageError(res.data.message),
+    onSuccess: () => {
+      logout()
+      setPageMessage('You have successfully logged out!')
+    },
+  })
 
   return (
     <div>
@@ -25,7 +30,6 @@ function Logout() {
           className="logout-button"
           value={ <FaSignOutAlt /> }
           onClick={() => {
-            setPageMessage('You have successfully logged out!')
             userLogout({'logoutToken': token.logout_token})
           }}
         />

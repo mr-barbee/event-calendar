@@ -20,6 +20,7 @@ import Spinner from '../components/_common/Spinner'
 import { Container } from 'react-bootstrap'
 import { PrivateRoute } from './PrivateRoute'
 import { SessionContext } from '../context'
+import Logo from './images/logo.png'
 import './style.scss'
 
 export default function PageRoutes() {
@@ -76,15 +77,18 @@ export default function PageRoutes() {
       }
       {!isLoading && sessionToken &&
         <Router>
-          <div className="split left">
-            <div className="centered">
+          <div className='split left'>
+            <div className='app-title'>
+              <h1>Volunteer Calendar</h1>
+            </div>
+            <div className='centered'>
               <BlockQuote />
             </div>
           </div>
-          <div className="split right">
+          <div className='split right'>
             <Header />
             <div className="main">
-              <Container className="main-container" fluid>
+              <Container className='main-container' fluid>
                 <div className="page-messages">
                   {pageMessage &&
                     <FadeIn vars={{startAt: {y: '-50%', opacity: 1}}}><h5>{ pageMessage }</h5></FadeIn>
@@ -110,6 +114,9 @@ export default function PageRoutes() {
                   <Route path='*' element={<PageNotFound />}/>
                 </Routes>
               </Container>
+            </div>
+            <div className='app-logo'>
+              <img src={Logo} alt='App Logo' />
             </div>
           </div>
           {token &&
