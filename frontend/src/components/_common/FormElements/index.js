@@ -87,7 +87,7 @@ export function Check(props) {
       }
       <Row>
         {props.values.map((value, index) => (
-          <Col sm={props.checkColumn} className={props.className} key={index}>
+          <Col sm={props.checkSm} md={props.checkMd} lg={props.checkLg} className={props.className} key={index}>
             <Form.Check
               inline={props.inline}
               type={props.type}

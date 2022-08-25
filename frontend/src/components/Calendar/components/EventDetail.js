@@ -136,7 +136,8 @@ function EventDetail(props) {
                     groupClassName="mb-3"
                     helperText={<p>The number next to the category depicts how many volunteer spots are still needed</p>}
                     name="categories"
-                    checkColumn="3"
+                    checkMd="12"
+                    checkLg="3"
                     inline={true}
                     value={values.categories}
                     values={data.event.categories.map((items) => ({

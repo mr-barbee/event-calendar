@@ -21,6 +21,7 @@ import { Container } from 'react-bootstrap'
 import { PrivateRoute } from './PrivateRoute'
 import { SessionContext } from '../context'
 import Logo from './images/logo.png'
+import Beta from './images/beta.png'
 import './style.scss'
 
 export default function PageRoutes() {
@@ -78,6 +79,9 @@ export default function PageRoutes() {
       {!isLoading && sessionToken &&
         <Router>
           <div className='split left'>
+            <div className='beta-logo'>
+              <img src={Beta} alt='Beta Logo' />
+            </div>
             <div className='app-title'>
               <h1>Volunteer Calendar</h1>
             </div>

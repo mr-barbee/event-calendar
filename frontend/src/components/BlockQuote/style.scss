@@ -14,12 +14,16 @@ blockquote {
   p {
     font-family: Georgia;
     color: #fff;
-    font-size: 14px;
+    font-size: 0.875rem;
     line-height: 15px;
     padding-bottom: 0.5rem;
     font-style: italic;
     font-weight: 300;
     @include medium {
+      font-size: 1.2rem;
+      line-height: 20px;
+    }
+    @include large {
       font-size: 1.7rem;
       padding-bottom: 2rem;
       line-height: 35px;
@@ -27,6 +31,10 @@ blockquote {
     &.title {
       font-size: 16px;
       @include medium {
+        font-size: 1.4rem;
+        line-height: 24px;
+      }
+      @include large {
         font-size: 1.7rem;
       }
     }
@@ -34,26 +42,24 @@ blockquote {
   span {
     will-change: opacity;
     opacity: 0;
-  }
-  span.animate {
-    opacity: 1;
-    -webkit-filter: blur(0) !important;
+    &.animate {
+      opacity: 1;
+      -webkit-filter: blur(0) !important;
+    }
   }
   cite {
     font-family: verdana;
     font-size: 0.9rem;
     color: #fff;
-    // opacity: 0;
+    line-height: 15px;
     font-style: normal;
     font-weight: 500;
     float: right;
-  }
-  cite {
     will-change: opacity;
     opacity: 0;
-  }
-  cite.animate {
-    opacity: 1;
-    -webkit-filter: blur(0) !important;
+    &.animate {
+      opacity: 1;
+      -webkit-filter: blur(0) !important;
+    }
   }
 }

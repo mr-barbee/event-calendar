@@ -2,13 +2,11 @@ import { useNavigate } from 'react-router-dom'
 import { Row, Col } from 'react-bootstrap'
 import { useUser } from '../../hooks/useUser'
 import { Submit } from '../_common/FormElements'
-import useLogout from '../../hooks/useLogout'
 import './style.scss'
 
 function Dashboard() {
   const navigate = useNavigate()
   const user = useUser()
-  const [logout] = useLogout()
   const navigation = where => {
     switch (where) {
       case 'profile':
@@ -38,7 +36,7 @@ function Dashboard() {
             <Submit
               variant="secondary"
               value='Update Profile'
-              onClick={() => { logout(); navigation('profile') }}
+              onClick={() => { navigation('profile') }}
             />
           </Row>
           <Row className="mb-5">

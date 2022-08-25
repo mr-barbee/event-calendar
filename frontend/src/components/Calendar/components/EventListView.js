@@ -10,7 +10,7 @@ export default function EventListView({ events }) {
     }, [[], []]);
   }
   // We want to seperate out the current and archive events.
-  const [current, archive] = partition(events, (e) => Moment(e.start) > Moment.now());
+  const [current, archive] = partition(events, (e) => Moment(e.end) > Moment.now());
 
   return (
     <>

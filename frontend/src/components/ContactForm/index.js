@@ -243,90 +243,104 @@ function ContactForm() {
                     />
                   </div>
                 </Row>
-                <Row>
-                  <Check
-                    as={Col}
-                    column="6"
-                    type="radio"
-                    controlId="formPrimary"
-                    groupClassName="mb-3"
-                    formLabel="Primary Contact:"
-                    name="primary"
-                    checkColumn="12"
-                    inline={false}
-                    value={values.primary}
-                    values={[
-                      {id:"email", label:"Email", value:"e"},
-                      {id:"phone", label:"Phone", value:"p"}
-                    ]}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    isValid={touched.primary && !errors.primary}
-                    errors={touched.primary && errors.primary ? errors.primary : null}
-                    helperText="Please confirm your primary contact."
-                  />
-                </Row>
-                {/* Volunteer Categories */}
-                <Row>
-                  {categories && !categoriesLoading &&
+                <div className='form-grouping'>
+                  <Row>
                     <Check
                       as={Col}
-                      column="12"
-                      type="checkbox"
-                      controlId="formCategories"
+                      column="6"
+                      type="radio"
+                      controlId="formPrimary"
                       groupClassName="mb-3"
-                      formLabel={<><h5>Volunteer Categories:</h5><p>Check all that apply. Based on the options you select you will be notified when volunteer work is needed for that category.</p></>}
-                      name="categories"
-                      checkColumn="3"
-                      inline={true}
-                      className={touched.categories && errors.categories ? "error" : null}
-                      value={values.categories}
-                      values={categories.taxonomies.items.map((items) => (
-                        {id:items.name, label:items.name, value:items.id}
-                      ))}
+                      formLabel="Primary Contact:"
+                      name="primary"
+                      checkSm="12"
+                      inline={false}
+                      value={values.primary}
+                      values={[
+                        {id:"email", label:"Email", value:"e"},
+                        {id:"phone", label:"Phone", value:"p"}
+                      ]}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      errors={touched.categories && errors.categories ? errors.categories : null}
+                      isValid={touched.primary && !errors.primary}
+                      errors={touched.primary && errors.primary ? errors.primary : null}
+                      helperText="Please confirm your primary contact."
                     />
-                  }
-                </Row>
-                <Row>
-                  <Check
-                    as={Col}
-                    column="12"
-                    type="checkbox"
-                    controlId="formContact"
-                    name="contact"
-                    className="mb-3"
-                    inline={true}
-                    value={values.contact}
-                    values={[{id:"contact", label:"Contact Me when volunteers are needed based on my categories selected.", value:values.contact}]}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                </Row>
-                <Row>
-                  {experiences && !skillsLoading &&
+                  </Row>
+                </div>
+                <div className='form-grouping'>
+                  {/* Volunteer Categories */}
+                  <Row>
+                    {categories && !categoriesLoading &&
+                      <Check
+                        as={Col}
+                        column="12"
+                        type="checkbox"
+                        controlId="formCategories"
+                        groupClassName="mb-3"
+                        formLabel={
+                          <>
+                            <label class="form-label" for="formCategories">Volunteer Categories:</label>
+                            <p>Check all that apply. Based on the options you select you will be notified when volunteer work is needed for that category.</p>
+                          </>
+                        }
+                        name="categories"
+                        checkMd="12"
+                        checkLg="3"
+                        inline={true}
+                        className={touched.categories && errors.categories ? "error" : null}
+                        value={values.categories}
+                        values={categories.taxonomies.items.map((items) => (
+                          {id:items.name, label:items.name, value:items.id}
+                        ))}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        errors={touched.categories && errors.categories ? errors.categories : null}
+                      />
+                    }
+                  </Row>
+                  <Row>
                     <Check
                       as={Col}
                       column="12"
                       type="checkbox"
-                      controlId="formExperiences"
-                      groupClassName="mb-3"
-                      formLabel={<h5>Experience & Skills:</h5>}
-                      name="experiences"
-                      checkColumn="3"
+                      controlId="formContact"
+                      name="contact"
                       className="mb-3"
                       inline={true}
-                      value={values.experiences}
-                      values={experiences.taxonomies.items.map((items) => (
-                        {id:items.name, label:items.name, value:items.id}
-                      ))}
+                      value={values.contact}
+                      values={[{id:"contact", label:"Contact me when volunteers are needed based on my categories selected.", value:values.contact}]}
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                  }
-                </Row>
+                  </Row>
+                </div>
+                <div className='form-grouping'>
+                  <Row>
+                    {experiences && !skillsLoading &&
+                      <Check
+                        as={Col}
+                        column="12"
+                        type="checkbox"
+                        controlId="formExperiences"
+                        groupClassName="mb-3"
+                        formLabel={
+                          <label class="form-label" for="formExperiences">Experience & Skills:</label>
+                        }
+                        name="experiences"
+                        checkMd="12"
+                        checkLg="3"
+                        inline={true}
+                        value={values.experiences}
+                        values={experiences.taxonomies.items.map((items) => (
+                          {id:items.name, label:items.name, value:items.id}
+                        ))}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                    }
+                  </Row>
+                </div>
                 <Row>
                   <Input
                     as={Col}
@@ -337,7 +351,7 @@ function ContactForm() {
                     name="note"
                     rows={3}
                     formLabel="Add Note:"
-                    placeholder="Note (Optional)"
+                    placeholder="Notes (Optional):"
                     value={values.note}
                     onChange={handleChange}
                     onBlur={handleBlur}
