@@ -26,6 +26,16 @@ body {
   * {
     transition: all 0.3s ease-out;
   }
+  .centered {
+    padding:15px;
+    @include medium {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+  }
   /* Split the screen in half */
   .split {
     @include medium {
@@ -79,14 +89,6 @@ body {
     }
     /* If you want the content centered horizontally and vertically */
     .centered {
-      padding:15px;
-      @include medium {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        text-align: center;
-      }
       img {
         width: 150px;
         border-radius: 50%;

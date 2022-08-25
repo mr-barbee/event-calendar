@@ -61,7 +61,7 @@ export default function PageRoutes() {
     }
   }, [data, setSessionToken, isLoading])
 
-  if (!sessionToken && !isLoading) return <h1>Error loading browser session</h1>
+  if (!sessionToken && !isLoading) return <h1 className='centered error-message'>Error loading browser session</h1>
 
   return (
     <SessionContext.Provider value={{
