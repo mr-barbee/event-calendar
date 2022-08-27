@@ -13,7 +13,7 @@ import './style.scss'
 export default function Login() {
   const [error, setError] = useState('')
   const [, loginUser,,,,,,,,,,, forceLogout] = useUserService()
-  const { token, setToken, setSessionToken } = useContext(SessionContext)
+  const { token, setToken, setSessionToken, ReactGA } = useContext(SessionContext)
   // Login mutation for the login form with an email and password.
   const { isLoading, data: mutationData, mutate: mutatePostLogin } = useMutation((values) => loginUser(values))
   const { mutate: mutateForceLogout } = useMutation((values) => forceLogout(values), {
@@ -48,7 +48,16 @@ export default function Login() {
             password: ''
           }}
           validationSchema={ValidationSchema}
-          onSubmit={(values, {setSubmitting, resetForm}) => { mutatePostLogin(values, { onError: (res) => formatError(res.data.message) }) }}
+          onSubmit={(values, {setSubmitting, resetForm}) => { mutatePostLogin(values, {onSuccess: () => {
+                ReactGA.event({
+                  event_name: "login",
+                  category: "login",
+                  action: "login",
+                  nonInteraction: true,
+                  transport: "xhr",
+                })
+              },
+              onError: (res) => formatError(res.data.message) }) }}
         >
           {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
             <Form onSubmit={handleSubmit}>

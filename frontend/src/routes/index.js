@@ -20,9 +20,13 @@ import Spinner from '../components/_common/Spinner'
 import { Container } from 'react-bootstrap'
 import { PrivateRoute } from './PrivateRoute'
 import { SessionContext } from '../context'
+import ReactGA from 'react-ga4'
 import Logo from './images/logo.png'
 import Beta from './images/beta.png'
 import './style.scss'
+
+// Initialize the react google analytics.
+ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID)
 
 export default function PageRoutes() {
   const [,,,, fetchSessionToken] = useUserService()
@@ -52,6 +56,11 @@ export default function PageRoutes() {
   }, [pageMessageError])
 
   useEffect(() => {
+    // Save the Page view.
+    ReactGA.pageview(window.location.pathname + window.location.search)
+  }, [])
+
+  useEffect(() => {
     // if the user is set and data empty run the
     // query if not loading.
     if (data && !isLoading) {
@@ -67,6 +76,7 @@ export default function PageRoutes() {
     <SessionContext.Provider value={{
       token: token,
       sessionToken: sessionToken,
+      ReactGA: ReactGA,
       setSessionToken: (value) => { setSessionToken(value) },
       refetchSession: () => { refetch() },
       setToken: (value) => { setToken(value) },

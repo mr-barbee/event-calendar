@@ -21,7 +21,7 @@ function ContactForm() {
   const [verification, setVerification] = useState('')
   const [getCurrentUser,,,,, updateUser] = useUserService()
   const [getTaxonomy, sendVerificationToken] = useUtilityService()
-  const { setPageMessage } = useContext(SessionContext)
+  const { setPageMessage, ReactGA } = useContext(SessionContext)
   const { isLoading, data: userData } = useQuery(['get-user'], () => getCurrentUser())
   const { isLoading: categoriesLoading, data: categories } = useQuery(['get-volunteer-categories'], () => getTaxonomy('volunteer_categories'))
   const { isLoading: skillsLoading, data: experiences } = useQuery(['get-experience-skills'], () => getTaxonomy('experience_skills'))
@@ -37,6 +37,13 @@ function ContactForm() {
         } else {
           // refetch the user data
           queryClient.invalidateQueries(['get-user'])
+          ReactGA.event({
+            event_name: "update_profile",
+            category: "update_profile",
+            action: "update_profile",
+            nonInteraction: true,
+            transport: "xhr",
+          })
           // check to see if we need to verifu the users primary contact.
           if (data.updateUser.user.verified === false) {
             setPageMessage('Profile Updated, but please verify your primary contact!')
@@ -280,7 +287,7 @@ function ContactForm() {
                         groupClassName="mb-3"
                         formLabel={
                           <>
-                            <label class="form-label" for="formCategories">Volunteer Categories:</label>
+                            <label className="form-label" htmlFor="formCategories">Volunteer Categories:</label>
                             <p>Check all that apply. Based on the options you select you will be notified when volunteer work is needed for that category.</p>
                           </>
                         }
@@ -325,7 +332,7 @@ function ContactForm() {
                         controlId="formExperiences"
                         groupClassName="mb-3"
                         formLabel={
-                          <label class="form-label" for="formExperiences">Experience & Skills:</label>
+                          <label className="form-label" htmlFor="formExperiences">Experience & Skills:</label>
                         }
                         name="experiences"
                         checkMd="12"
