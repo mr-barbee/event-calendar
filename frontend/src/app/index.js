@@ -20,7 +20,7 @@ const queryClient = new QueryClient({
 })
 
 // Redirect the user https if not already.
-// @TODO do this on the server.
+// @NOTE: Fallback for https
 if (window.location.protocol === 'http:') {
     window.location.href =
         window.location.href.replace(
