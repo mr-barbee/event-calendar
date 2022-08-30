@@ -8,6 +8,7 @@ import { Submit, Input } from '../_common/FormElements'
 import { SocialLogins } from '../_common/SocialLogins'
 import ValidationSchema from './validation'
 import { SessionContext } from '../../context'
+import SEO from '@americanexpress/react-seo'
 import './style.scss'
 
 export default function Login() {
@@ -40,93 +41,95 @@ export default function Login() {
 
   return (
     <div className="login">
-      <>
-        <h5>Please Login with your <strong>Email</strong> or <strong>Username</strong></h5>
-        <Formik
-          initialValues={{
-            email: '',
-            password: ''
-          }}
-          validationSchema={ValidationSchema}
-          onSubmit={(values, {setSubmitting, resetForm}) => { mutatePostLogin(values, {onSuccess: () => {
-                ReactGA.event({
-                  event_name: "login",
-                  category: "login",
-                  action: "login",
-                  nonInteraction: true,
-                  transport: "xhr",
-                })
-              },
-              onError: (res) => formatError(res.data.message) }) }}
-        >
-          {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
-            <Form onSubmit={handleSubmit}>
-              <Row className="mb-3">
-                <Input
-                  as={Col}
-                  column="12"
-                  controlId="formEmail"
-                  groupClassName="position-relative"
-                  type="text"
-                  name="email"
-                  placeholder="Email or Username"
-                  value={values.email}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  isValid={touched.email && !errors.email}
-                  className={touched.email && errors.email ? "error" : null}
-                  errors={touched.email && errors.email ? errors.email : null}
-                  helperText="You can use your username or email address to login."
-                />
-              </Row>
-              <Row className="mb-3">
-                <Input
-                  as={Col}
-                  column="12"
-                  controlId="formPassword"
-                  groupClassName="position-relative"
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  value={values.password}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  isValid={touched.password && !errors.password}
-                  className={touched.password && errors.password ? "error" : null}
-                  errors={touched.password && errors.password ? errors.password : null}
-                />
-              </Row>
-              <Row className="mb-3">
-                <Col>
-                  <Link to={`/locate-account`}>Forgot Your Password?</Link>
-                </Col>
-              </Row>
-              <Row className="mb-3">
-                <Col>
-                  <Submit value='Login' isLoading={isLoading} />
-                </Col>
-              </Row>
-            </Form>
-          )}
-        </Formik>
-        <Row className="mb-3">
-          <hr className="hr-text" data-content="OR" />
-        </Row>
-        <Row className="mb-3">
-          <Col>
-            <SocialLogins
-              onError={(error) => {formatError(error)}}
-            />
+      <SEO
+        title="Login"
+        description="Please login into your event calendar application."
+      />
+      <h5>Please Login with your <strong>Email</strong> or <strong>Username</strong></h5>
+      <Formik
+        initialValues={{
+          email: '',
+          password: ''
+        }}
+        validationSchema={ValidationSchema}
+        onSubmit={(values, {setSubmitting, resetForm}) => { mutatePostLogin(values, {onSuccess: () => {
+              ReactGA.event({
+                event_name: "login",
+                category: "login",
+                action: "login",
+                nonInteraction: false,
+                transport: "xhr",
+              })
+            },
+            onError: (res) => formatError(res.data.message) }) }}
+      >
+        {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
+          <Form onSubmit={handleSubmit}>
+            <Row className="mb-3">
+              <Input
+                as={Col}
+                column="12"
+                controlId="formEmail"
+                groupClassName="position-relative"
+                type="text"
+                name="email"
+                placeholder="Email or Username"
+                value={values.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                isValid={touched.email && !errors.email}
+                className={touched.email && errors.email ? "error" : null}
+                errors={touched.email && errors.email ? errors.email : null}
+                helperText="You can use your username or email address to login."
+              />
+            </Row>
+            <Row className="mb-3">
+              <Input
+                as={Col}
+                column="12"
+                controlId="formPassword"
+                groupClassName="position-relative"
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={values.password}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                isValid={touched.password && !errors.password}
+                className={touched.password && errors.password ? "error" : null}
+                errors={touched.password && errors.password ? errors.password : null}
+              />
+            </Row>
+            <Row className="mb-3">
+              <Col>
+                <Link to={`/locate-account`}>Forgot Your Password?</Link>
+              </Col>
+            </Row>
+            <Row className="mb-3">
+              <Col>
+                <Submit value='Login' isLoading={isLoading} />
+              </Col>
+            </Row>
+          </Form>
+        )}
+      </Formik>
+      <Row className="mb-3">
+        <hr className="hr-text" data-content="OR" />
+      </Row>
+      <Row className="mb-3">
+        <Col>
+          <SocialLogins
+            onError={(error) => {formatError(error)}}
+          />
+        </Col>
+      </Row>
+      <Row className="mb-3">
+        <Col>
+          <Col sm="12">
+            Are you a new volunteer? <Link to={`/register`}>Click Here</Link>
           </Col>
-        </Row>
-        <Row className="mb-3">
-          <Col>
-            <Col sm="12">
-              Are you a new volunteer? <Link to={`/register`}>Click Here</Link>
-            </Col>
-          </Col>
-        </Row>
-      </>
+        </Col>
+      </Row>
       {error &&
         <p className="error-message">{ error }</p>
       }

@@ -8,6 +8,7 @@ import { Form, Row, Col } from 'react-bootstrap'
 import { Submit, Input } from '../_common/FormElements'
 import ValidationSchema from './validation'
 import { SessionContext } from '../../context'
+import SEO from '@americanexpress/react-seo'
 import './style.scss'
 
 function ValidateUser() {
@@ -78,6 +79,10 @@ function ValidateUser() {
 
   return (
     <div className="validate-user">
+      <SEO
+        title="Validate"
+        description="Validate the access code."
+      />
       {newUser &&
         <>
           <h3>Please confirm your account. See your email for further steps.</h3>

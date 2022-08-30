@@ -20,6 +20,7 @@ import Spinner from '../components/_common/Spinner'
 import { Container } from 'react-bootstrap'
 import { PrivateRoute } from './PrivateRoute'
 import { SessionContext } from '../context'
+import SEO from '@americanexpress/react-seo'
 import ReactGA from 'react-ga4'
 import Logo from './images/logo.png'
 import Beta from './images/beta.png'
@@ -88,6 +89,13 @@ export default function PageRoutes() {
       }
       {!isLoading && sessionToken &&
         <Router>
+          <SEO
+            title="AICP Event Calendar"
+            description="Volunteer Calendar & Signup Application"
+            keywords={['event', 'volunteer', 'signup']}
+            siteUrl={process.env.REACT_APP_SITE_URL}
+            image={{ src: Logo }}
+          />
           <div className='split left'>
             <div className='beta-logo'>
               <img src={Beta} alt='Beta Logo' />

@@ -13,6 +13,7 @@ import EventDetail from './components/EventDetail'
 import { Submit } from '../_common/FormElements'
 import Spinner from '../_common/Spinner'
 import useEventService from '../../api/useEventService'
+import SEO from '@americanexpress/react-seo'
 import { useQuery } from 'react-query'
 import './style.scss'
 
@@ -68,6 +69,10 @@ function EventCalendar() {
 
   return (
     <div className="event-calendar">
+      <SEO
+        title="Event Calendar"
+        description="A list of all the events that a user can sign up for. Showing both current and archive events."
+      />
       {eventDetail &&
         <EventDetail
           id={eventDetail}

@@ -10,6 +10,7 @@ import { Submit, Input, Check } from '../_common/FormElements'
 import Spinner from '../_common/Spinner'
 import ValidationSchema from './validation'
 import { SessionContext } from '../../context'
+import SEO from '@americanexpress/react-seo'
 import './style.scss'
 
 function ContactForm() {
@@ -38,10 +39,10 @@ function ContactForm() {
           // refetch the user data
           queryClient.invalidateQueries(['get-user'])
           ReactGA.event({
-            event_name: "update_profile",
+            event_name: "Update Profile",
             category: "update_profile",
             action: "update_profile",
-            nonInteraction: true,
+            nonInteraction: false,
             transport: "xhr",
           })
           // check to see if we need to verifu the users primary contact.
@@ -82,6 +83,10 @@ function ContactForm() {
 
   return (
     <div className="contact-form">
+      <SEO
+        title="Profile"
+        description="View and update your account information."
+      />
       {userData && !isLoading &&
         <>
           <h3>Please fill out the form below:</h3>

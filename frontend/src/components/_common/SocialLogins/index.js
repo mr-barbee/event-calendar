@@ -11,7 +11,7 @@ import './style.scss'
 
 export function SocialLogins({ onError }) {
   const [,, facebookLoginUser,,,,,,,, googleLoginUser] = useUserService()
-  const { setToken, setSessionToken } = useContext(SessionContext)
+  const { setToken, setSessionToken, ReactGA } = useContext(SessionContext)
   // Login mutation for the facebook and google data.
   const { data: facebookData, mutate: mutateFacebookLogin } = useMutation((accessToken) => facebookLoginUser(accessToken))
   const { data: googleData, mutate: mutateGoogleLogin } = useMutation((accessToken) => googleLoginUser(accessToken))
@@ -32,10 +32,17 @@ export function SocialLogins({ onError }) {
       // we want to run the
       // current user api.
       let tokenData = facebookData ?? googleData
+      ReactGA.event({
+        event_name: "Social Login",
+        category: "social_login",
+        action: "social_login",
+        nonInteraction: false,
+        transport: "xhr",
+      })
       setToken(tokenData)
       setSessionToken(tokenData.csrf_token)
     }
-  }, [facebookData, googleData, setToken, setSessionToken])
+  }, [facebookData, googleData, setToken, setSessionToken, ReactGA])
 
   return(
     <>

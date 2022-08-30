@@ -9,7 +9,7 @@ import { SessionContext } from '../../../context'
 export default function DeleteModal(props) {
   const [show, setShow] = useState(true)
   const [logout] = useLogout()
-  const { setPageMessage } = useContext(SessionContext)
+  const { setPageMessage, ReactGA } = useContext(SessionContext)
   const [,,,,,,,,, cancelUser] = useUserService()
   const { mutate: cancel } = useMutation(() => cancelUser(), {
     onSuccess: () => { logoutHandler() }
@@ -17,6 +17,13 @@ export default function DeleteModal(props) {
 
   const logoutHandler = () => {
     setPageMessage('You account has been deactivated! To reactivate please contact site administator.')
+    ReactGA.event({
+      event_name: "Deactivate Account",
+      category: "deactivate",
+      action: "deactivate",
+      nonInteraction: false,
+      transport: "xhr",
+    })
     logout()
   }
 

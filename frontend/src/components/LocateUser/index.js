@@ -6,6 +6,7 @@ import useUserService from '../../api/useUserService'
 import { Form, Row, Col } from 'react-bootstrap'
 import { Submit, Input } from '../_common/FormElements'
 import ValidationSchema from './validation'
+import SEO from '@americanexpress/react-seo'
 import './style.scss'
 
 export default function Register() {
@@ -32,68 +33,72 @@ export default function Register() {
 
   return (
     <div className="login">
-        <h5>Locate your account using your Email or Username</h5>
-        <Formik
-          initialValues={{
-            name: '',
-            email: ''
-          }}
-          validationSchema={ValidationSchema}
-          onSubmit={(values, {setSubmitting, resetForm}) => { locate(values, { onError: (res) => setError(res.data.error_message) }) }}
-        >
-          {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
-            <Form onSubmit={handleSubmit}>
-              <Row className="mb-3">
-                <Input
-                  as={Col}
-                  column="12"
-                  controlId="formEmail"
-                  groupClassName="position-relative"
-                  type="text"
-                  name="email"
-                  placeholder="Email"
-                  value={values.email}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  isValid={touched.email && !errors.email}
-                  className={touched.email && errors.email ? "error" : null}
-                  errors={touched.email && errors.email ? errors.email : null}
-                />
-              </Row>
-              <Row className="mb-3">
-                <hr className="hr-text" data-content="OR" />
-              </Row>
-              <Row className="mb-3">
-                <Input
-                  as={Col}
-                  column="12"
-                  controlId="formName"
-                  type="text"
-                  name="name"
-                  placeholder="Username"
-                  value={values.name}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  isValid={touched.name && !errors.name}
-                  className={touched.name && errors.name ? "error" : null}
-                  errors={touched.name && errors.name ? errors.name : null}
-                />
-              </Row>
-              <Row className="mb-3">
-                <Col>
-                  <Submit value='Locate Account' />
+      <SEO
+        title="Locate Account"
+        description="Please lookup your accoutn based on the certain account information."
+      />
+      <h5>Locate your account using your Email or Username</h5>
+      <Formik
+        initialValues={{
+          name: '',
+          email: ''
+        }}
+        validationSchema={ValidationSchema}
+        onSubmit={(values, {setSubmitting, resetForm}) => { locate(values, { onError: (res) => setError(res.data.error_message) }) }}
+      >
+        {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
+          <Form onSubmit={handleSubmit}>
+            <Row className="mb-3">
+              <Input
+                as={Col}
+                column="12"
+                controlId="formEmail"
+                groupClassName="position-relative"
+                type="text"
+                name="email"
+                placeholder="Email"
+                value={values.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                isValid={touched.email && !errors.email}
+                className={touched.email && errors.email ? "error" : null}
+                errors={touched.email && errors.email ? errors.email : null}
+              />
+            </Row>
+            <Row className="mb-3">
+              <hr className="hr-text" data-content="OR" />
+            </Row>
+            <Row className="mb-3">
+              <Input
+                as={Col}
+                column="12"
+                controlId="formName"
+                type="text"
+                name="name"
+                placeholder="Username"
+                value={values.name}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                isValid={touched.name && !errors.name}
+                className={touched.name && errors.name ? "error" : null}
+                errors={touched.name && errors.name ? errors.name : null}
+              />
+            </Row>
+            <Row className="mb-3">
+              <Col>
+                <Submit value='Locate Account' />
+              </Col>
+            </Row>
+            <Row className="mb-3">
+              <Col>
+                <Col sm="6">
+                  Remember you login? <Link to={`/login`}>Click Here</Link>
                 </Col>
-              </Row>
-              <Row className="mb-3">
-                <Col>
-                  <Col sm="6">
-                    Remember you login? <Link to={`/login`}>Click Here</Link>
-                  </Col>
-                </Col>
-              </Row>
-            </Form>
-          )}
-        </Formik>
+              </Col>
+            </Row>
+          </Form>
+        )}
+      </Formik>
       {error &&
         <p className="error-message">{ error }</p>
       }

@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useQueryClient, useMutation } from 'react-query'
 import useEventService from '../../../api/useEventService'
+import { SessionContext } from '../../../context'
 
 const useRemoveVolunteer = () => {
   const queryClient = useQueryClient()
+  const { ReactGA } = useContext(SessionContext)
   const [,, updateEvent] = useEventService()
   const { isLoading: eventMutationLoading, data: mutationEventData, mutate: mutateEvent } = useMutation((values) => updateEvent(values))
 
@@ -25,6 +27,13 @@ const useRemoveVolunteer = () => {
     // the event volunteer data.
     mutateEvent(values, {
       onSuccess: () => {
+        ReactGA.event({
+          event_name: "Remove Event",
+          category: "update_event",
+          action: "remove_event",
+          nonInteraction: false,
+          transport: "xhr",
+        })
         // refetch the event data
         queryClient.invalidateQueries([`get-event-${id}`])
         queryClient.invalidateQueries(['get-user-events'])

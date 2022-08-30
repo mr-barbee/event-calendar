@@ -2,12 +2,17 @@ import { Row, Col } from 'react-bootstrap'
 import { useState } from 'react'
 import { Submit } from '../_common/FormElements'
 import DeleteModal from './components/DeleteModal'
+import SEO from '@americanexpress/react-seo'
 
 function DeleteUser() {
   const [openList, setOpenList] = useState(false)
 
   return (
     <div className="delete-user">
+      <SEO
+        title="Delete Account"
+        description="User can disable their accounts and disable all their content."
+      />
       {openList &&
         <DeleteModal
           onHide={() => setOpenList(false)}

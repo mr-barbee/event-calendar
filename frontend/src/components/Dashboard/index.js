@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { Row, Col } from 'react-bootstrap'
 import { useUser } from '../../hooks/useUser'
 import { Submit } from '../_common/FormElements'
+import SEO from '@americanexpress/react-seo'
 import './style.scss'
 
 function Dashboard() {
@@ -24,6 +25,10 @@ function Dashboard() {
 
   return (
     <div className="dashboard">
+      <SEO
+        title="Dashboard"
+        description="Access the volunteer signup dashboard"
+      />
       <Row>
         <Col sm={12}>
           <p><strong>Username</strong>: {user.name}</p>

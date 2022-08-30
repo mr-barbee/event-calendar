@@ -7,6 +7,7 @@ import { Form, Row, Col } from 'react-bootstrap'
 import { Submit, Input } from '../_common/FormElements'
 import { PasswordSchema } from './validation'
 import { SessionContext } from '../../context'
+import SEO from '@americanexpress/react-seo'
 import './style.scss'
 
 export default function MakePassword() {
@@ -47,58 +48,60 @@ export default function MakePassword() {
 
   return (
     <div className="login">
-      <>
-        <h3>Set Your New Password</h3>
-        <Formik
-          initialValues={{
-            pass: '',
-            confirmPass: ''
-          }}
-          validationSchema={PasswordSchema}
-          onSubmit={(values) => { formSubmit(values) }}
-        >
-          {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
-            <Form onSubmit={handleSubmit}>
+      <SEO
+        title="Set a Password"
+        description="Set a new password for your account."
+      />
+      <h3>Set Your New Password</h3>
+      <Formik
+        initialValues={{
+          pass: '',
+          confirmPass: ''
+        }}
+        validationSchema={PasswordSchema}
+        onSubmit={(values) => { formSubmit(values) }}
+      >
+        {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
+          <Form onSubmit={handleSubmit}>
+          <Row className="mb-3">
+            <Input
+              as={Col}
+              column="6"
+              controlId="formPass"
+              type="password"
+              name="pass"
+              placeholder="* Password"
+              value={values.pass}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              isValid={touched.pass && !errors.pass}
+              className={touched.pass && errors.pass ? "error" : null}
+              errors={touched.pass && errors.pass ? errors.pass : null}
+              helperText="Please enter your new password"
+            />
+            <Input
+              as={Col}
+              column="6"
+              controlId="formConfirmPass"
+              type="password"
+              name="confirmPass"
+              placeholder="* Confirm Password"
+              value={values.confirmPass}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              isValid={touched.confirmPass && !errors.confirmPass}
+              className={touched.confirmPass && errors.confirmPass ? "error" : null}
+              errors={touched.confirmPass && errors.confirmPass ? errors.confirmPass : null}
+            />
+          </Row>
             <Row className="mb-3">
-              <Input
-                as={Col}
-                column="6"
-                controlId="formPass"
-                type="password"
-                name="pass"
-                placeholder="* Password"
-                value={values.pass}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                isValid={touched.pass && !errors.pass}
-                className={touched.pass && errors.pass ? "error" : null}
-                errors={touched.pass && errors.pass ? errors.pass : null}
-                helperText="Please enter your new password"
-              />
-              <Input
-                as={Col}
-                column="6"
-                controlId="formConfirmPass"
-                type="password"
-                name="confirmPass"
-                placeholder="* Confirm Password"
-                value={values.confirmPass}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                isValid={touched.confirmPass && !errors.confirmPass}
-                className={touched.confirmPass && errors.confirmPass ? "error" : null}
-                errors={touched.confirmPass && errors.confirmPass ? errors.confirmPass : null}
-              />
+              <Col>
+                <Submit value='Set Password' isLoading={isLoading} />
+              </Col>
             </Row>
-              <Row className="mb-3">
-                <Col>
-                  <Submit value='Set Password' isLoading={isLoading} />
-                </Col>
-              </Row>
-            </Form>
-          )}
-        </Formik>
-      </>
+          </Form>
+        )}
+      </Formik>
       {error &&
         <p className="error-message">{ error }</p>
       }
