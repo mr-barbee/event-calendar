@@ -28,7 +28,7 @@ services:
       password: cms
       database: cms
   node:
-    type: node
+    type: node:14
     ssl: true
     build:
       - "cd frontend && npm install"

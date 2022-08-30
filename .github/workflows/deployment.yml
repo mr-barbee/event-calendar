@@ -1,0 +1,78 @@
+name: Deployment
+
+on:
+  push:
+    tags:
+      - v1.*
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        working-directory: ./frontend
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name:
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Build React Application
+        working-directory: ./frontend
+        run: npm run build --if-present
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        working-directory: ./backend
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: composer install --prefer-dist --no-progress
+
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+
+      - name: Putting the site into maintenance mode
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p 7822 'cd public_html/backend && drush state:set system.maintenance_mode 1 --input-format=integer'
+
+      - name: Deploy with rsync
+        working-directory: ./backend
+        run: rsync -arvz -e 'ssh -p 7822' --exclude 'docroot/sites/default/files/**' --exclude 'docroot/sites/default/settings.php' --exclude 'docroot/sites/default/private/**' --exclude '/.github/***' --exclude '/.git/***' --exclude '/.lando.yml' --progress --delete ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/hajjkevin/public_html/backend
+
+      - name: Deploy React with rsync
+        working-directory: ./frontend
+        run: rsync -arvz -e 'ssh -p 7822' --exclude '.htaccess' --progress --delete ./build ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/hajjkevin/public_html/frontend
+
+      - name: Update the Database
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p 7822 'cd public_html/backend && drush updatedb -y'
+
+      - name: Import the configurations
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p 7822 'cd public_html/backend && drush config:import'
+
+      - name: Clearing Cache
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p 7822 'cd public_html/backend && drush cr'
+
+      - name: Truning off maintenance mode
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p 7822 'cd public_html/backend && drush state:set system.maintenance_mode 0 --input-format=integer'
