@@ -35,7 +35,7 @@ function ValidateUser() {
   }
 
   const resendCode = () => {
-    sendVerification({'uid': uid}, { onError: (res) => setError(res.data.error_message) })
+    sendVerification({'uid': uid}, { onError: (res) => setError(res.data.message) })
   }
 
   useEffect(() => {

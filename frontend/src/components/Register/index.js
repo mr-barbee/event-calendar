@@ -52,7 +52,7 @@ export default function Register() {
           fullName: ''
         }}
         validationSchema={RegisterSchema}
-        onSubmit={(values, {setSubmitting, resetForm}) => { register(values, { onError: (res) => setError(res.data.error_message) }) }}
+        onSubmit={(values, {setSubmitting, resetForm}) => { register(values, { onError: (res) => setError(res.data.message) }) }}
       >
         {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
           <Form onSubmit={handleSubmit}>

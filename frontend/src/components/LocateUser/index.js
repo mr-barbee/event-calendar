@@ -44,7 +44,7 @@ export default function Register() {
           email: ''
         }}
         validationSchema={ValidationSchema}
-        onSubmit={(values, {setSubmitting, resetForm}) => { locate(values, { onError: (res) => setError(res.data.error_message) }) }}
+        onSubmit={(values, {setSubmitting, resetForm}) => { locate(values, { onError: (res) => setError(res.data.message) }) }}
       >
         {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
           <Form onSubmit={handleSubmit}>

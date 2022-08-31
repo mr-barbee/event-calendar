@@ -147,23 +147,23 @@ class TwilioApiController extends ControllerBase {
           ];
         }
         else {
-          $response = ['error_message' => 'There was an issue sending verification token. Please contact site administator.', 'status' => 'error'];
+          $response = ['message' => 'There was an issue sending verification token. Please contact site administator.', 'status' => 'error'];
           throw new \Exception();
         }
       }
       else {
-        $response = ['error_message' => 'Verify contact is missing', 'status' => 'error'];
+        $response = ['message' => 'Verify contact is missing', 'status' => 'error'];
         throw new \Exception();
       }
     }
     catch (AccessDeniedHttpException $e) {
-      $response = ['error_message' => 'You dont have the priviledges to access this url', 'status' => 'error'];
+      $response = ['message' => 'You dont have the priviledges to access this url', 'status' => 'error'];
       $status = 403;
     }
     catch (\Exception $e) {
-      if (empty($response['error_message'])) {
-        \Drupal::logger(__CLASS__)->error($e->getMessage());
-        $response = ['error_message' => 'We\'re currenlty experiency some technical difficulties.', 'status' => 'error'];
+      \Drupal::logger(__CLASS__)->error($e->getMessage());
+      if (empty($response['message'])) {
+        $response = ['message' => 'We\'re currenlty experiency some technical difficulties.', 'status' => 'error'];
       }
       $status = 400;
     }
@@ -232,18 +232,18 @@ class TwilioApiController extends ControllerBase {
         ];
       }
       else {
-        $response = ['error_message' => 'Missing Parameters', 'status' => 'error'];
+        $response = ['message' => 'Missing Parameters', 'status' => 'error'];
         throw new \Exception();
       }
     }
     catch (AccessDeniedHttpException $e) {
-      $response = ['error_message' => 'You dont have the priviledges to access this url', 'status' => 'error'];
+      $response = ['message' => 'You dont have the priviledges to access this url', 'status' => 'error'];
       $status = 403;
     }
     catch (\Exception $e) {
-      if (empty($response['error_message'])) {
-        \Drupal::logger(__CLASS__)->error($e->getMessage());
-        $response = ['error_message' => 'We\'re currenlty experiency some technical difficulties.', 'status' => 'error'];
+      \Drupal::logger(__CLASS__)->error($e->getMessage());
+      if (empty($response['message'])) {
+        $response = ['message' => 'We\'re currenlty experiency some technical difficulties.', 'status' => 'error'];
       }
       $status = 400;
     }

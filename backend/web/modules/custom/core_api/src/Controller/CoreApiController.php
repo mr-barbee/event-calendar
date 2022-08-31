@@ -82,18 +82,18 @@ class CoreApiController extends ControllerBase {
           ->range(0, 1)
           ->execute();
         if (!empty($ids)) {
-          $response = ['error_message' => 'Username or email already taken.', 'status' => 'error'];
+          $response = ['message' => 'Username or email already taken.', 'status' => 'error'];
           throw new \Exception();
         }
         // Ensure we have a valid user name.
         $valid_name = user_validate_name($data['name']);
         if (!empty($valid_name)) {
-          $response = ['error_message' => $valid_name, 'status' => 'error'];
+          $response = ['message' => $valid_name, 'status' => 'error'];
           throw new \Exception();
         }
         // Ensur the email address is valid.
         if (!\Drupal::service('email.validator')->isValid($data['email'])) {
-          $response = ['error_message' => 'The email address is not valid.', 'status' => 'error'];
+          $response = ['message' => 'The email address is not valid.', 'status' => 'error'];
           throw new \Exception();
         }
         // Make the user.
@@ -123,7 +123,7 @@ class CoreApiController extends ControllerBase {
             ];
           }
           else {
-            $response = ['error_message' => 'There was an issue sending verification email. Please contact site administator.', 'status' => 'error'];
+            $response = ['message' => 'There was an issue sending verification email. Please contact site administator.', 'status' => 'error'];
             throw new \Exception();
           }
         }
@@ -132,18 +132,18 @@ class CoreApiController extends ControllerBase {
         }
       }
       else {
-        $response = ['error_message' => 'Missing Fields', 'status' => 'error'];
+        $response = ['message' => 'Missing Fields', 'status' => 'error'];
         throw new \Exception();
       }
     }
     catch (AccessDeniedHttpException $e) {
-      $response = ['error_message' => 'You dont have the priviledges to access this url', 'status' => 'error'];
+      $response = ['message' => 'You dont have the priviledges to access this url', 'status' => 'error'];
       $status = 403;
     }
     catch (\Exception $e) {
-      if (empty($response['error_message'])) {
-        \Drupal::logger(__CLASS__)->error($e->getMessage());
-        $response = ['error_message' => 'We\'re currenlty experiency some technical difficulties.', 'status' => 'error'];
+      \Drupal::logger(__CLASS__)->error($e->getMessage());
+      if (empty($response['message'])) {
+        $response = ['message' => 'We\'re currenlty experiency some technical difficulties.', 'status' => 'error'];
       }
       $status = 400;
     }
@@ -183,14 +183,14 @@ class CoreApiController extends ControllerBase {
         ];
       }
       else {
-        $response = ['error_message' => 'Invalid Parameters.', 'status' => 'error'];
+        $response = ['message' => 'Invalid Parameters.', 'status' => 'error'];
         throw new \Exception();
       }
    }
    catch (\Exception $e) {
-     if (empty($response['error_message'])) {
-       \Drupal::logger(__CLASS__)->error($e->getMessage());
-       $response = ['error_message' => 'We\'re currenlty experiency some technical difficulties. Please contact site administrator.', 'status' => 'error'];
+     \Drupal::logger(__CLASS__)->error($e->getMessage());
+     if (empty($response['message'])) {
+       $response = ['message' => 'We\'re currenlty experiency some technical difficulties. Please contact site administrator.', 'status' => 'error'];
      }
      $status = 400;
    }
@@ -223,7 +223,7 @@ class CoreApiController extends ControllerBase {
           ->execute();
         $id = reset($id);
         if (empty($id)) {
-          $response = ['error_message' => 'Cannot locate your account. Please contact site administator.', 'status' => 'error'];
+          $response = ['message' => 'Cannot locate your account. Please contact site administator.', 'status' => 'error'];
           throw new \Exception();
         }
         else {
@@ -238,20 +238,20 @@ class CoreApiController extends ControllerBase {
             ];
           }
           else {
-            $response = ['error_message' => 'There was an issue sending verification email. Please contact site administator.', 'status' => 'error'];
+            $response = ['message' => 'There was an issue sending verification email. Please contact site administator.', 'status' => 'error'];
             throw new \Exception();
           }
         }
       }
       else {
-        $response = ['error_message' => 'Invalid Parameters.', 'status' => 'error'];
+        $response = ['message' => 'Invalid Parameters.', 'status' => 'error'];
         throw new \Exception();
       }
     }
     catch (\Exception $e) {
-     if (empty($response['error_message'])) {
-       \Drupal::logger(__CLASS__)->error($e->getMessage());
-       $response = ['error_message' => 'We\'re currenlty experiency some technical difficulties. Please contact site administrator.', 'status' => 'error'];
+      \Drupal::logger(__CLASS__)->error($e->getMessage());
+     if (empty($response['message'])) {
+       $response = ['message' => 'We\'re currenlty experiency some technical difficulties. Please contact site administrator.', 'status' => 'error'];
      }
      $status = 400;
     }
@@ -287,13 +287,13 @@ class CoreApiController extends ControllerBase {
       ];
     }
     catch (AccessDeniedHttpException $e) {
-      $response = ['error_message' => 'You dont have the priviledges to access this url.', 'status' => 'error'];
+      $response = ['message' => 'You dont have the priviledges to access this url.', 'status' => 'error'];
       $status = 403;
     }
     catch (\Exception $e) {
-      if (empty($response['error_message'])) {
-        \Drupal::logger(__CLASS__)->error($e->getMessage());
-        $response = ['error_message' => 'We\'re currenlty experiency some technical difficulties. Please contact site administrator.', 'status' => 'error'];
+      \Drupal::logger(__CLASS__)->error($e->getMessage());
+      if (empty($response['message'])) {
+        $response = ['message' => 'We\'re currenlty experiency some technical difficulties. Please contact site administrator.', 'status' => 'error'];
       }
       $status = 400;
     }
@@ -315,9 +315,9 @@ class CoreApiController extends ControllerBase {
       if ($this->currentUser->isAuthenticated()) $response = [ 'is_authenticated' => TRUE ];
     }
     catch (\Exception $e) {
-      if (empty($response['error_message'])) {
-        \Drupal::logger(__CLASS__)->error($e->getMessage());
-        $response = ['error_message' => 'We\'re currenlty experiency some technical difficulties. Please contact site administrator.', 'status' => 'error'];
+      \Drupal::logger(__CLASS__)->error($e->getMessage());
+      if (empty($response['message'])) {
+        $response = ['message' => 'We\'re currenlty experiency some technical difficulties. Please contact site administrator.', 'status' => 'error'];
       }
       $status = 400;
     }
@@ -353,13 +353,13 @@ class CoreApiController extends ControllerBase {
       $response = [ 'block_quotes' => $block_quotes ];
     }
     catch (AccessDeniedHttpException $e) {
-      $response = ['error_message' => 'You dont have the priviledges to access this url.', 'status' => 'error'];
+      $response = ['message' => 'You dont have the priviledges to access this url.', 'status' => 'error'];
       $status = 403;
     }
     catch (\Exception $e) {
-      if (empty($response['error_message'])) {
-        \Drupal::logger(__CLASS__)->error($e->getMessage());
-        $response = ['error_message' => 'We\'re currenlty experiency some technical difficulties. Please contact site administrator.', 'status' => 'error'];
+      \Drupal::logger(__CLASS__)->error($e->getMessage());
+      if (empty($response['message'])) {
+        $response = ['message' => 'We\'re currenlty experiency some technical difficulties. Please contact site administrator.', 'status' => 'error'];
       }
       $status = 400;
     }
@@ -386,13 +386,13 @@ class CoreApiController extends ControllerBase {
       $response = [ 'success' => $success ];
     }
     catch (AccessDeniedHttpException $e) {
-      $response = ['error_message' => 'You dont have the priviledges to access this url.', 'status' => 'error'];
+      $response = ['message' => 'You dont have the priviledges to access this url.', 'status' => 'error'];
       $status = 403;
     }
     catch (\Exception $e) {
-      if (empty($response['error_message'])) {
-        \Drupal::logger(__CLASS__)->error($e->getMessage());
-        $response = ['error_message' => 'We\'re currenlty experiency some technical difficulties. Please contact site administrator.', 'status' => 'error'];
+      \Drupal::logger(__CLASS__)->error($e->getMessage());
+      if (empty($response['message'])) {
+        $response = ['message' => 'We\'re currenlty experiency some technical difficulties. Please contact site administrator.', 'status' => 'error'];
       }
       $status = 400;
     }

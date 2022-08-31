@@ -26,7 +26,7 @@ export default function MakePassword() {
     // and user id to the values.
     values.sid = sid
     values.uid = uid
-    updatePassword(values, { onError: (res) => setError(res.data.error_message) })
+    updatePassword(values, { onError: (res) => setError(res.data.message) })
   }
 
   useEffect(() => {

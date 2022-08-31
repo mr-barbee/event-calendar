@@ -184,7 +184,6 @@ class UpdateUser extends DataProducerPluginBase implements ContainerFactoryPlugi
         if (!empty($ids)) {
           throw new \Exception('The phone number ' . $data['phone'] . ' is already taken.');
         }
-        dsgbskj
         // This needs to be done last bc of the verification.
         $user->set('field_user_phone', $data['phone']);
       }

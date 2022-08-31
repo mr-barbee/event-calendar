@@ -31,8 +31,8 @@ const useRequest = () => {
   }
   // Catch the error response.
   const onError = function (error) {
-    // we verify the session if we get a 403 access denied error.
-    if (typeof error.response !== 'undefined' && error.response.status === 403) queryClient.invalidateQueries('verify-session')
+    // we re-verify the session if we get a 403 access denied error.
+    if (error.response.status === 403) queryClient.invalidateQueries('verify-session')
     // if an error was returned but not response was set then we must manually set it.
     if (typeof error.response == 'undefined') error.response = {'data': {'message': 'There was an error contacting the server.'}}
     // return promise.

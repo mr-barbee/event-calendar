@@ -48,7 +48,7 @@ function ContactForm() {
           // check to see if we need to verifu the users primary contact.
           if (data.updateUser.user.verified === false) {
             setPageMessage('Profile Updated, but please verify your primary contact!')
-            sendVerification({'uid': user.uid}, { onError: (res) => setError(res.data.error_message) })
+            sendVerification({'uid': user.uid}, { onError: (res) => setError(res.data.message) })
           } else {
             setPageMessage('Profile Updated!')
             // We only want navigate to
