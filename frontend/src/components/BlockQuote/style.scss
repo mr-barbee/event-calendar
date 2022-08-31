@@ -30,9 +30,10 @@ blockquote {
     }
     &.title {
       font-size: 16px;
+      line-height: 20px;
       @include medium {
         font-size: 1.4rem;
-        line-height: 24px;
+        line-height: 35px;
       }
       @include large {
         font-size: 1.7rem;

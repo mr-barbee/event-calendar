@@ -46,7 +46,6 @@ class TwilioApiController extends ControllerBase {
                                          ->verifications($sid)
                                          ->fetch();
 
-      \Drupal::logger('module_name')->notice('<pre><code>' . print_r($verification, TRUE) . '</code></pre>' );
       return $verification;
     }
     catch (\Exception $e) {

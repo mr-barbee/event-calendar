@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "49f7f8f816a9d137b63b47d6dafc1c47",
+    "content-hash": "0ce23bc3811e8f8493ba8c29613c4723",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2671,6 +2671,66 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/typed_data",
                 "issues": "https://www.drupal.org/project/issues/typed_data"
+            }
+        },
+        {
+            "name": "drupal/unique_field_ajax",
+            "version": "2.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/unique_field_ajax.git",
+                "reference": "2.1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/unique_field_ajax-2.1.2.zip",
+                "reference": "2.1.2",
+                "shasum": "90b9924448e0a6f4c363a2e45e8ace057f56b812"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.1.2",
+                    "datestamp": "1649164472",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "3li",
+                    "homepage": "https://www.drupal.org/user/3537348"
+                },
+                {
+                    "name": "adel-by",
+                    "homepage": "https://www.drupal.org/user/523686"
+                },
+                {
+                    "name": "benellefimostfa",
+                    "homepage": "https://www.drupal.org/user/3092403"
+                },
+                {
+                    "name": "bomoko",
+                    "homepage": "https://www.drupal.org/user/1213388"
+                }
+            ],
+            "description": "This is a very light-weight module allows fields to be unique by bundle and language. You can use ajax for check. You can customize the error message",
+            "homepage": "http://drupal.org/project/unique_field_ajax",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/unique_field_ajax",
+                "issues": "http://drupal.org/project/issues/unique_field_ajax"
             }
         },
         {

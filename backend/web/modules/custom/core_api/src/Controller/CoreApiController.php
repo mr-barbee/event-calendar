@@ -71,7 +71,7 @@ class CoreApiController extends ControllerBase {
       $request->request->replace( is_array( $data ) ? $data : [] );
       if (isset($data['name']) && isset($data['email'])) {
         // We want to check to make sure the email and
-        // username hasnt been take.
+        // username hasnt been taken.
         $query = \Drupal::entityQuery('user');
         $group = $query
           ->orConditionGroup()
@@ -343,7 +343,6 @@ class CoreApiController extends ControllerBase {
       $field_block_quotes = $node->get('field_block_quotes')->getValue();
       foreach ($field_block_quotes as $key => $block_quote) {
         $paragraph = Paragraph::load($block_quote['target_id']);
-        \Drupal::logger('module_name')->notice('<pre><code>' . print_r($paragraph->get('field_block_quote_quote')->getValue()[0], TRUE) . '</code></pre>' );
         // Retrieve the block quotes.
         $block_quotes[] = [
           'quote' => $paragraph->get('field_block_quote_quote')->getValue()[0]['value'],

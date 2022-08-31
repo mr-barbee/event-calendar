@@ -33,6 +33,7 @@
         "drupal/social_auth_facebook_api": "^3.0@RC",
         "drupal/social_auth_google": "^3.0@RC",
         "drupal/social_auth_google_api": "3.0.x-dev@dev",
+        "drupal/unique_field_ajax": "^2.1",
         "drush/drush": "10.*",
         "league/oauth2-client": "^2.6",
         "twilio/sdk": "^6.35"

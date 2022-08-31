@@ -31,7 +31,7 @@ function ContactForm() {
 
   const formSubmit = values => {
     mutateUser(values, {
-      onError: (res) => setError(res.data.updateUser.errors.message),
+      onError: (res) => setError(res.data.message),
       onSuccess: (data) => {
         if (data.updateUser.errors.length) {
           setError(data.updateUser.errors[0].message)

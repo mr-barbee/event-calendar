@@ -138,7 +138,16 @@ class UpdateUser extends DataProducerPluginBase implements ContainerFactoryPlugi
         else {
           // We want to remove the social media login flag.
           $user->set('field_user_active_social_login', null);
-          if (!empty($data['name'])) {
+          // make sure username is set and is changing.
+          if (!empty($data['name']) && $user->getAccountName() !== $data['name']) {
+            $ids = \Drupal::entityQuery('user')
+                ->condition('name', $data['name'])
+                ->range(0, 1)
+                ->execute();
+            if (!empty($ids)) {
+              throw new \Exception('The username ' . $data['name'] . ' is already taken.');
+            }
+            // Set the username.
             $user->setUsername($data['name']);
           }
           // 2. The users account was never verified.
@@ -152,13 +161,31 @@ class UpdateUser extends DataProducerPluginBase implements ContainerFactoryPlugi
           if (!empty($data['pass'])) {
             $user->setPassword($data['pass']);
           }
-          if (!empty($data['email'])) {
+          // make sure email is set and is changing.
+          if (!empty($data['email']) && $user->getEmail() !== $data['email']) {
+            $ids = \Drupal::entityQuery('user')
+                ->condition('mail', $data['email'])
+                ->range(0, 1)
+                ->execute();
+            if (!empty($ids)) {
+              throw new \Exception('The email address ' . $data['email'] . ' is already taken.');
+            }
+            // Set the username.
             $user->setEmail($data['email']);
           }
         }
       }
-      // This needs to be done last bc of the verification.
-      if (isset($data['phone'])) {
+      // make sure email is set and is changing.
+      if (!empty($data['phone']) && $user->get('field_user_phone')->getValue()[0]['value'] !== $data['phone']) {
+        $ids = \Drupal::entityQuery('user')
+            ->condition('field_user_phone', $data['phone'])
+            ->range(0, 1)
+            ->execute();
+        if (!empty($ids)) {
+          throw new \Exception('The phone number ' . $data['phone'] . ' is already taken.');
+        }
+        dsgbskj
+        // This needs to be done last bc of the verification.
         $user->set('field_user_phone', $data['phone']);
       }
       // If the needs verification status is set
@@ -174,7 +201,7 @@ class UpdateUser extends DataProducerPluginBase implements ContainerFactoryPlugi
       $message = $e->getMessage();
       \Drupal::logger(__CLASS__)->error($message);
       $response->addViolation(
-        $this->t($message ?? 'There was an error trying to save the Event')
+        $this->t($message ?? 'There was an error trying to save the user')
       );
     }
 
