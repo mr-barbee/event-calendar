@@ -37,11 +37,11 @@ export default function Register() {
         title="Locate Account"
         description="Please lookup your accoutn based on the certain account information."
       />
-      <h5>Locate your account using your Email or Username</h5>
+      <h5>Locate your account</h5>
       <Formik
         initialValues={{
           name: '',
-          email: ''
+          phone: ''
         }}
         validationSchema={ValidationSchema}
         onSubmit={(values, {setSubmitting, resetForm}) => { locate(values, { onError: (res) => setError(res.data.message) }) }}
@@ -52,17 +52,16 @@ export default function Register() {
               <Input
                 as={Col}
                 column="12"
-                controlId="formEmail"
-                groupClassName="position-relative"
+                controlId="formName"
                 type="text"
-                name="email"
-                placeholder="Email"
-                value={values.email}
+                name="name"
+                placeholder="Email or Username"
+                value={values.name}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                isValid={touched.email && !errors.email}
-                className={touched.email && errors.email ? "error" : null}
-                errors={touched.email && errors.email ? errors.email : null}
+                isValid={touched.name && !errors.name}
+                className={touched.name && errors.name ? "error" : null}
+                errors={touched.name && errors.name ? errors.name : null}
               />
             </Row>
             <Row className="mb-3">
@@ -72,16 +71,20 @@ export default function Register() {
               <Input
                 as={Col}
                 column="12"
-                controlId="formName"
+                controlId="formPhone"
                 type="text"
-                name="name"
-                placeholder="Username"
-                value={values.name}
+                name="phone"
+                placeholder="5555555555"
+                value={values.phone}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                isValid={touched.name && !errors.name}
-                className={touched.name && errors.name ? "error" : null}
-                errors={touched.name && errors.name ? errors.name : null}
+                isValid={touched.phone && !errors.phone}
+                className={touched.phone && errors.phone ? "error" : null}
+                errors={touched.phone && errors.phone ? errors.phone : null}
+                helperText="Please include the area code."
+                InputGroupType="text"
+                InputGroupClassName="mb-3"
+                InputGroupValue="+1"
               />
             </Row>
             <Row className="mb-3">

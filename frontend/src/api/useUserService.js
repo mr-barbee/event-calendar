@@ -92,7 +92,6 @@ const useUserService = () => {
       url: 'api/services/locate-user',
       method: 'POST',
       data: {
-        email: parameters.email,
         name: parameters.name,
         phone: parameters.phone
       }

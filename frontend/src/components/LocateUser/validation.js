@@ -1,8 +1,11 @@
 import * as Yup from 'yup'
 
+// RegEx for phone number validation
+const phoneRegExp = /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/
+
 const ValidationSchema = Yup.object().shape({
-  email: Yup.string()
-    .email('Invalid email')
+  phone: Yup.string()
+    .matches(phoneRegExp, "*Phone number is not valid")
     .when('name', {
       is: (name) => !name || name.length === 0,
       then: Yup.string()
@@ -10,12 +13,12 @@ const ValidationSchema = Yup.object().shape({
       otherwise: Yup.string()
     }),
   name: Yup.string()
-    .when('email', {
-      is: (email) => !email || email.length === 0,
+    .when('phone', {
+      is: (phone) => !phone || phone.length === 0,
       then: Yup.string()
         .required('Field is required'),
       otherwise: Yup.string()
     })
-}, [['email', 'name']])
+}, [['phone', 'name']])
 
 export default ValidationSchema

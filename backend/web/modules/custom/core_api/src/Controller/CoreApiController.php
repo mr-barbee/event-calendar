@@ -214,24 +214,31 @@ class CoreApiController extends ControllerBase {
       $data = json_decode($request->getContent(), TRUE);
       // Update the request with the data.
       $request->request->replace( is_array( $data ) ? $data : [] );
-      if (isset($data['email']) || isset($data['name'])) {
+      if (!empty($data['phone']) || !empty($data['name'])) {
         // Gather the user email.
-        $query = \Drupal::entityQuery('user');
-        if (!empty($data['name'])) $query->condition('name', $data['name']);
-        else $query->condition('mail', $data['email']);
-        $id = $query->range(0, 1)
-          ->execute();
-        $id = reset($id);
-        if (empty($id)) {
+        $uid = FALSE;
+        if (!empty($data['name'])) {
+          $user = user_load_by_name($data['name']);
+          if ($user === FALSE) $user = user_load_by_mail($data['name']);
+          if ($user) $uid = $user->id();
+        }
+        else if (!empty($data['phone'])) {
+          $query = \Drupal::entityQuery('user');
+          $query->condition('field_user_phone', $data['phone']);
+          $id = $query->range(0, 1)
+            ->execute();
+          $uid = reset($id);
+        }
+        if (!$uid) {
           $response = ['message' => 'Cannot locate your account. Please contact site administator.', 'status' => 'error'];
           throw new \Exception();
         }
         else {
           // Send out the twilio verification email.
           $twilio = new TwilioApiController();
-          if ($twilio_response = $twilio->sendVerificationToken($id, 'password_reset')) {
+          if ($twilio_response = $twilio->sendVerificationToken($uid, 'password_reset')) {
             $response = [
-              'uid' => $id,
+              'uid' => $uid,
               'valid' => $twilio_response['valid'],
               'token' => $twilio_response['token'],
               'status' => $twilio_response['status']
