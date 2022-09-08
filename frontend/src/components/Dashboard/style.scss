@@ -3,6 +3,23 @@
 .dashboard {
   text-align: center;
   margin: auto;
+  .notification {
+    &.error-message {
+      font-size: 1rem;
+      button {
+        background-color: inherit;
+        color: #0d6efd;
+        border: none;
+        font-weight: inherit;
+        text-decoration: underline;
+        font-style: italic;
+        padding: 0;
+        &:hover, &:focus {
+          color: #0b5ed7;
+        }
+      }
+    }
+  }
   @include large {
     width: 60%;
     padding: 10px;

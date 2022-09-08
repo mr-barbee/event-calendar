@@ -1,13 +1,23 @@
+import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useQuery, useMutation } from 'react-query'
 import { Row, Col } from 'react-bootstrap'
 import { useUser } from '../../hooks/useUser'
 import { Submit } from '../_common/FormElements'
+import useUserService from '../../api/useUserService'
+import useUtilityService from '../../api/useUtilityService'
+import { SessionContext } from '../../context'
 import SEO from '@americanexpress/react-seo'
 import './style.scss'
 
 function Dashboard() {
   const navigate = useNavigate()
   const user = useUser()
+  const [getCurrentUser] = useUserService()
+  const [, sendVerificationToken] = useUtilityService()
+  const { setPageMessageError } = useContext(SessionContext)
+  const { data } = useQuery(['get-user'], () => getCurrentUser())
+  const { isLoading, mutate: sendVerification } = useMutation((values) => sendVerificationToken(values))
   const navigation = where => {
     switch (where) {
       case 'profile':
@@ -29,6 +39,27 @@ function Dashboard() {
         title="Dashboard"
         description="Access the volunteer signup dashboard"
       />
+      {data && data.currentUser.verified === false &&
+        <p className="mb-3 notification error-message">To get the most out of the website, please&nbsp;
+          <Submit
+            value='Click Here'
+            isLoading={isLoading}
+            onClick={() => {
+              sendVerification({'uid': user.uid}, {
+                onError: (res) => setPageMessageError(res.data.message),
+                onSuccess: (data) => {
+                  // refetch the user data
+                  if (data.status === 'pending') {
+                    navigate('/verify')
+                  } else {
+                    setPageMessageError('There was an error with the verification. Please try again later.')
+                  }
+                }
+              })
+            }}
+          />
+        &nbsp;to verify your primary contact!</p>
+      }
       <Row>
         <Col sm={12}>
           <p><strong>Username</strong>: {user.name}</p>

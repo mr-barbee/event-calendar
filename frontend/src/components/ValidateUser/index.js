@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react'
 import { Navigate, useSearchParams } from "react-router-dom"
-import { useMutation } from 'react-query'
+import { useMutation, useQueryClient } from 'react-query'
 import useUtilityService from '../../api/useUtilityService'
 import { useUser } from '../../hooks/useUser'
 import { Formik } from 'formik'
@@ -14,6 +14,7 @@ import './style.scss'
 function ValidateUser() {
   let [searchParams] = useSearchParams()
   const user = useUser()
+  const queryClient = useQueryClient()
   const [error, setError] = useState('')
   const [uid, setUid] = useState(searchParams.get('uid'))
   const [verified, setVerified] = useState(false)
@@ -66,13 +67,14 @@ function ValidateUser() {
     if (verifyData) {
       // we want to verify the status is pending.
       if (verifyData.status === 'approved') {
+        queryClient.invalidateQueries(['get-user'])
         setPageMessage('Your account has been verified!')
         setVerified(true)
       } else {
         setError(verifyData.error_message ?? 'There was an error with the verification')
       }
     }
-  }, [verifyData, setVerified, setPageMessage])
+  }, [verifyData, setVerified, setPageMessage, queryClient])
 
   // Direct to the portal page if token is set.
   if (verified) return <Navigate to={updatePassword ? `/activate-account?sid=${verifyData.token}&uid=${uid}` : '/'} />
