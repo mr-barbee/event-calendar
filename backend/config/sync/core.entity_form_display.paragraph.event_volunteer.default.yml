@@ -1,0 +1,53 @@
+uuid: d9770466-c93e-4e12-8f40-654d727251fd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.event_volunteer.field_event_volunteer
+    - field.field.paragraph.event_volunteer.field_event_volunteer_category
+    - field.field.paragraph.event_volunteer.field_event_volunteer_hrs_avail
+    - field.field.paragraph.event_volunteer.field_event_volunteer_notes
+    - paragraphs.paragraphs_type.event_volunteer
+id: paragraph.event_volunteer.default
+targetEntityType: paragraph
+bundle: event_volunteer
+mode: default
+content:
+  field_event_volunteer:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_event_volunteer_category:
+    type: entity_reference_autocomplete
+    weight: 2
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_event_volunteer_hrs_avail:
+    type: number
+    weight: 1
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_event_volunteer_notes:
+    type: string_textarea
+    weight: 3
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

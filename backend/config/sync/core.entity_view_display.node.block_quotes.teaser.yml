@@ -1,0 +1,22 @@
+uuid: 4febe2b7-891d-4d83-a55c-146fc355b9a4
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.block_quotes.field_block_quotes
+    - node.type.block_quotes
+  module:
+    - user
+id: node.block_quotes.teaser
+targetEntityType: node
+bundle: block_quotes
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_block_quotes: true

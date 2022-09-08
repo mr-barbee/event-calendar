@@ -1,0 +1,14 @@
+features:
+  node_user_picture: 1
+  comment_user_picture: 1
+  comment_user_verification: 1
+  favicon: 1
+logo:
+  use_default: 0
+  path: 'public://AICP_Badge_0.png'
+favicon:
+  use_default: 1
+scrolltop: ''
+scrolltop_display: 1
+bootstrap_remote_type: cdn
+premium_description: ''

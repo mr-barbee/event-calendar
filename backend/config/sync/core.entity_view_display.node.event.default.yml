@@ -1,0 +1,70 @@
+uuid: 46a24f9e-f3f3-4af7-b217-ede50486daaa
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.event.body
+    - field.field.node.event.field_event_end_date
+    - field.field.node.event.field_event_start_date
+    - field.field.node.event.field_event_volunteer_categories
+    - field.field.node.event.field_event_volunteers
+    - node.type.event
+  module:
+    - datetime
+    - entity_reference_revisions
+    - text
+    - user
+id: node.event.default
+targetEntityType: node
+bundle: event
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  field_event_end_date:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: America/New_York
+      format_type: long
+    third_party_settings: {  }
+    weight: 103
+    region: content
+  field_event_start_date:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: America/New_York
+      format_type: long
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  field_event_volunteer_categories:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 105
+    region: content
+  field_event_volunteers:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 106
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 107
+    region: content
+hidden: {  }

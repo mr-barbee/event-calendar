@@ -1,0 +1,50 @@
+uuid: bad2e935-1849-45db-9784-2459ec9a6add
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.event_volunteer.field_event_volunteer
+    - field.field.paragraph.event_volunteer.field_event_volunteer_category
+    - field.field.paragraph.event_volunteer.field_event_volunteer_hrs_avail
+    - field.field.paragraph.event_volunteer.field_event_volunteer_notes
+    - paragraphs.paragraphs_type.event_volunteer
+id: paragraph.event_volunteer.default
+targetEntityType: paragraph
+bundle: event_volunteer
+mode: default
+content:
+  field_event_volunteer:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_event_volunteer_category:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_event_volunteer_hrs_avail:
+    type: number_decimal
+    label: above
+    settings:
+      thousand_separator: ''
+      decimal_separator: .
+      scale: 2
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_event_volunteer_notes:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden: {  }

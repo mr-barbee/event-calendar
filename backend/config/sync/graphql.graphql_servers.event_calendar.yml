@@ -1,0 +1,20 @@
+uuid: 0136d4b5-c350-430d-8a09-c0483a23216c
+langcode: en
+status: true
+dependencies: {  }
+name: event_calendar
+label: 'Event Calendar'
+endpoint: /graphql_api
+debug_flag: 15
+schema: composable
+caching: false
+batching: true
+disable_introspection: false
+query_depth: null
+query_complexity: null
+schema_configuration:
+  composable:
+    extensions:
+      composable_extension: composable_extension
+      composable_user_extension: 0
+persisted_queries_settings: {  }

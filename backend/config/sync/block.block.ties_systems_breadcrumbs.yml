@@ -1,0 +1,22 @@
+uuid: 2a42eb58-1c9a-4afe-a923-1ad8082a4fcb
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - ties_systems
+_core:
+  default_config_hash: y0bXRvKYQQKkf_RVxA3aOPGpIfKKsDOzzrWYCgjxJ9Y
+id: ties_systems_breadcrumbs
+theme: ties_systems
+region: pre_header_first
+weight: 0
+provider: null
+plugin: system_breadcrumb_block
+settings:
+  id: system_breadcrumb_block
+  label: Breadcrumbs
+  label_display: '0'
+  provider: system
+visibility: {  }

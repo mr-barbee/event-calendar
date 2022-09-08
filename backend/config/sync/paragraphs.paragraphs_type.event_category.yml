@@ -1,0 +1,10 @@
+uuid: 0ccfad32-b2a7-45f9-8986-b93d93733bdd
+langcode: en
+status: true
+dependencies: {  }
+id: event_category
+label: 'Event Category'
+icon_uuid: null
+icon_default: null
+description: 'A collection of categories for an event with amount of positions needed for each category.'
+behavior_plugins: {  }

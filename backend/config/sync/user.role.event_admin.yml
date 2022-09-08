@@ -1,0 +1,27 @@
+uuid: 10e988da-3442-42c6-9457-89b8245c9cd0
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.event
+    - taxonomy.vocabulary.tags
+  module:
+    - node
+    - taxonomy
+id: event_admin
+label: 'Event Admin'
+weight: 5
+is_admin: null
+permissions:
+  - 'access user profiles'
+  - 'create event content'
+  - 'create terms in tags'
+  - 'delete any event content'
+  - 'delete event revisions'
+  - 'delete own event content'
+  - 'edit any event content'
+  - 'edit own event content'
+  - 'edit terms in tags'
+  - 'revert event revisions'
+  - 'view own unpublished content'
+  - 'view user email addresses'

@@ -1,0 +1,25 @@
+uuid: c7322acb-2817-47ad-8e46-89109de1d746
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - ties_systems
+_core:
+  default_config_hash: d-0emr1mEq7sFKDu5RHUJckvNk62hvIZdRwPEfnJyGg
+id: ties_systems_branding
+theme: ties_systems
+region: header
+weight: 0
+provider: null
+plugin: system_branding_block
+settings:
+  id: system_branding_block
+  label: 'Site branding'
+  label_display: '0'
+  provider: system
+  use_site_logo: true
+  use_site_name: true
+  use_site_slogan: true
+visibility: {  }

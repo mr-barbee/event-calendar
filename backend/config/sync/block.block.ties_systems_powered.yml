@@ -1,0 +1,22 @@
+uuid: f54c8907-acf7-4b4f-a3ed-539b2d2ca011
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - ties_systems
+_core:
+  default_config_hash: I6Esh8cDlPdl2POZg4MOSRUrQNYA1UNCJCxL2yqT_wc
+id: ties_systems_powered
+theme: ties_systems
+region: pre_header_first
+weight: 10
+provider: null
+plugin: system_powered_by_block
+settings:
+  id: system_powered_by_block
+  label: 'Powered by Drupal'
+  label_display: '0'
+  provider: system
+visibility: {  }

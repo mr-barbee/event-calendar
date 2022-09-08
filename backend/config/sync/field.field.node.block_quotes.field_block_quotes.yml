@@ -1,0 +1,37 @@
+uuid: bb63df53-eaa1-42ae-90a7-9f8420edcc9e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_block_quotes
+    - node.type.block_quotes
+    - paragraphs.paragraphs_type.block_quote
+  module:
+    - entity_reference_revisions
+id: node.block_quotes.field_block_quotes
+field_name: field_block_quotes
+entity_type: node
+bundle: block_quotes
+label: 'Block Quotes'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      block_quote: block_quote
+    negate: 0
+    target_bundles_drag_drop:
+      block_quote:
+        weight: 4
+        enabled: true
+      event_category:
+        weight: 3
+        enabled: false
+      event_volunteer:
+        weight: 4
+        enabled: false
+field_type: entity_reference_revisions

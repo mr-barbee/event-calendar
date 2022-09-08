@@ -1,0 +1,15 @@
+_core:
+  default_config_hash: VDJxTZtQR21qB4lvOq8zszJZLvLKrSPQpdn2E3T71Ww
+langcode: en
+uuid: ef081926-9fc8-487e-a106-d53ee447dc4b
+name: 'Event Calendar Management'
+mail: admin@eventcalendar.com
+slogan: ''
+page:
+  403: ''
+  404: ''
+  front: /event-calendar/events
+admin_compact_mode: false
+weight_select_max: 100
+default_langcode: en
+mail_notification: ''

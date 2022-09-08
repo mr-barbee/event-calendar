@@ -1,0 +1,41 @@
+uuid: 45a1d4cd-5695-429c-b4b3-d5373f53a281
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.event_category.field_event_category
+    - field.field.paragraph.event_category.field_event_category_count
+    - field.field.paragraph.event_category.field_event_category_remaining
+    - paragraphs.paragraphs_type.event_category
+id: paragraph.event_category.default
+targetEntityType: paragraph
+bundle: event_category
+mode: default
+content:
+  field_event_category:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_event_category_count:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_event_category_remaining:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden: {  }

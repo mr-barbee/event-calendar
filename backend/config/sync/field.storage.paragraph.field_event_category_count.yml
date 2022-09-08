@@ -1,0 +1,20 @@
+uuid: ba06cf5c-5998-4b3f-b360-469369658310
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+id: paragraph.field_event_category_count
+field_name: field_event_category_count
+entity_type: paragraph
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

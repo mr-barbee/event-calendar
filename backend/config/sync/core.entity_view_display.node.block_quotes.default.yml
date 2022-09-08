@@ -1,0 +1,30 @@
+uuid: ed5e7465-ffd9-4cf5-99a3-a90f25a625fe
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.block_quotes.field_block_quotes
+    - node.type.block_quotes
+  module:
+    - entity_reference_revisions
+    - user
+id: node.block_quotes.default
+targetEntityType: node
+bundle: block_quotes
+mode: default
+content:
+  field_block_quotes:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden: {  }

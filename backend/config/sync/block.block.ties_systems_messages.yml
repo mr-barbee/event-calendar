@@ -1,0 +1,22 @@
+uuid: e98b414d-5d0a-409b-a788-31f15dbab7fb
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - ties_systems
+_core:
+  default_config_hash: KC12e0aosUnBBs5bd374JVcQjJaFNOSIHzu0dUGf22o
+id: ties_systems_messages
+theme: ties_systems
+region: highlighted
+weight: 0
+provider: null
+plugin: system_messages_block
+settings:
+  id: system_messages_block
+  label: 'Status messages'
+  label_display: '0'
+  provider: system
+visibility: {  }

@@ -1,0 +1,19 @@
+uuid: 606b4985-11d0-496e-801b-b9981c8cd0bc
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+id: paragraph.field_block_quote_quote
+field_name: field_block_quote_quote
+entity_type: paragraph
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

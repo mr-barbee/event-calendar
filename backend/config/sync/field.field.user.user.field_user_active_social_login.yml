@@ -1,0 +1,21 @@
+uuid: 80d1c006-943f-4cef-93cb-3517bf9b36b4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_user_active_social_login
+  module:
+    - options
+    - user
+id: user.user.field_user_active_social_login
+field_name: field_user_active_social_login
+entity_type: user
+bundle: user
+label: 'Social Login'
+description: 'Shows if the user is an active social login user. '
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

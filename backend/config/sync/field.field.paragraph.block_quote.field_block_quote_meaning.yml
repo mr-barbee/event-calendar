@@ -1,0 +1,19 @@
+uuid: 4eee638c-91e8-4381-98b7-4e0b9a8ffa5d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_block_quote_meaning
+    - paragraphs.paragraphs_type.block_quote
+id: paragraph.block_quote.field_block_quote_meaning
+field_name: field_block_quote_meaning
+entity_type: paragraph
+bundle: block_quote
+label: Meaning
+description: 'A <span><break></span> in the text to where the quote should split up the fade in animation.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

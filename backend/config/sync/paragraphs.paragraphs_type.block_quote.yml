@@ -1,0 +1,10 @@
+uuid: e63fc1b8-7a4c-4808-bcb4-63261cdf2c1b
+langcode: en
+status: true
+dependencies: {  }
+id: block_quote
+label: 'Block Quote'
+icon_uuid: null
+icon_default: null
+description: 'A block quote for the website'
+behavior_plugins: {  }

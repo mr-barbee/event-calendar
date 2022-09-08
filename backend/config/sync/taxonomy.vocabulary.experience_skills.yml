@@ -1,0 +1,8 @@
+uuid: 93ba194e-f5d7-432c-864d-40811fd0314b
+langcode: en
+status: true
+dependencies: {  }
+name: 'Experience & Skills'
+vid: experience_skills
+description: 'The list of experience and skills that a user can associate to there account.'
+weight: 0

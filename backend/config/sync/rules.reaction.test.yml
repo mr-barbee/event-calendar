@@ -1,0 +1,14 @@
+uuid: d8527c82-150c-4424-ba43-aa83be6ba3eb
+langcode: en
+status: true
+dependencies: {  }
+id: test
+label: test
+events:
+  -
+    event_name: 'rules_entity_presave:user'
+description: ''
+tags: {  }
+config_version: '3'
+expression:
+  id: rules_rule

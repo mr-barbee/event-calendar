@@ -1,0 +1,23 @@
+uuid: 5522b910-e27b-4b8f-89a7-33f089be5a7f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.event
+  module:
+    - text
+id: node.event.body
+field_name: body
+entity_type: node
+bundle: event
+label: Descriptions
+description: 'A description of the event that is displayed to the volunteers when signing up. The summary is allowed as well and will provide a brief description. '
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+field_type: text_with_summary

@@ -1,0 +1,22 @@
+uuid: 0beebf2d-c3ec-435b-b731-37017889093e
+langcode: en
+status: true
+dependencies:
+  module:
+    - help
+  theme:
+    - ties_systems
+_core:
+  default_config_hash: '-laWx8WA-ikiIEH3NJQ0hVbjqk3iEuBms91LB0B4IQU'
+id: ties_systems_help
+theme: ties_systems
+region: content
+weight: -30
+provider: null
+plugin: help_block
+settings:
+  id: help_block
+  label: Help
+  label_display: '0'
+  provider: help
+visibility: {  }

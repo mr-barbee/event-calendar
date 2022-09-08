@@ -1,0 +1,8 @@
+uuid: 7efcd779-f79f-4f0c-8798-29023e1ae6ba
+langcode: en
+status: true
+dependencies: {  }
+name: 'Volunteer Categories'
+vid: volunteer_categories
+description: 'Users categories that the wish to volunteer for.'
+weight: 0

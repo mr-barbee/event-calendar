@@ -1,0 +1,33 @@
+uuid: bf70057a-ee36-4271-a731-3e5d6fc15769
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_event_volunteer
+    - paragraphs.paragraphs_type.event_volunteer
+id: paragraph.event_volunteer.field_event_volunteer
+field_name: field_event_volunteer
+entity_type: paragraph
+bundle: event_volunteer
+label: Volunteer
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: name
+      direction: ASC
+    auto_create: false
+    filter:
+      type: role
+      role:
+        volunteer: volunteer
+        content_editor: '0'
+        administrator: '0'
+    include_anonymous: false
+field_type: entity_reference

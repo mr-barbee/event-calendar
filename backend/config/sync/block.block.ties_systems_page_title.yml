@@ -1,0 +1,20 @@
+uuid: 5c4b2847-f971-4636-948a-579ffe15668a
+langcode: en
+status: true
+dependencies:
+  theme:
+    - ties_systems
+_core:
+  default_config_hash: ItFhhiUOoeR7oIq73ZaCV7PAYrOwXZ-9fazMzF5DJXM
+id: ties_systems_page_title
+theme: ties_systems
+region: content
+weight: -50
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  label_display: '0'
+  provider: core
+visibility: {  }

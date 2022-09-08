@@ -1,0 +1,19 @@
+uuid: b3e16675-db9f-486d-b1cf-1577706494cd
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.event
+  module:
+    - graphql
+    - node
+id: volunteer
+label: Volunteer
+weight: 4
+is_admin: null
+permissions:
+  - 'cancel account'
+  - 'change own username'
+  - 'edit any event content'
+  - 'execute event_calendar arbitrary graphql requests'
+  - 'execute event_calendar persisted graphql requests'

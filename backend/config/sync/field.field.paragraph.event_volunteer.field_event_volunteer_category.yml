@@ -1,0 +1,29 @@
+uuid: d9053f71-d35a-4121-965e-21d784512788
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_event_volunteer_category
+    - paragraphs.paragraphs_type.event_volunteer
+    - taxonomy.vocabulary.volunteer_categories
+id: paragraph.event_volunteer.field_event_volunteer_category
+field_name: field_event_volunteer_category
+entity_type: paragraph
+bundle: event_volunteer
+label: Category
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      volunteer_categories: volunteer_categories
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

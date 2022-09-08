@@ -1,0 +1,37 @@
+uuid: c2a54a4b-56b6-4300-b20f-07847c85ef2e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_event_volunteer_categories
+    - node.type.event
+    - paragraphs.paragraphs_type.event_category
+  module:
+    - entity_reference_revisions
+id: node.event.field_event_volunteer_categories
+field_name: field_event_volunteer_categories
+entity_type: node
+bundle: event
+label: 'Event Categories'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      event_category: event_category
+    negate: 0
+    target_bundles_drag_drop:
+      event_category:
+        weight: 4
+        enabled: true
+      event_volunteer:
+        weight: 5
+        enabled: false
+      event_volunteer_categories:
+        weight: 2
+        enabled: false
+field_type: entity_reference_revisions

@@ -1,0 +1,23 @@
+uuid: 6455736a-c41e-46a5-8efe-af909163a8cc
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_event_category_count
+    - paragraphs.paragraphs_type.event_category
+id: paragraph.event_category.field_event_category_count
+field_name: field_event_category_count
+entity_type: paragraph
+bundle: event_category
+label: 'Category Count'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

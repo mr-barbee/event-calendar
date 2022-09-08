@@ -1,0 +1,5 @@
+twilio_api_settings_form:
+  account_sid: AC98612360ca3c6a64da32e80e751d81b0
+  auth_token: 978dbf6669a9ffba55022715c460ca85
+  service_id: VA110d6f8871c021e5ce915bd1eaa2c496
+  allowed_ips: 172.19.0.2

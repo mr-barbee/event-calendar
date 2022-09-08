@@ -1,0 +1,27 @@
+uuid: baa86eee-6713-432b-b9b7-868b2d6ee373
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - user
+id: user.field_user_primary_contact
+field_name: field_user_primary_contact
+entity_type: user
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: e
+      label: Email
+    -
+      value: p
+      label: Phone
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

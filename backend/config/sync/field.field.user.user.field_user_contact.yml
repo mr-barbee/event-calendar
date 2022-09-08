@@ -1,0 +1,24 @@
+uuid: 8714ef01-2ba0-4702-8de7-9c6b04ed72eb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_user_contact
+  module:
+    - user
+id: user.user.field_user_contact
+field_name: field_user_contact
+entity_type: user
+bundle: user
+label: 'Allow Contact'
+description: 'This flag determines if we should allow system or site admins to contact them. '
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

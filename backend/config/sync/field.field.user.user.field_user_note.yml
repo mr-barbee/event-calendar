@@ -1,0 +1,20 @@
+uuid: f2450778-44d7-4815-a27f-e26bd33571fa
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_user_note
+  module:
+    - user
+id: user.user.field_user_note
+field_name: field_user_note
+entity_type: user
+bundle: user
+label: Note
+description: 'Special Notes that a user can add to their profile for the system admins to be aware.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

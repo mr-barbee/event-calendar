@@ -1,0 +1,19 @@
+uuid: 0c0aae85-995f-453f-be5c-f76272ee8050
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_event_volunteer_notes
+    - paragraphs.paragraphs_type.event_volunteer
+id: paragraph.event_volunteer.field_event_volunteer_notes
+field_name: field_event_volunteer_notes
+entity_type: paragraph
+bundle: event_volunteer
+label: 'Volunteer Notes'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

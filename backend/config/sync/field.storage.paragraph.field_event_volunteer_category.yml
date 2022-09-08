@@ -1,0 +1,20 @@
+uuid: f980b1d2-e2b6-442d-a280-eece15f3cd2a
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+    - taxonomy
+id: paragraph.field_event_volunteer_category
+field_name: field_event_volunteer_category
+entity_type: paragraph
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
