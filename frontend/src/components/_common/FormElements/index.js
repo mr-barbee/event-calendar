@@ -24,7 +24,7 @@ export function Submit(props) {
       variant={props.variant ?? 'primary'}
       onClick={props.onClick}
       className={props.className}
-      disabled={props.isLoading}
+      disabled={props.isLoading || props.disabled}
       type={props.onClick ? "button" : "submit" }
     >
       {props.isLoading &&

@@ -3,7 +3,7 @@ import FacebookLogin from 'react-facebook-login'
 import { useGoogleLogin } from '@react-oauth/google'
 import { useMutation } from 'react-query'
 import useUserService from '../../../api/useUserService'
-import { Row, Col } from 'react-bootstrap'
+import { Row, Col, Spinner } from 'react-bootstrap'
 import { Submit } from '../FormElements'
 import { SessionContext } from '../../../context'
 import GoogleIcon from './images/icons8-google.svg'
@@ -13,8 +13,8 @@ export function SocialLogins({ onError }) {
   const [,, facebookLoginUser,,,,,,,, googleLoginUser] = useUserService()
   const { setToken, setSessionToken, ReactGA } = useContext(SessionContext)
   // Login mutation for the facebook and google data.
-  const { data: facebookData, mutate: mutateFacebookLogin } = useMutation((accessToken) => facebookLoginUser(accessToken))
-  const { data: googleData, mutate: mutateGoogleLogin } = useMutation((accessToken) => googleLoginUser(accessToken))
+  const { isLoading: facebookLoading, data: facebookData, mutate: mutateFacebookLogin } = useMutation((accessToken) => facebookLoginUser(accessToken))
+  const { isLoading: googleLoading, data: googleData, mutate: mutateGoogleLogin } = useMutation((accessToken) => googleLoginUser(accessToken))
   // Reponse callback for the facebook login.
   const responseFacebook = response => {
     // Set the data from the Facebook API.
@@ -25,7 +25,21 @@ export function SocialLogins({ onError }) {
   const googleLogin = useGoogleLogin({
     onSuccess: response => mutateGoogleLogin(response.access_token, { onError: (res) => onError(res.data.message) }),
     onError: () => onError('Sorry, unable to authenticate with Google.')
-  });
+  })
+  // Helper JSX for the loading spinner.
+  const Loading = () => {
+    return (
+      <>
+        <Spinner
+          as="span"
+          animation="border"
+          size="sm"
+          role="status"
+          aria-hidden="true"
+        /> Loading...
+      </>
+    )
+  }
 
   useEffect(() => {
     if (facebookData || googleData) {
@@ -54,20 +68,26 @@ export function SocialLogins({ onError }) {
             fields='name,email,picture'
             scope='public_profile,user_friends'
             callback={responseFacebook}
-            icon='fa-facebook' />
+            icon='fa-facebook'
+            isDisabled={facebookLoading}
+            textButton={ facebookLoading ? <Loading /> : 'Login with Facebook' }
+          />
         </Col>
       </Row>
       <Row className="mb-3">
         <Col>
           <Submit value={
-            <div id='googleBtn' className='customGPlusSignIn'>
-              <div className='google-icon'>
-                <img src={GoogleIcon} alt='Google Icon' />
+              <div id='googleBtn' className='customGPlusSignIn'>
+                <div className='google-icon'>
+                  <img src={GoogleIcon} alt='Google Icon' />
+                </div>
+                <span className='buttonText'>
+                  { googleLoading ? <Loading /> : 'Login with Google' }
+                </span>
               </div>
-              <span className='buttonText'>Login with Google</span>
-            </div>
             }
             className='google-button'
+            disabled={googleLoading}
             onClick={() => { googleLogin() }}
           />
         </Col>
